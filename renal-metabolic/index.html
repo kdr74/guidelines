@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renal & Metabolic Guidelines - UHBW Critical Care</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .guideline-list {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .guideline-item {
+            background: var(--nhs-white);
+            border: 2px solid var(--nhs-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .guideline-item:hover {
+            border-color: var(--nhs-blue);
+            box-shadow: 0 4px 12px rgba(0, 94, 184, 0.1);
+        }
+        .guideline-item h2 {
+            color: var(--nhs-blue);
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .guideline-meta {
+            color: var(--nhs-grey);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .guideline-item p {
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+        .guideline-features {
+            background: var(--nhs-light-grey);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.25rem;
+        }
+        .guideline-features h3 {
+            color: var(--nhs-blue);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .guideline-features ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .guideline-features li {
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+        .guideline-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .guideline-link {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-blue);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .guideline-link:hover {
+            background: var(--hover-blue);
+        }
+        .guideline-link.secondary {
+            background: var(--nhs-grey);
+        }
+        .guideline-link.secondary:hover {
+            background: var(--nhs-dark-blue);
+        }
+        .back-link {
+            display: inline-block;
+            margin: 2rem auto;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-grey);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            background: var(--nhs-dark-blue);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Renal & Metabolic Guidelines</h1>
+                <p class="subtitle">UHBW Critical Care</p>
+                <p class="units">Renal replacement therapy, electrolyte management, metabolic protocols</p>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search guidelines..." aria-label="Search guidelines">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="guideline-list">
+        <div class="guideline-item">
+            <h2>RRT Guidelines (2025)</h2>
+            <p class="guideline-meta">Version 2.2 | December 2025 | Author: Dr Kieron Rooney, Consultant in ICM</p>
+            
+            <p>Comprehensive reference guide for continuous renal replacement therapy using citrate anticoagulation on the Fresenius MultiFiltrate Pro® system.</p>
+            
+            <div class="guideline-features">
+                <h3>Key Topics Covered:</h3>
+                <ul>
+                    <li>Vascath locking and filter selection (AV1000s vs EMiC2)</li>
+                    <li>CRRT modes: CVV-HD and CVV-HDF</li>
+                    <li>Machine preparation and priming procedures</li>
+                    <li>Dialysate solutions and flow rate selection</li>
+                    <li>Calcium and citrate anticoagulation management</li>
+                    <li>Acid-base balance and electrolyte management</li>
+                    <li>Sodium correction protocols (hypo/hypernatraemia)</li>
+                    <li>Fluid removal strategies</li>
+                    <li>Citrate accumulation: detection and management</li>
+                    <li>Troubleshooting: access, clotting, and filter issues</li>
+                    <li>Filter membrane pore blockage recognition</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="RRT-Guidelines-2025.pdf" class="guideline-link" target="_blank">📄 View PDF Guideline</a>
+            </div>
+        </div>
+
+        <div class="guideline-item">
+            <h2>RRT Calculators & Troubleshooting</h2>
+            <p class="guideline-meta">Interactive Clinical Decision Support Tool | December 2025</p>
+            
+            <p>Interactive web-based tool for rapid clinical decision support during RRT management. Designed for busy clinicians who need quick answers at the bedside.</p>
+            
+            <div class="guideline-features">
+                <h3>Interactive Features:</h3>
+                <ul>
+                    <li><strong>Patient Parameters:</strong> Track weight, height, serum sodium, and target correction rates</li>
+                    <li><strong>Citrate Dose Calculator:</strong> Automatic citrate dosing based on blood flow rates</li>
+                    <li><strong>Calcium Management:</strong> Real-time iCa²⁺ target calculations and adjustment recommendations</li>
+                    <li><strong>Sodium Correction:</strong> Interactive calculator for hypo/hypernatraemia with dialysate modification volumes</li>
+                    <li><strong>Acid-Base Calculator:</strong> pH and bicarbonate management with flow rate recommendations</li>
+                    <li><strong>Citrate Troubleshooting:</strong> Serial monitoring with automated graphs and filter blockage detection</li>
+                    <li><strong>Filter Blockage Detection:</strong> Early warning system based on Na⁺, Cl⁻, iCa²⁺, and HCO₃⁻ trends</li>
+                    <li><strong>Clearance Calculator:</strong> Automated clearance calculations based on patient weight and flow rates</li>
+                </ul>
+            </div>
+
+            <div class="guideline-features">
+                <h3>Recent Updates (Amendments 7):</h3>
+                <ul>
+                    <li>Modality options updated to CVV-HD/CVV-HDF nomenclature</li>
+                    <li>Sodium correction with auto-recalculation on parameter changes</li>
+                    <li>Chloride (Cl⁻) column added to monitoring table</li>
+                    <li>Enhanced filter blockage detection with lower, more sensitive thresholds</li>
+                    <li>Improved graph data collection for non-sequential row IDs</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="rrt-calculators-troubleshooting.html" class="guideline-link">🧮 Open Interactive Tool</a>
+                <a href="RRT-Guidelines-2025.pdf" class="guideline-link secondary" target="_blank">📖 Full Guidelines Reference</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="../index.html" class="back-link">← Back to All Guidelines</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+            <p>For internal use by UHBW Critical Care staff</p>
+            <p class="version">RRT Guidelines v2.2 | December 2025</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/search.js"></script>
+</body>
+</html>

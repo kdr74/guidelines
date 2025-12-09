@@ -1,5 +1,28 @@
 // Search functionality for UHBW Critical Care Guidelines
-const guidelineIndex = [];
+// Guideline index - populated with actual guidelines
+const guidelineIndex = [
+    {
+        title: "RRT Guidelines (2025)",
+        url: "renal-metabolic/RRT-Guidelines-2025.pdf",
+        category: "Renal & Metabolic",
+        keywords: ["rrt", "renal", "replacement", "therapy", "citrate", "anticoagulation", "fresenius", "multifilrate", "cvvhd", "cvvhdf", "dialysis", "calcium", "filter", "crrt"],
+        excerpt: "Comprehensive reference guide for continuous renal replacement therapy using citrate anticoagulation on the Fresenius MultiFiltrate Pro system. Covers filter selection, CRRT modes, calcium management, electrolyte management, and troubleshooting."
+    },
+    {
+        title: "RRT Calculators & Troubleshooting",
+        url: "renal-metabolic/rrt-calculators-troubleshooting.html",
+        category: "Renal & Metabolic",
+        keywords: ["rrt", "calculator", "citrate", "calcium", "sodium", "correction", "troubleshooting", "filter", "blockage", "interactive", "tool", "clearance", "dialysate"],
+        excerpt: "Interactive clinical decision support tool for RRT management. Features citrate dose calculator, calcium management, sodium correction, acid-base calculator, and automated filter blockage detection with serial monitoring graphs."
+    },
+    {
+        title: "Renal & Metabolic Guidelines",
+        url: "renal-metabolic/index.html",
+        category: "Renal & Metabolic",
+        keywords: ["renal", "metabolic", "rrt", "electrolyte", "sodium", "potassium", "calcium", "dialysis"],
+        excerpt: "Renal replacement therapy protocols, electrolyte management, and metabolic support guidelines"
+    }
+];
 
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
