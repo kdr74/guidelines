@@ -2,6 +2,27 @@
 // Guideline index - populated with actual guidelines
 const guidelineIndex = [
     {
+        title: "Investigation and Management of Pulmonary Embolism",
+        url: "airway-respiratory/PE-Guidelines-UHBW.pdf",
+        category: "Airway & Respiratory",
+        keywords: ["pulmonary", "embolism", "pe", "dvt", "wells", "perc", "thrombolysis", "alteplase", "ctpa", "anticoagulation", "apixaban", "rivaroxaban", "enoxaparin", "thrombectomy", "vte", "spesi"],
+        excerpt: "Trust-wide guideline for investigation and management of pulmonary embolism. Covers Wells Score, PERC criteria, risk stratification, thrombolysis protocols, anticoagulation, and follow-up pathways."
+    },
+    {
+        title: "PE Interactive Management Tool",
+        url: "airway-respiratory/pe-interactive-management-tool.html",
+        category: "Airway & Respiratory",
+        keywords: ["pulmonary", "embolism", "pe", "calculator", "wells", "score", "perc", "spesi", "thrombolysis", "dosing", "anticoagulation", "risk", "interactive"],
+        excerpt: "Interactive clinical decision support tool for PE management. Features Wells Score calculator, PERC criteria, sPESI calculator, thrombolysis decision support, and anticoagulation dosing."
+    },
+    {
+        title: "Airway & Respiratory Guidelines",
+        url: "airway-respiratory/index.html",
+        category: "Airway & Respiratory",
+        keywords: ["airway", "respiratory", "ventilation", "pulmonary", "breathing", "oxygen"],
+        excerpt: "Ventilation strategies, airway management, and respiratory support protocols"
+    },
+    {
         title: "RRT Guidelines (2025)",
         url: "renal-metabolic/RRT-Guidelines-2025.pdf",
         category: "Renal & Metabolic",

@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Management of Pulmonary Embolism - UHBW</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-blue: #41B6E6;
+            --nhs-red: #DA291C;
+            --nhs-orange: #ED8B00;
+            --nhs-yellow: #FFE000;
+            --nhs-green: #007F3B;
+            --nhs-grey: #768692;
+            --nhs-dark-grey: #425563;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Frutiger', Arial, sans-serif;
+            line-height: 1.4;
+            color: #212b32;
+            background: #f0f4f5;
+            font-size: 14px;
+        }
+        
+        .header {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 0.8rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        
+        .header-meta {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.8rem;
+        }
+        
+        .guideline-info {
+            background: white;
+            border-left: 3px solid var(--nhs-blue);
+            padding: 0.6rem;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+        }
+        
+        .guideline-info p {
+            margin: 0.3rem 0;
+        }
+        
+        .warning-box {
+            background: #fff4e5;
+            border-left: 3px solid var(--nhs-orange);
+            padding: 0.6rem;
+            margin: 0.8rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .warning-box strong {
+            color: var(--nhs-orange);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.3rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            background: white;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--nhs-dark-blue);
+            border-radius: 3px 3px 0 0;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: var(--nhs-light-blue);
+            color: white;
+        }
+        
+        .tab.active {
+            background: var(--nhs-blue);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 1rem;
+            border-radius: 0 3px 3px 3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--nhs-dark-blue);
+        }
+        
+        h3 {
+            font-size: 1rem;
+            margin-top: 0.8rem;
+            margin-bottom: 0.4rem;
+            color: var(--nhs-dark-grey);
+        }
+        
+        h4 {
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0.3rem 0;
+            color: var(--nhs-dark-grey);
+        }
+        
+        .risk-category {
+            margin: 0.8rem 0;
+            border: 2px solid;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .risk-category.high-risk {
+            border-color: var(--nhs-red);
+        }
+        
+        .risk-category.intermediate-risk {
+            border-color: var(--nhs-orange);
+        }
+        
+        .risk-category.low-risk {
+            border-color: var(--nhs-green);
+        }
+        
+        .risk-header {
+            padding: 0.6rem 1rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .high-risk .risk-header {
+            background: var(--nhs-red);
+        }
+        
+        .intermediate-risk .risk-header {
+            background: var(--nhs-orange);
+        }
+        
+        .low-risk .risk-header {
+            background: var(--nhs-green);
+        }
+        
+        .risk-content {
+            padding: 0.8rem;
+        }
+        
+        .criteria-box {
+            background: #f8f8f8;
+            padding: 0.6rem;
+            margin: 0.6rem 0;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+        
+        .criteria-box h4 {
+            color: var(--nhs-dark-blue);
+            margin-bottom: 0.4rem;
+        }
+        
+        .criteria-box ul {
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+        
+        .criteria-box li {
+            margin: 0.3rem 0;
+        }
+        
+        .dosing-card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            margin: 0.6rem 0;
+            border-radius: 3px;
+            border-left: 3px solid var(--nhs-blue);
+        }
+        
+        .drug-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--nhs-blue);
+            margin-bottom: 0.4rem;
+        }
+        
+        .dose-line {
+            background: #f0f4f5;
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .calculator {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin: 0.8rem 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .input-group {
+            margin: 0.6rem 0;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--nhs-dark-grey);
+            font-size: 0.85rem;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
+            margin-right: 0.4rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 400;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .radio-option label {
+            margin: 0;
+            font-weight: 400;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        button,
+        .calculate-btn {
+            background: var(--nhs-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0.3rem 0.3rem 0.3rem 0;
+            transition: background 0.3s;
+        }
+        
+        button:hover,
+        .calculate-btn:hover {
+            background: var(--nhs-dark-blue);
+        }
+        
+        button.secondary {
+            background: var(--nhs-grey);
+        }
+        
+        button.secondary:hover {
+            background: var(--nhs-dark-grey);
+        }
+        
+        .result-box,
+        .results {
+            background: white;
+            border: 2px solid var(--nhs-blue);
+            padding: 0.8rem;
+            margin-top: 0.8rem;
+            border-radius: 3px;
+            display: none;
+        }
+        
+        .result-box.show,
+        .results.show {
+            display: block;
+        }
+        
+        .result-box h4 {
+            color: var(--nhs-dark-blue);
+            margin-bottom: 0.6rem;
+        }
+        
+        .alert {
+            padding: 0.6rem;
+            border-radius: 3px;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .alert-danger { background: var(--nhs-red); color: white; }
+        .alert-warning { background: var(--nhs-orange); color: white; }
+        .alert-info { background: var(--nhs-light-blue); color: white; }
+        .alert-success { background: var(--nhs-green); color: white; }
+        
+        .result-card {
+            background: #f8f8f8;
+            padding: 0.6rem;
+            border-radius: 3px;
+            margin-bottom: 0.6rem;
+            border-left: 3px solid var(--nhs-blue);
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.85rem;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            text-align: right;
+        }
+        
+        .highlight-box {
+            background: #e8f4f8;
+            border-left: 3px solid var(--nhs-light-blue);
+            padding: 0.6rem;
+            margin: 0.6rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .emergency-number {
+            background: var(--nhs-red);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.6rem 0;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            padding: 0.5rem;
+            border-radius: 3px;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .compact-text {
+            margin: 0.3rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .label-help {
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: var(--nhs-grey);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.8rem 0;
+            font-size: 0.85rem;
+        }
+        
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: var(--nhs-blue);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .footer {
+            background: var(--nhs-dark-grey);
+            color: white;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 0.8rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links span {
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                font-size: 13px;
+            }
+            
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .header-meta {
+                font-size: 0.7rem;
+                gap: 0.5rem;
+            }
+            
+            .tabs {
+                gap: 0.2rem;
+            }
+            
+            .tab {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            .tab-content {
+                padding: 0.8rem;
+            }
+            
+            h2 {
+                font-size: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group input,
+            .input-group select {
+                max-width: 100%;
+            }
+            
+            table {
+                font-size: 0.75rem;
+            }
+            
+            th, td {
+                padding: 0.3rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        .flowchart-container {
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+
+        .flowchart-container .mermaid {
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        @media print {
+            .tabs,
+            button,
+            .calculate-btn {
+                display: none;
+            }
+            
+            .tab-content {
+                display: block !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ICU Management of Confirmed Pulmonary Embolism</h1>
+        <div class="header-meta">
+            <span>University Hospitals Bristol and Weston NHS Foundation Trust</span>
+            <span>For ICU/HDU Use</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="guideline-info">
+            <p><strong>Setting:</strong> General ICU (A600), Cardiac ICU (C604), Weston ICU</p>
+            <p><strong>Contact:</strong> Thrombosis Nurses ext. 24684 | Cardiology SpR #6527 (thrombectomy)</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>Important:</strong> Clinical judgement should always be used when deciding on management for individual patients.
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('calculator')">PE Calculator</button>
+            <button class="tab" onclick="showTab('risk-assessment')">Risk Assessment</button>
+            <button class="tab" onclick="showTab('thrombolysis')">Thrombolysis</button>
+            <button class="tab" onclick="showTab('thrombectomy')">Thrombectomy</button>
+            <button class="tab" onclick="showTab('anticoagulation')">Anticoagulation</button>
+            <button class="tab" onclick="showTab('calculators')">Dose Calculators</button>
+            <button class="tab" onclick="showTab('flowcharts')">Flowcharts</button>
+            <button class="tab" onclick="showTab('guideline')">📄 Full Guideline</button>
+        </div>
+
+        <!-- PE Calculator Tab -->
+        <div id="calculator" class="tab-content active">
+            <div style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 1rem; margin: -1rem -1rem 1rem -1rem; border-radius: 3px 3px 0 0;">
+                <h2 style="color: white; margin: 0; font-size: 1.2rem;">PE Risk Calculator & Management</h2>
+                <p style="margin: 0.3rem 0 0 0; font-size: 0.8rem; opacity: 0.9;">Evidence-based risk stratification</p>
+            </div>
+            
+            <div style="border-bottom: 2px solid #3498db; padding-bottom: 0.5rem; margin-bottom: 0.8rem;">
+                <h3 style="margin: 0; font-size: 1rem; color: #2c3e50;">Patient Assessment</h3>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.8rem;">
+                <div class="input-group">
+                    <label for="age">Age (years)</label>
+                    <input type="number" id="age" min="0" max="120" style="width: 100%;">
+                </div>
+                <div class="input-group">
+                    <label for="sex">Sex</label>
+                    <select id="sex" style="width: 100%;">
+                        <option value="">Select</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="hr">Heart rate (bpm)</label>
+                    <input type="number" id="hr" min="0" max="300" style="width: 100%;">
+                </div>
+                <div class="input-group">
+                    <label for="sbp">Systolic BP (mmHg)</label>
+                    <input type="number" id="sbp" min="0" max="300" style="width: 100%;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.8rem;">
+                <div class="input-group">
+                    <label for="rr">Resp rate (/min)</label>
+                    <input type="number" id="rr" min="0" max="100" style="width: 100%;">
+                </div>
+                <div class="input-group">
+                    <label for="temp">Temperature (°C) <span style="font-size: 0.7rem; color: #666;">(<36°C scores in PESI)</span></label>
+                    <input type="number" id="temp" min="30" max="45" step="0.1" style="width: 100%;" placeholder="Normal 36-37.5">
+                </div>
+                <div class="input-group">
+                    <label for="spo2">SpO₂ (%)</label>
+                    <input type="number" id="spo2" min="0" max="100" style="width: 100%;">
+                </div>
+                <div class="input-group">
+                    <label for="rvlv">CT RV:LV ratio</label>
+                    <input type="number" id="rvlv" min="0" max="5" step="0.1" placeholder="e.g. 1.2" style="width: 100%;">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.8rem;">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="cancer">
+                    <label for="cancer">Active malignancy</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="heartFailure">
+                    <label for="heartFailure">Heart failure</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="chronicLung">
+                    <label for="chronicLung">Chronic lung disease</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="alteredMental">
+                    <label for="alteredMental">Altered mental status</label>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem; margin-bottom: 0.8rem;">
+                <div>
+                    <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; display: block;">Haemodynamic status</label>
+                    <div class="radio-option" style="margin: 0.2rem 0;">
+                        <input type="radio" id="stable" name="haemodynamic" value="stable" checked>
+                        <label for="stable" style="font-size: 0.85rem;">Stable</label>
+                    </div>
+                    <div class="radio-option" style="margin: 0.2rem 0;">
+                        <input type="radio" id="unstable" name="haemodynamic" value="unstable">
+                        <label for="unstable" style="font-size: 0.8rem;">Unstable (SBP <90 mmHg ≥15 min or shock)</label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="troponin">Troponin</label>
+                    <select id="troponin" style="width: 100%;">
+                        <option value="">Select</option>
+                        <option value="normal">Normal</option>
+                        <option value="mild">Mildly ↑ (1-3× ULN)</option>
+                        <option value="moderate">Moderately ↑ (3-5× ULN)</option>
+                        <option value="severe">Severely ↑ (>5× ULN)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="bnp">BNP/NT-proBNP</label>
+                    <select id="bnp" style="width: 100%;">
+                        <option value="">Select</option>
+                        <option value="normal">Normal (<100/<300)</option>
+                        <option value="mild">Mildly ↑ (100-500/300-900)</option>
+                        <option value="moderate">Moderately ↑ (500-1000/900-1800)</option>
+                        <option value="severe">Severely ↑ (>1000/>1800)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="echo-rv">Echo RV dysfunction</label>
+                    <select id="echo-rv" style="width: 100%;">
+                        <option value="">Select</option>
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin: 0.8rem 0; padding: 0.6rem; background: #f8f8f8; border-radius: 3px; border-left: 3px solid #3498db;">
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: start;">
+                    <div class="checkbox-group" style="margin: 0;">
+                        <input type="checkbox" id="has-oxygen" onchange="toggleOxygenSection()">
+                        <label for="has-oxygen"><strong>Oxygen Therapy</strong></label>
+                    </div>
+                    <div id="oxygen-section" style="display: none;" data-mermaid-hidden="true">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.6rem;">
+                            <div class="input-group" style="margin: 0;">
+                                <label for="oxygen-type">Delivery</label>
+                                <select id="oxygen-type" onchange="updateOxygenFields()">
+                                    <option value="">Select</option>
+                                    <option value="room-air">Room air</option>
+                                    <option value="nc-mask">NC/Face mask</option>
+                                    <option value="hfnc">HFNC</option>
+                                    <option value="niv">NIV/CPAP</option>
+                                    <option value="invasive">Invasive ventilation</option>
+                                </select>
+                            </div>
+                            <div class="input-group" id="o2-flow-group" style="display: none; margin: 0;">
+                                <label for="o2-flow">Flow (L/min)</label>
+                                <input type="number" id="o2-flow" min="0" max="100" step="0.5">
+                            </div>
+                            <div class="input-group" id="fio2-group" style="display: none; margin: 0;">
+                                <label for="fio2">FiO₂ (%)</label>
+                                <input type="number" id="fio2" min="21" max="100">
+                            </div>
+                            <div class="input-group" id="peep-group" style="display: none; margin: 0;">
+                                <label for="peep">PEEP/CPAP (cmH₂O)</label>
+                                <input type="number" id="peep" min="0" max="30">
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.4rem; padding: 0.4rem; background: #e8f4f8; border-radius: 3px; font-size: 0.75rem;">
+                            <strong>Note:</strong> SpO₂ <90% on room air scores in PESI. Higher oxygen requirements indicate more severe respiratory compromise despite not being directly scored. PaO₂/FiO₂ ratio <300 may indicate ARDS complicating PE.<sup>1,2</sup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 0.8rem 0; padding: 0.6rem; background: #f8f8f8; border-radius: 3px; border-left: 3px solid #9b59b6;">
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: start;">
+                    <div class="checkbox-group" style="margin: 0;">
+                        <input type="checkbox" id="has-abg" onchange="toggleABGSection()">
+                        <label for="has-abg"><strong>Arterial Blood Gas</strong></label>
+                    </div>
+                    <div id="abg-section" style="display: none;" data-mermaid-hidden="true">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem;">
+                            <div class="input-group" style="margin: 0;">
+                                <label for="ph">pH</label>
+                                <input type="number" id="ph" min="6.5" max="8.0" step="0.01" placeholder="7.40">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="pco2">pCO₂ (kPa)</label>
+                                <input type="number" id="pco2" min="1" max="20" step="0.1" placeholder="5.3">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="po2">pO₂ (kPa)</label>
+                                <input type="number" id="po2" min="1" max="100" step="0.1" placeholder="11">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="lactate">Lactate (mmol/L)</label>
+                                <input type="number" id="lactate" min="0" max="30" step="0.1" placeholder="1.5">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-top: 0.6rem;">
+                            <div class="input-group" style="margin: 0;">
+                                <label for="hb-abg">Hb (g/L)</label>
+                                <input type="number" id="hb-abg" min="30" max="250" placeholder="140">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="base-excess">Base excess (mmol/L)</label>
+                                <input type="number" id="base-excess" min="-30" max="30" step="0.1" placeholder="0">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="sao2-abg">SaO₂ (%)</label>
+                                <input type="number" id="sao2-abg" min="50" max="100" step="0.1" placeholder="97">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="hco3">HCO₃⁻ (mmol/L)</label>
+                                <input type="number" id="hco3" min="5" max="50" step="0.1" placeholder="24">
+                            </div>
+                        </div>
+                        <div id="abg-interpretation" style="margin-top: 0.5rem; padding: 0.5rem; background: #fff; border-left: 3px solid #9b59b6; border-radius: 3px; font-size: 0.8rem; display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 0.8rem 0; padding: 0.6rem; background: #f8f8f8; border-radius: 3px; border-left: 3px solid #e67e22;">
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: start;">
+                    <div class="checkbox-group" style="margin: 0;">
+                        <input type="checkbox" id="has-ctpa" onchange="toggleCTPASection()">
+                        <label for="has-ctpa"><strong>CTPA Details</strong></label>
+                    </div>
+                    <div id="ctpa-section" style="display: none;" data-mermaid-hidden="true">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem;">
+                            <div class="input-group" style="margin: 0;">
+                                <label for="clot-location">Clot location</label>
+                                <select id="clot-location">
+                                    <option value="">Select</option>
+                                    <option value="central">Central (main/lobar)</option>
+                                    <option value="segmental">Segmental</option>
+                                    <option value="subsegmental">Subsegmental</option>
+                                    <option value="saddle">Saddle embolus</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="clot-burden">Clot burden</label>
+                                <select id="clot-burden">
+                                    <option value="">Select</option>
+                                    <option value="low"><50% occlusion</option>
+                                    <option value="moderate">50-75% occlusion</option>
+                                    <option value="high">>75% occlusion</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="rv-strain-ct">RV strain signs</label>
+                                <select id="rv-strain-ct">
+                                    <option value="">Select</option>
+                                    <option value="none">None</option>
+                                    <option value="mild">Septal bowing</option>
+                                    <option value="severe">Reflux to IVC/hepatic veins</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="info-box" style="margin-top: 0.5rem; font-size: 0.75rem;">
+                            <strong>CTPA Risk Markers:</strong> RV:LV ratio ≥0.9 indicates RV dysfunction (Becattini 2006).<sup>4</sup> Central clots and high burden correlate with adverse outcomes. Saddle embolus associated with haemodynamic instability. Septal bowing and IVC reflux are additional signs of RV strain. RV:LV ≥1.5 predicts 30-day mortality in normotensive patients.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 0.8rem 0; padding: 0.6rem; background: #f8f8f8; border-radius: 3px; border-left: 3px solid #16a085;">
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; align-items: start;">
+                    <div class="checkbox-group" style="margin: 0;">
+                        <input type="checkbox" id="has-echo" onchange="toggleEchoSection()">
+                        <label for="has-echo"><strong>Echo Details</strong></label>
+                    </div>
+                    <div id="echo-section" style="display: none;" data-mermaid-hidden="true">
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem;">
+                            <div class="input-group" style="margin: 0;">
+                                <label for="rv-dilatation">RV dilatation</label>
+                                <select id="rv-dilatation">
+                                    <option value="">Select</option>
+                                    <option value="none">None</option>
+                                    <option value="mild">Mild</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="severe">Severe</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="rv-dysfunction">RV dysfunction</label>
+                                <select id="rv-dysfunction">
+                                    <option value="">Select</option>
+                                    <option value="none">None</option>
+                                    <option value="mild">Mild hypokinesis</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="severe">Severe</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="mcconnell">McConnell's sign</label>
+                                <select id="mcconnell">
+                                    <option value="">Select</option>
+                                    <option value="absent">Absent</option>
+                                    <option value="present">Present</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="tapse">TAPSE (mm)</label>
+                                <input type="number" id="tapse" min="0" max="50" placeholder="Normal >17">
+                            </div>
+                            <div class="input-group" style="margin: 0;">
+                                <label for="tr-velocity">TR velocity (m/s)</label>
+                                <input type="number" id="tr-velocity" min="0" max="10" step="0.1" placeholder="Normal <2.8">
+                            </div>
+                        </div>
+                        <div class="info-box" style="margin-top: 0.5rem; font-size: 0.75rem;">
+                            <strong>Echo RV Assessment:</strong> McConnell's sign (RV free wall hypokinesis with apical sparing) is 94% specific for acute PE (Weekes 2016).<sup>5</sup> TAPSE <17mm indicates RV systolic dysfunction. TR velocity >2.8 m/s suggests pulmonary hypertension (PASP ~50 mmHg). Moderate-severe RV dysfunction predicts adverse outcomes and may warrant escalation of care.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group" style="margin: 1rem 0;">
+                <button onclick="calculateRisk()" style="padding: 0.6rem 1.5rem;">Calculate Risk</button>
+                <button class="secondary" onclick="resetForm()" style="padding: 0.6rem 1.5rem;">Reset</button>
+            </div>
+
+            <div id="results" class="results"></div>
+            
+            <div style="margin-top: 1.5rem; padding: 0.8rem; background: #f0f4f5; border-left: 3px solid #005EB8; font-size: 0.75rem; line-height: 1.6;">
+                <strong>Key References:</strong>
+                <ol style="margin: 0.5rem 0 0 1.2rem;">
+                    <li>Konstantinides SV, et al. 2019 ESC Guidelines for acute PE. <em>Eur Heart J</em> 2020;41:543-603.</li>
+                    <li>Kline JA, et al. Shock index and A-a gradient normal limits by age for PE. <em>Acad Emerg Med</em> 2020;27:617-24.</li>
+                    <li>Jiménez D, et al. Troponin-based risk stratification. <em>Chest</em> 2009;136:974-82.</li>
+                    <li>Lankeit M, et al. NT-proBNP for risk assessment. <em>Am J Respir Crit Care Med</em> 2010;181:506-10.</li>
+                    <li>Sanchez O, et al. Prognostic value of arterial pO₂ in acute PE. <em>Chest</em> 2008;134:766-73.</li>
+                    <li>Vanni S, et al. Prognostic value of ECG and ABG in normotensive PE. <em>Eur J Intern Med</em> 2011;22:131-5.</li>
+                    <li>Kostrubiec M, et al. Shock index and arterial lactate predict mortality in PE. <em>Heart</em> 2008;94:e24.</li>
+                    <li>Meyer G, et al. Fibrinolysis for intermediate-risk PE (PEITHO). <em>N Engl J Med</em> 2014;370:1402-11.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Risk Assessment Tab -->
+        <div id="risk-assessment" class="tab-content">
+            <h2>Risk Stratification for Confirmed PE</h2>
+            
+            <div class="risk-category high-risk">
+                <div class="risk-header">
+                    HIGH RISK PE (Previously "Massive") — >15% 30-day mortality
+                </div>
+                <div class="risk-content">
+                    <div class="criteria-box">
+                        <h4>Clinical Criteria:</h4>
+                        <ul>
+                            <li>Shock or persistent hypotension: SBP <90 mmHg despite fluid, OR</li>
+                            <li>Vasopressors required for BP ≥90 mmHg, OR</li>
+                            <li>SBP drop >40 mmHg for >15 min (not due to arrhythmia/hypovolaemia/sepsis)</li>
+                            <li>Persistent tachycardia >100 bpm, RR >20, SpO₂ <90%, signs of RV dysfunction</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>Management:</strong> Immediate thrombolysis → Admit CCU/ICU → If contraindicated or fails, refer for catheter thrombectomy
+                    </div>
+                </div>
+            </div>
+
+            <div class="risk-category intermediate-risk">
+                <div class="risk-header">
+                    INTERMEDIATE-HIGH RISK PE — 3-15% mortality
+                </div>
+                <div class="risk-content">
+                    <div class="criteria-box">
+                        <h4>Criteria (ALL must be present):</h4>
+                        <ul>
+                            <li>PESI >86 OR sPESI ≥1</li>
+                            <li>RV/LV ratio >1.0 on CTPA or TTE</li>
+                            <li>Elevated troponin AND BNP >600 pg/mL</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>Management:</strong> Enoxaparin 1mg/kg BD → Monitor closely → Refer for thrombectomy if deterioration at 24-48h (consultant decision)
+                    </div>
+                </div>
+            </div>
+
+            <div class="risk-category low-risk">
+                <div class="risk-header">
+                    LOW RISK PE — <3% mortality
+                </div>
+                <div class="risk-content">
+                    <div class="criteria-box">
+                        <h4>Criteria:</h4>
+                        <ul>
+                            <li>Haemodynamically stable, sPESI = 0, no significant RV dysfunction</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <strong>Management:</strong> DOAC (apixaban or rivaroxaban) → Consider outpatient → Refer to Thrombosis Nurses within 24h
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thrombolysis Tab -->
+        <div id="thrombolysis" class="tab-content">
+            <h2>Thrombolysis for High-Risk PE</h2>
+            
+            <div class="warning-box">
+                <strong>Indication:</strong> Cardiac arrest, obstructive shock, or persistent hypotension
+            </div>
+
+            <div class="dosing-card">
+                <div class="drug-name">ALTEPLASE</div>
+                
+                <h4>Cardiogenic Shock:</h4>
+                <div class="dose-line">Bolus: 10 mg (10 mL) IV over 1-2 min</div>
+                <div class="dose-line">Infusion: 90 mg (90 mL) over 2 hours</div>
+                <div class="dose-line">Weight <65 kg: Max total 1.5 mg/kg</div>
+                
+                <h4>Cardiac Arrest:</h4>
+                <div class="dose-line">Bolus: 50 mg (50 mL) IV</div>
+                <div class="dose-line">Post-ROSC: 40 mg over 1 hour</div>
+            </div>
+
+            <div class="dosing-card">
+                <div class="drug-name">UFH POST-THROMBOLYSIS</div>
+                <ol style="font-size: 0.85rem; margin-left: 1.2rem;">
+                    <li>Check APTT after alteplase completion</li>
+                    <li>Start UFH 3h later if APTT <64 sec</li>
+                    <li>Give bolus when starting</li>
+                    <li>Min 5 days total heparin before DOAC</li>
+                </ol>
+            </div>
+
+            <h3 style="color: var(--nhs-red);">Contraindications</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Absolute</th>
+                        <th>Relative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul style="list-style-position: inside; font-size: 0.8rem;">
+                                <li>Haemorrhagic stroke/unknown stroke</li>
+                                <li>Ischaemic stroke <6 months</li>
+                                <li>Major trauma/surgery/head injury <3 weeks</li>
+                                <li>Bleeding diathesis</li>
+                                <li>Active bleeding</li>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul style="list-style-position: inside; font-size: 0.8rem;">
+                                <li>TIA <6 months</li>
+                                <li>Oral anticoagulation</li>
+                                <li>Pregnancy/1st week post-partum</li>
+                                <li>Non-compressible puncture</li>
+                                <li>Traumatic CPR</li>
+                                <li>Refractory HTN (SBP >180)</li>
+                                <li>Advanced liver disease</li>
+                                <li>Endocarditis, peptic ulcer, ECMO</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <strong>Location:</strong> Alteplase in ED, A300, CCU, ITU<br>
+                <strong>Care:</strong> CCU/ITU monitoring. No improvement 2-4h or deterioration → thrombectomy referral
+            </div>
+        </div>
+
+        <!-- Catheter Thrombectomy Tab -->
+        <div id="thrombectomy" class="tab-content">
+            <h2>Catheter Thrombectomy</h2>
+            
+            <div class="emergency-number">
+                REFERRAL: Cardiology SpR #6527
+            </div>
+
+            <div class="risk-category high-risk">
+                <div class="risk-header">HIGH RISK — Immediate Referral (MG+, involve ICU)</div>
+                <div class="risk-content">
+                    <ul style="font-size: 0.85rem;">
+                        <li>Thrombolysis indicated but contraindicated</li>
+                        <li>Post-thrombolysis failure (no improvement or deterioration 2-4h)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="risk-category intermediate-risk">
+                <div class="risk-header">INTERMEDIATE-HIGH — Consultant Decision</div>
+                <div class="risk-content">
+                    <ul style="font-size: 0.85rem;">
+                        <li>No improvement/deterioration despite 48h anticoagulation</li>
+                        <li>Case-by-case basis on PTWR</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Note:</strong> Weston patients require BRI transfer if accepted
+            </div>
+
+            <div class="highlight-box">
+                <h4>Prepare for Referral:</h4>
+                <ul style="font-size: 0.85rem; margin-left: 1.2rem;">
+                    <li>Demographics, weight, haemodynamics</li>
+                    <li>Thrombolysis timing/response if given</li>
+                    <li>CTPA findings (RV/LV, clot location)</li>
+                    <li>Contraindications to lysis</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Anticoagulation Tab -->
+        <div id="anticoagulation" class="tab-content">
+            <h2>Anticoagulation</h2>
+            
+            <div class="dosing-card">
+                <div class="drug-name">INTERMEDIATE/HIGH RISK (Initially)</div>
+                <h4>Enoxaparin</h4>
+                <div class="dose-line">1 mg/kg SC BD</div>
+                <p style="font-size: 0.85rem; margin-top: 0.4rem;">Preferred for symptomatic PE or risk factors (malignancy). OR if bleeding risk/eGFR <30: UFH infusion</p>
+            </div>
+
+            <div class="dosing-card">
+                <div class="drug-name">LOW RISK (Routine)</div>
+                
+                <h4>Apixaban (preferred):</h4>
+                <div class="dose-line">Loading: 10 mg PO BD × 7 days</div>
+                <div class="dose-line">Maintenance: 5 mg PO BD</div>
+                
+                <h4>Rivaroxaban (alternative):</h4>
+                <div class="dose-line">Loading: 15 mg PO BD × 21 days</div>
+                <div class="dose-line">Maintenance: 20 mg PO OD</div>
+            </div>
+
+            <h3>Special Considerations</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Weight >150 kg</strong></td>
+                        <td>Discuss with haematology</td>
+                    </tr>
+                    <tr>
+                        <td><strong>eGFR 15-30</strong></td>
+                        <td>Enoxaparin 1mg/kg OD → switch to DOAC when stable</td>
+                    </tr>
+                    <tr>
+                        <td><strong>eGFR <15</strong></td>
+                        <td>DOACs contraindicated. Enoxaparin + anti-Xa monitoring (unlicensed). Discuss renal/haem</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Malignancy</strong></td>
+                        <td>DOAC if low bleed risk, else enoxaparin 1mg/kg BD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pregnancy</strong></td>
+                        <td>Enoxaparin 1.0 mg/kg SC BD</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="warning-box">
+                Days of enoxaparin count toward DOAC loading (e.g., 3 days enoxaparin + 4 days apix 10mg BD = complete)
+            </div>
+
+            <h3>Duration</h3>
+            <ul style="font-size: 0.85rem; margin-left: 1.2rem;">
+                <li><strong>Provoked:</strong> 3 months</li>
+                <li><strong>Unprovoked:</strong> Min 3 months, consider long-term</li>
+                <li><strong>Pulmonary HTN at 3m:</strong> Long-term</li>
+            </ul>
+        </div>
+
+        <!-- Dose Calculators Tab -->
+        <div id="calculators" class="tab-content">
+            <h2>Clinical Dose Calculators</h2>
+            
+            <div class="calculator">
+                <h3>sPESI Score</h3>
+                <p style="font-size: 0.85rem; margin-bottom: 0.6rem;">Score 1 point for each criterion</p>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-age">
+                    <label for="spesi-age">Age >80 years</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-cancer">
+                    <label for="spesi-cancer">History of cancer</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-cardiopulm">
+                    <label for="spesi-cardiopulm">Chronic cardiopulmonary disease</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-hr">
+                    <label for="spesi-hr">HR ≥110 bpm</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-sbp">
+                    <label for="spesi-sbp">SBP <100 mmHg</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="spesi-spo2">
+                    <label for="spesi-spo2">SpO₂ <90%</label>
+                </div>
+                
+                <button class="calculate-btn" onclick="calculatesPESI()">Calculate</button>
+                
+                <div id="spesi-result" class="result-box">
+                    <h4>sPESI: <span id="spesi-score">0</span></h4>
+                    <div id="spesi-interpretation"></div>
+                </div>
+            </div>
+
+            <div class="calculator">
+                <h3>Alteplase Dose</h3>
+                
+                <div class="input-group">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" id="weight" min="1" max="200" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="clinical-scenario">Scenario:</label>
+                    <select id="clinical-scenario">
+                        <option value="shock">Cardiogenic Shock</option>
+                        <option value="arrest">Cardiac Arrest</option>
+                    </select>
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateAlteplase()">Calculate</button>
+                
+                <div id="alteplase-result" class="result-box"></div>
+            </div>
+
+            <div class="calculator">
+                <h3>Enoxaparin Dose</h3>
+                
+                <div class="input-group">
+                    <label for="enox-weight">Weight (kg):</label>
+                    <input type="number" id="enox-weight" min="1" max="200" step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="egfr">eGFR (mL/min):</label>
+                    <input type="number" id="egfr" min="1" max="150">
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateEnoxaparin()">Calculate</button>
+                
+                <div id="enoxaparin-result" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Flowcharts Tab -->
+        <div id="flowcharts" class="tab-content">
+            <div style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 1rem; margin: -1rem -1rem 1rem -1rem; border-radius: 3px 3px 0 0;">
+                <h2 style="color: white; margin-bottom: 0.2rem;">PE Management Flowcharts</h2>
+                <p style="font-size: 0.85rem; opacity: 0.9; margin: 0;">Interactive clinical decision pathways</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label for="flowchart-selector" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50;">Select Flowchart:</label>
+                <select id="flowchart-selector" onchange="showFlowchart(this.value)" style="width: 100%; padding: 0.6rem; font-size: 0.95rem; border: 2px solid #005EB8; border-radius: 3px;">
+                    <option value="management">Immediate Management of Confirmed PE</option>
+                    <option value="investigation">Investigation Pathway for Suspected PE</option>
+                    <option value="anticoagulation">Anticoagulation Decision Tree</option>
+                </select>
+            </div>
+
+            <!-- Management Flowchart -->
+            <div id="flowchart-management" class="flowchart-container">
+                <div class="mermaid">
+flowchart TD
+    Start([Confirmed PE]) --> Assessment{Risk Assessment}
+    
+    Assessment -->|Shock or persistent<br/>BP<90mmHg| HighRisk[HIGH RISK<br/>Massive PE<br/>>15% mortality]
+    Assessment -->|RV dysfunction<br/>or myocardial injury| IntRisk{Further Assessment}
+    Assessment -->|sPESI=0 or<br/>Low PESI| LowRisk[LOW RISK<br/><3% mortality]
+    
+    IntRisk -->|PESI >86 or sPESI ≥1<br/>AND RV dysfunction<br/>AND biomarkers ↑| IntHigh[INTERMEDIATE-HIGH<br/>3-15% mortality]
+    IntRisk -->|Other combinations| IntLow[INTERMEDIATE-LOW<br/>1-5% mortality]
+    
+    HighRisk --> Thrombo[THROMBOLYSIS<br/>────────────<br/>Alteplase 10mg IV bolus<br/>then 90mg over 2h<br/><br/>+ UFH infusion<br/>────────────<br/>Admit CCU/ICU<br/>Monitor closely]
+    
+    Thrombo --> ThromboCheck{Response<br/>after 2-4h?}
+    ThromboCheck -->|No improvement or<br/>deterioration| Cath1[Refer for<br/>Catheter Thrombectomy]
+    ThromboCheck -->|Contraindications<br/>to thrombolysis?| Cath2[Refer for<br/>Catheter Thrombectomy]
+    
+    IntHigh --> IntHighTx[ANTICOAGULATION<br/>────────────<br/>Enoxaparin 1mg/kg BD<br/>OR<br/>UFH if high bleeding risk<br/>or eGFR <30<br/>────────────<br/>Admit HDU/ICU monitoring]
+    
+    IntHighTx --> IntHighCheck{All 3 present?<br/>• PESI >86 or sPESI ≥1<br/>• RV:LV >1.0<br/>• Trop or BNP ↑}
+    IntHighCheck -->|Yes| Cath3[Refer for<br/>Catheter Thrombectomy]
+    IntHighCheck -->|No deterioration| IntHighFollow[Monitor closely]
+    
+    IntLow --> IntLowTx[ANTICOAGULATION<br/>────────────<br/>Enoxaparin 1mg/kg BD<br/>OR<br/>DOAC if stable<br/>────────────<br/>Ward admission]
+    
+    LowRisk --> LowTx[ANTICOAGULATION<br/>────────────<br/>Apixaban 10mg BD x7d<br/>then 5mg BD<br/>OR<br/>Rivaroxaban 15mg BD x21d<br/>then 20mg OD<br/>────────────<br/>Consider outpatient<br/>management if stable]
+    
+    IntHighFollow --> Referral[Refer all to<br/>Thrombosis Nurses<br/>within 24h]
+    IntLowTx --> Outpatient{Suitable for<br/>outpatient?}
+    Outpatient -->|Yes| Referral
+    Outpatient -->|No| Admit[Admit for monitoring]
+    Admit --> Referral
+    LowTx --> Referral
+    
+    Cath1 --> Cardio[Contact Cardiology SpR<br/>#6527]
+    Cath2 --> Cardio
+    Cath3 --> Cardio
+    
+    style HighRisk fill:#ffdddd,stroke:#DA291C,stroke-width:3px
+    style IntHigh fill:#ffe6cc,stroke:#ED8B00,stroke-width:3px
+    style IntLow fill:#fff8e6,stroke:#f39c12,stroke-width:2px
+    style LowRisk fill:#e8f5e9,stroke:#007F3B,stroke-width:2px
+    style Thrombo fill:#ffcccc,stroke:#DA291C,stroke-width:2px
+    style Cath1 fill:#d1c4e9,stroke:#673AB7,stroke-width:2px
+    style Cath2 fill:#d1c4e9,stroke:#673AB7,stroke-width:2px
+    style Cath3 fill:#d1c4e9,stroke:#673AB7,stroke-width:2px
+    style Cardio fill:#d1c4e9,stroke:#673AB7,stroke-width:3px
+    style Start fill:#e3f2fd,stroke:#005EB8,stroke-width:2px
+    style Referral fill:#e3f2fd,stroke:#005EB8,stroke-width:2px
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>Key Decision Points:</strong>
+                    <ul style="margin: 5px 0 0 20px; line-height: 1.6;">
+                        <li><strong>High Risk (Massive PE):</strong> Shock or persistent hypotension (SBP <90mmHg despite fluids) → Immediate thrombolysis</li>
+                        <li><strong>RV Dysfunction:</strong> RV:LV ratio >0.9 on CTPA OR echo evidence of RV dysfunction</li>
+                        <li><strong>Biomarker Elevation:</strong> Elevated troponin AND elevated BNP (>600 pg/mL) or NT-proBNP</li>
+                        <li><strong>Catheter Thrombectomy Referrals:</strong>
+                            <ul style="margin-top: 5px;">
+                                <li>HIGH RISK: If contraindications to lysis OR no response/deterioration after lysis → Immediate referral</li>
+                                <li>INTERMEDIATE-HIGH: If all three criteria present AND failure to improve at 24-48h → Consultant decision</li>
+                            </ul>
+                        </li>
+                        <li><strong>Contact:</strong> Cardiology SpR on #6527 for thrombectomy referrals (Weston patients require transfer to BRI)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Investigation Flowchart -->
+            <div id="flowchart-investigation" class="flowchart-container" data-mermaid-hidden="true">
+                <div class="mermaid">
+flowchart TD
+    Suspected([Suspected PE]) --> PERC{PERC Rule<br/>All 8 criteria apply?}
+    
+    PERC -->|Yes<br/>Ultra-low risk| NoPE[No further testing<br/>Consider alternative diagnosis]
+    PERC -->|No| Wells{Two-Level Wells Score}
+    
+    Wells -->|>4 points<br/>PE likely| Clinical{Clinically<br/>unstable?}
+    Wells -->|≤4 points<br/>PE unlikely| DDimer[Check D-Dimer<br/>age-adjusted]
+    
+    Clinical -->|Yes<br/>HR>100, SBP<90<br/>RR>20, SpO2<90%<br/>RV signs| StartAnticoag[Start LMWH<br/>1mg/kg BD]
+    Clinical -->|No| DDimer2[Check D-Dimer<br/>age-adjusted]
+    
+    StartAnticoag --> Imaging1[Arrange urgent CTPA<br/>Admit for management]
+    
+    DDimer -->|Negative| NoPE2[No further testing<br/>Consider alternative]
+    DDimer -->|Positive| Imaging2{Imaging<br/>indicated}
+    
+    DDimer2 -->|Positive| Imaging2
+    DDimer2 -->|Negative| NoPE3[No further testing<br/>Consider alternative]
+    
+    Imaging2 -->|CTPA 1st line<br/>Most patients| CTPA[CT Pulmonary<br/>Angiogram]
+    Imaging2 -->|Contrast allergy<br/>Renal impairment<br/>Young female| VQ[V/Q SPECT Scan<br/>Mon-Fri 9-5pm]
+    
+    CTPA --> Result{CTPA Result}
+    VQ --> Result2{V/Q Result}
+    
+    Result -->|PE confirmed| OutpatientCheck{sPESI = 0<br/>Safe discharge?}
+    Result -->|PE excluded| Alternative[Consider<br/>alternative diagnosis]
+    
+    Result2 -->|PE confirmed| OutpatientCheck
+    Result2 -->|PE excluded| Alternative
+    
+    OutpatientCheck -->|Yes| OutpatientMgmt[Refer to:<br/>• Thrombosis Clinic Bristol<br/>• SDEC Weston<br/>• Acute Med Cons/SpR<br/><br/>Start DOAC]
+    OutpatientCheck -->|No| Admit2[Admit for<br/>management<br/><br/>See Management<br/>Flowchart]
+    
+    style Suspected fill:#e3f2fd,stroke:#005EB8,stroke-width:2px
+    style PERC fill:#fff9c4,stroke:#F9A825,stroke-width:2px
+    style Wells fill:#fff9c4,stroke:#F9A825,stroke-width:2px
+    style Clinical fill:#ffccbc,stroke:#e64a19,stroke-width:2px
+    style StartAnticoag fill:#ffcccc,stroke:#DA291C,stroke-width:2px
+    style CTPA fill:#e1bee7,stroke:#8E24AA,stroke-width:2px
+    style VQ fill:#e1bee7,stroke:#8E24AA,stroke-width:2px
+    style OutpatientMgmt fill:#e8f5e9,stroke:#007F3B,stroke-width:2px
+    style NoPE fill:#e0f2f1,stroke:#00897B,stroke-width:2px
+    style NoPE2 fill:#e0f2f1,stroke:#00897B,stroke-width:2px
+    style NoPE3 fill:#e0f2f1,stroke:#00897B,stroke-width:2px
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>Investigation Pearls:</strong>
+                    <ul style="margin: 5px 0 0 20px; line-height: 1.6;">
+                        <li><strong>PERC Rule:</strong> If all 8 criteria present, PE <1% → No testing needed:
+                            <ul style="margin-top: 3px;">
+                                <li>Age <50 • HR <100 • SpO₂ >94% • No unilateral leg swelling</li>
+                                <li>No haemoptysis • No surgery/trauma in 4 weeks • No prior DVT/PE • No oral hormones</li>
+                            </ul>
+                        </li>
+                        <li><strong>Wells Score >4:</strong> PE likely (28% probability) → Imaging regardless of D-dimer</li>
+                        <li><strong>Age-adjusted D-dimer:</strong> Age × 10 μg/L for patients >50 years</li>
+                        <li><strong>V/Q SPECT:</strong> Consider in young females (lower radiation), renal impairment, contrast allergy</li>
+                        <li><strong>Interim Anticoagulation:</strong> If imaging delayed >24h, cover with LMWH or DOAC</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Anticoagulation Flowchart -->
+            <div id="flowchart-anticoagulation" class="flowchart-container" data-mermaid-hidden="true">
+                <div class="mermaid">
+flowchart TD
+    Start([PE Confirmed<br/>Need Anticoagulation]) --> Risk{Risk Category?}
+    
+    Risk -->|High Risk<br/>Massive PE| UFH[Unfractionated Heparin<br/>────────────<br/>80 units/kg bolus<br/>18 units/kg/h infusion<br/>────────────<br/>Post-thrombolysis:<br/>Start 3h after if APTT <64s<br/>────────────<br/>Minimum 5 days]
+    
+    Risk -->|Intermediate<br/>Risk| IntAnticoag{Bleeding risk or<br/>renal impairment?}
+    
+    Risk -->|Low Risk<br/>Stable| DOACFirst[First Line: DOAC<br/>────────────<br/>Apixaban 10mg BD x7d<br/>then 5mg BD<br/>OR<br/>Rivaroxaban 15mg BD x21d<br/>then 20mg OD]
+    
+    IntAnticoag -->|High bleeding risk<br/>OR eGFR <30| LMWH[Enoxaparin<br/>────────────<br/>1mg/kg BD SC<br/>────────────<br/>Monitor if eGFR 15-30<br/>Anti-Xa if eGFR <15]
+    IntAnticoag -->|Standard risk<br/>eGFR >30| Choice[Either:<br/>• Enoxaparin 1mg/kg BD<br/>• DOAC if stable]
+    
+    UFH --> Switch{Patient<br/>stabilised?}
+    Switch -->|Yes<br/>After 5+ days| SwitchDOAC[Switch to DOAC<br/>or continue LMWH]
+    
+    LMWH --> Special{Special<br/>circumstances?}
+    Choice --> Special
+    DOACFirst --> Special
+    
+    Special -->|Weight >150kg| Discuss1[Discuss with<br/>Haematology<br/>May need monitoring]
+    Special -->|Active malignancy| Cancer[Cancer-associated PE<br/>────────────<br/>Prefer: DOAC if low<br/>bleeding risk and no<br/>drug interactions<br/>OR<br/>Enoxaparin 1mg/kg BD<br/>────────────<br/>Duration: 3-6 months<br/>then reassess]
+    Special -->|Pregnancy| Preg[Enoxaparin<br/>1mg/kg BD SC<br/>────────────<br/>Throughout pregnancy<br/>and 6 weeks postpartum]
+    Special -->|IVDUs| IVDU[Rivaroxaban<br/>preferred<br/>────────────<br/>Good adherence<br/>once daily dosing]
+    Special -->|Standard patient| Duration{Duration of<br/>anticoagulation?}
+    
+    Duration -->|Provoked PE<br/>Major temp risk factor| Prov[3 months<br/>then stop]
+    Duration -->|Unprovoked PE| Unprov[Minimum 3 months<br/>Consider long-term<br/>────────────<br/>Reassess at 3 months:<br/>• Risk of recurrence<br/>• Bleeding risk<br/>• Patient preference]
+    Duration -->|Pulmonary HTN<br/>at 3 months| Long[Long-term<br/>anticoagulation<br/>────────────<br/>Lifelong treatment]
+    
+    Cancer --> CancerDuration[Initial 3-6 months<br/>Reassess at 6 months<br/>────────────<br/>Continue while cancer<br/>active/on treatment]
+    
+    style Start fill:#e3f2fd,stroke:#005EB8,stroke-width:2px
+    style UFH fill:#ffcccc,stroke:#DA291C,stroke-width:2px
+    style LMWH fill:#ffe6cc,stroke:#ED8B00,stroke-width:2px
+    style DOACFirst fill:#e8f5e9,stroke:#007F3B,stroke-width:2px
+    style Cancer fill:#fff3e0,stroke:#F57C00,stroke-width:2px
+    style Preg fill:#fce4ec,stroke:#C2185B,stroke-width:2px
+    style Long fill:#e1bee7,stroke:#8E24AA,stroke-width:2px
+    style Discuss1 fill:#fff9c4,stroke:#F9A825,stroke-width:2px
+                </div>
+
+                <div class="info-box" style="margin-top: 1rem;">
+                    <strong>Anticoagulation Key Points:</strong>
+                    <ul style="margin: 5px 0 0 20px; line-height: 1.6;">
+                        <li><strong>DOAC Advantages:</strong> Fixed dosing, no monitoring, oral administration, rapid offset</li>
+                        <li><strong>LMWH Indications:</strong> Renal impairment (eGFR 15-30), high bleeding risk, extremes of weight, pregnancy</li>
+                        <li><strong>Renal Dosing:</strong>
+                            <ul style="margin-top: 3px;">
+                                <li>eGFR 30-50: Standard DOAC doses acceptable</li>
+                                <li>eGFR 15-30: Enoxaparin 1mg/kg OD (discuss with renal/haem), can consider DOAC when stable (unlicensed)</li>
+                                <li>eGFR <15: Enoxaparin with anti-Xa monitoring (unlicensed) - see renal anticoag guideline</li>
+                            </ul>
+                        </li>
+                        <li><strong>Days of enoxaparin count:</strong> If patient has 3 days enoxaparin before DOAC, only need 4 more days of apixaban 10mg BD</li>
+                        <li><strong>Cancer PE:</strong> Higher recurrence risk (15% vs 3% at 6 months) - extended treatment while cancer active</li>
+                        <li><strong>Duration Decisions:</strong> Balance recurrence risk (~10%/year off anticoagulation if unprovoked) vs bleeding risk (~2-3%/year)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Guideline Tab Content -->
+    <div id="guideline" class="tab-content">
+        <div style="background: white; padding: 2rem; border-radius: 3px;">
+            <h2 style="color: var(--nhs-dark-blue); margin-bottom: 1rem;">📄 UHBW PE Clinical Guideline</h2>
+            <p style="margin-bottom: 1rem; color: #666;">
+                <strong>Investigation and Management of Pulmonary Embolism</strong><br>
+                Version 4.4 (October 2024 – August 2026)
+            </p>
+            
+            <div style="background: #f0f4f5; padding: 1rem; border-radius: 3px; margin-bottom: 1rem;">
+                <p style="margin: 0; font-size: 0.9rem;">
+                    💡 <strong>Note:</strong> This interactive tool summarizes key decision points from the full guideline. 
+                    For complete details, contraindications, and evidence references, please refer to the original PDF document below.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="Investigation_and_Management_of_Pulmonary_Embolism.pdf" 
+                   target="_blank" 
+                   style="display: inline-block; background: var(--nhs-blue); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 3px; font-weight: 600; font-size: 1.1rem;">
+                    📥 Download Full PDF Guideline
+                </a>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: #666;">
+                    Opens in new tab • 11 pages • PDF format
+                </p>
+            </div>
+
+            <div style="margin-top: 2rem; border: 2px solid #005EB8; border-radius: 3px; overflow: hidden;">
+                <iframe src="Investigation_and_Management_of_Pulmonary_Embolism.pdf" 
+                        style="width: 100%; height: 800px; border: none;"
+                        title="PE Clinical Guideline PDF">
+                </iframe>
+            </div>
+
+            <p style="margin-top: 1rem; font-size: 0.85rem; color: #666; text-align: center;">
+                If the PDF doesn't display above, <a href="Investigation_and_Management_of_Pulmonary_Embolism.pdf" target="_blank" style="color: var(--nhs-blue);">click here to open it in a new tab</a>.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Based on UHBW PE Clinical Guideline v4.4 (October 2024 – August 2026)</strong></p>
+        <p style="margin: 0.5rem 0; font-size: 0.8rem;">Refer to complete guideline for full details and references</p>
+        <div class="footer-links">
+            <span>Thrombosis Nurses: ext. 24684</span>
+            <span>Cardiology SpR: #6527</span>
+            <span>BRI Switchboard: 0117 923 0000</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid 
+        // Initialize Mermaid with startOnLoad: false
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            }
+        });
+
+        // Flag to track if flowcharts have been rendered
+        let flowchartsRendered = false;
+
+        // Function to render Mermaid charts when tab becomes visible
+        function renderFlowcharts() {
+            if (flowchartsRendered) return;
+            flowchartsRendered = true;
+            
+            // Wait for tab to be visible, then render
+            setTimeout(() => {
+                // Reinitialize with startOnLoad to force render
+                mermaid.initialize({ 
+                    startOnLoad: true,
+                    theme: 'default',
+                    flowchart: {
+                        useMaxWidth: true,
+                        htmlLabels: true,
+                        curve: 'basis',
+                        padding: 20
+                    }
+                });
+                
+                // Force Mermaid to scan and render all .mermaid elements
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            }, 300);
+        }
+
+        // Flowchart switcher
+        function showFlowchart(flowchartId) {
+            // Hide all flowcharts
+            document.querySelectorAll('.flowchart-container').forEach(chart => {
+                chart.style.display = 'none';
+            });
+            
+            // Show selected flowchart
+            const selectedChart = document.getElementById('flowchart-' + flowchartId);
+            if (selectedChart) {
+                selectedChart.style.display = 'block';
+            }
+        }
+
+        // Tab switching
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Render flowcharts when that tab is opened
+            if (tabId === 'flowcharts') {
+                renderFlowcharts();
+            }
+        }
+
+        // Toggle Oxygen section
+        function toggleOxygenSection() {
+            const section = document.getElementById('oxygen-section');
+            const checkbox = document.getElementById('has-oxygen');
+            section.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        // Update oxygen fields based on delivery type
+        function updateOxygenFields() {
+            const type = document.getElementById('oxygen-type').value;
+            const flowGroup = document.getElementById('o2-flow-group');
+            const fio2Group = document.getElementById('fio2-group');
+            const peepGroup = document.getElementById('peep-group');
+            
+            // Hide all initially
+            flowGroup.style.display = 'none';
+            fio2Group.style.display = 'none';
+            peepGroup.style.display = 'none';
+            
+            // Show relevant fields based on type
+            if (type === 'nc-mask') {
+                flowGroup.style.display = 'block';
+            } else if (type === 'hfnc') {
+                flowGroup.style.display = 'block';
+                fio2Group.style.display = 'block';
+            } else if (type === 'niv' || type === 'invasive') {
+                fio2Group.style.display = 'block';
+                peepGroup.style.display = 'block';
+            }
+        }
+
+        // Toggle ABG section
+        function toggleABGSection() {
+            const section = document.getElementById('abg-section');
+            const checkbox = document.getElementById('has-abg');
+            section.style.display = checkbox.checked ? 'block' : 'none';
+            if (checkbox.checked) {
+                interpretABG();
+            }
+        }
+
+        // Calculate A-a gradient
+        function calculateAaGradient() {
+            const age = parseInt(document.getElementById('age').value) || 25;
+            const po2 = parseFloat(document.getElementById('po2').value);
+            const pco2 = parseFloat(document.getElementById('pco2').value);
+            
+            // Get FiO2 from oxygen section if available
+            let fio2 = 0.21; // Room air default
+            const hasOxygen = document.getElementById('has-oxygen').checked;
+            const oxygenType = document.getElementById('oxygen-type').value;
+            
+            if (hasOxygen) {
+                if (oxygenType === 'room-air') {
+                    fio2 = 0.21;
+                } else {
+                    const fio2Input = parseFloat(document.getElementById('fio2').value);
+                    if (fio2Input) {
+                        fio2 = fio2Input / 100;
+                    } else if (oxygenType === 'nc-mask') {
+                        // Estimate FiO2 from flow rate
+                        const flow = parseFloat(document.getElementById('o2-flow').value) || 0;
+                        fio2 = 0.21 + (flow * 0.03); // Rough estimate
+                    }
+                }
+            }
+            
+            if (!po2 || !pco2) return null;
+            
+            // A-a gradient = PAO2 - PaO2
+            // PAO2 = FiO2(Patm - PH2O) - PaCO2/R
+            // Assuming Patm = 101.3 kPa, PH2O = 6.3 kPa, R = 0.8
+            const pao2 = (fio2 * (101.3 - 6.3)) - (pco2 / 0.8);
+            const aaGradient = pao2 - po2;
+            
+            // Normal A-a gradient = 2.5 + 0.21 × age (in kPa)
+            // Or approximately age/4 + 1 (in kPa)
+            const normalAaGrad = (age / 4) + 1;
+            
+            return {
+                value: aaGradient,
+                normal: normalAaGrad,
+                elevated: aaGradient > normalAaGrad
+            };
+        }
+
+        // Calculate PaO2/FiO2 ratio
+        function calculatePfRatio() {
+            const po2 = parseFloat(document.getElementById('po2').value);
+            
+            let fio2 = 0.21;
+            const hasOxygen = document.getElementById('has-oxygen').checked;
+            const oxygenType = document.getElementById('oxygen-type').value;
+            
+            if (hasOxygen) {
+                if (oxygenType === 'room-air') {
+                    fio2 = 0.21;
+                } else {
+                    const fio2Input = parseFloat(document.getElementById('fio2').value);
+                    if (fio2Input) {
+                        fio2 = fio2Input / 100;
+                    } else if (oxygenType === 'nc-mask') {
+                        const flow = parseFloat(document.getElementById('o2-flow').value) || 0;
+                        fio2 = 0.21 + (flow * 0.03);
+                    }
+                }
+            }
+            
+            if (!po2) return null;
+            
+            // Convert kPa to mmHg for P/F ratio (multiply by 7.5)
+            const po2mmHg = po2 * 7.5;
+            const pfRatio = po2mmHg / fio2;
+            
+            return {
+                value: pfRatio,
+                severe: pfRatio < 200,    // ARDS
+                moderate: pfRatio < 300,  // Hypoxemic respiratory failure
+                normal: pfRatio >= 400
+            };
+        }
+
+        // Interpret ABG
+        function interpretABG() {
+            const ph = parseFloat(document.getElementById('ph').value);
+            const pco2 = parseFloat(document.getElementById('pco2').value);
+            const po2 = parseFloat(document.getElementById('po2').value);
+            const lactate = parseFloat(document.getElementById('lactate').value);
+            const be = parseFloat(document.getElementById('base-excess').value);
+            
+            if (!ph && !pco2 && !po2) {
+                document.getElementById('abg-interpretation').style.display = 'none';
+                return;
+            }
+            
+            let interpretation = '<strong>ABG Interpretation:</strong><br>';
+            let alerts = [];
+            
+            // Acid-base status
+            if (ph) {
+                if (ph < 7.35) {
+                    alerts.push('Acidaemia');
+                    if (pco2 && pco2 > 6.0) alerts.push('Respiratory acidosis');
+                    if (be && be < -2) alerts.push('Metabolic component');
+                } else if (ph > 7.45) {
+                    alerts.push('Alkalaemia');
+                    if (pco2 && pco2 < 4.5) alerts.push('Respiratory alkalosis');
+                }
+            }
+            
+            // Oxygenation
+            if (po2) {
+                const aaGrad = calculateAaGradient();
+                const pfRatio = calculatePfRatio();
+                
+                if (po2 < 8.0) {
+                    alerts.push('<span style="color: #DA291C; font-weight: 600;">Severe hypoxaemia (Type 1 RF)</span>');
+                } else if (po2 < 10.6) {
+                    alerts.push('<span style="color: #ED8B00; font-weight: 600;">Hypoxaemia</span>');
+                }
+                
+                if (aaGrad && aaGrad.elevated) {
+                    alerts.push(`A-a gradient ${aaGrad.value.toFixed(1)} kPa (elevated for age)`);
+                }
+                
+                if (pfRatio) {
+                    if (pfRatio.severe) {
+                        alerts.push(`<span style="color: #DA291C; font-weight: 600;">P/F ratio ${pfRatio.value.toFixed(0)} (ARDS range)</span>`);
+                    } else if (pfRatio.moderate) {
+                        alerts.push(`<span style="color: #ED8B00;">P/F ratio ${pfRatio.value.toFixed(0)} (hypoxemic RF)</span>`);
+                    }
+                }
+            }
+            
+            // Lactate
+            if (lactate) {
+                if (lactate >= 4.0) {
+                    alerts.push('<span style="color: #DA291C; font-weight: 600;">Severe hyperlactataemia (shock)</span>');
+                } else if (lactate >= 2.0) {
+                    alerts.push('<span style="color: #ED8B00;">Elevated lactate (tissue hypoperfusion)</span>');
+                }
+            }
+            
+            // Type 2 RF
+            if (pco2 && pco2 > 6.5 && po2 && po2 < 8.0) {
+                alerts.push('<span style="color: #DA291C; font-weight: 600;">Type 2 respiratory failure</span>');
+            }
+            
+            if (alerts.length > 0) {
+                interpretation += alerts.join('<br>');
+                interpretation += '<br><br><strong>Clinical Significance in PE:</strong><br>';
+                interpretation += 'Severe hypoxaemia and elevated A-a gradient common in PE. ';
+                interpretation += 'P/F ratio <300 or lactate >2 suggest more severe disease. ';
+                interpretation += 'Lactate ≥2 mmol/L independently predicts mortality in PE (Kostrubiec 2008). ';
+                interpretation += 'pCO₂ <4.5 kPa (respiratory alkalosis) typical in acute PE.';
+                
+                document.getElementById('abg-interpretation').innerHTML = interpretation;
+                document.getElementById('abg-interpretation').style.display = 'block';
+            } else {
+                document.getElementById('abg-interpretation').style.display = 'none';
+            }
+        }
+        
+        // Update ABG interpretation on input
+        document.addEventListener('DOMContentLoaded', function() {
+            ['ph', 'pco2', 'po2', 'lactate', 'base-excess', 'fio2', 'o2-flow'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', function() {
+                        if (document.getElementById('has-abg').checked) {
+                            interpretABG();
+                        }
+                    });
+                }
+            });
+        });
+
+        // Toggle CTPA section
+        function toggleCTPASection() {
+            const section = document.getElementById('ctpa-section');
+            const checkbox = document.getElementById('has-ctpa');
+            section.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        // Toggle Echo section
+        function toggleEchoSection() {
+            const section = document.getElementById('echo-section');
+            const checkbox = document.getElementById('has-echo');
+            section.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        // PESI Calculator
+        function calculatePESI() {
+            const age = parseInt(document.getElementById('age').value) || 0;
+            const sex = document.getElementById('sex').value;
+            const hr = parseInt(document.getElementById('hr').value) || 0;
+            const sbp = parseInt(document.getElementById('sbp').value) || 0;
+            const rr = parseInt(document.getElementById('rr').value) || 0;
+            const temp = parseFloat(document.getElementById('temp').value) || 37;
+            const spo2 = parseInt(document.getElementById('spo2').value) || 100;
+            
+            let score = age;
+            if (sex === 'M') score += 10;
+            if (document.getElementById('cancer').checked) score += 30;
+            if (document.getElementById('heartFailure').checked) score += 10;
+            if (document.getElementById('chronicLung').checked) score += 10;
+            if (hr >= 110) score += 20;
+            if (sbp < 100) score += 30;
+            if (rr >= 30) score += 20;
+            if (temp < 36) score += 20;
+            if (spo2 < 90) score += 20;
+            
+            return score;
+        }
+
+        function getPESIClass(score) {
+            if (score < 66) return 'I (very low)';
+            if (score < 86) return 'II (low)';
+            if (score < 106) return 'III (moderate)';
+            if (score < 126) return 'IV (high)';
+            return 'V (very high)';
+        }
+
+        // sPESI Calculator
+        function calculateSPESI() {
+            const age = parseInt(document.getElementById('age').value) || 0;
+            const hr = parseInt(document.getElementById('hr').value) || 0;
+            const sbp = parseInt(document.getElementById('sbp').value) || 0;
+            const spo2 = parseInt(document.getElementById('spo2').value) || 100;
+
+            let score = 0;
+            if (age > 80) score += 1;
+            if (document.getElementById('cancer').checked) score += 1;
+            if (document.getElementById('heartFailure').checked || document.getElementById('chronicLung').checked) score += 1;
+            if (hr >= 110) score += 1;
+            if (sbp < 100) score += 1;
+            if (spo2 < 90) score += 1;
+
+            return score;
+        }
+
+        function hasRVDysfunction() {
+            // Check CTPA RV:LV ratio
+            const rvlv = parseFloat(document.getElementById('rvlv').value) || 0;
+            if (rvlv >= 0.9) return true;
+            
+            // Check simple Echo RV dropdown
+            const echoRV = document.getElementById('echo-rv').value;
+            if (echoRV === 'yes') return true;
+            
+            // Check detailed Echo if available
+            const hasEcho = document.getElementById('has-echo').checked;
+            if (hasEcho) {
+                const rvDysfunctionEcho = document.getElementById('rv-dysfunction').value;
+                if (rvDysfunctionEcho === 'moderate' || rvDysfunctionEcho === 'severe') return true;
+                
+                const rvDilatation = document.getElementById('rv-dilatation').value;
+                if (rvDilatation === 'moderate' || rvDilatation === 'severe') return true;
+                
+                const mcconnell = document.getElementById('mcconnell').value;
+                if (mcconnell === 'present') return true;
+                
+                const tapse = parseFloat(document.getElementById('tapse').value) || 999;
+                if (tapse < 17 && tapse > 0) return true;
+            }
+            
+            return false;
+        }
+
+        function hasBiomarkerElevation() {
+            const troponin = document.getElementById('troponin').value;
+            const bnp = document.getElementById('bnp').value;
+            
+            // For risk stratification, any elevation counts
+            const tropElevated = (troponin === 'mild' || troponin === 'moderate' || troponin === 'severe');
+            const bnpElevated = (bnp === 'mild' || bnp === 'moderate' || bnp === 'severe');
+            
+            return tropElevated && bnpElevated;
+        }
+        
+        function getBiomarkerSeverity() {
+            const troponin = document.getElementById('troponin').value;
+            const bnp = document.getElementById('bnp').value;
+            
+            let severity = 'normal';
+            
+            if (troponin === 'severe' || bnp === 'severe') {
+                severity = 'severe';
+            } else if (troponin === 'moderate' || bnp === 'moderate') {
+                severity = 'moderate';
+            } else if (troponin === 'mild' || bnp === 'mild') {
+                severity = 'mild';
+            }
+            
+            return severity;
+        }
+
+        function getRiskCategory() {
+            const haemodynamic = document.querySelector('input[name="haemodynamic"]:checked');
+            if (!haemodynamic) return null;
+
+            if (haemodynamic.value === 'unstable') {
+                return { category: 'High-Risk', level: 'high', mortality: '15-30%' };
+            }
+
+            const spesi = calculateSPESI();
+            const pesi = calculatePESI();
+            const rvDysfunction = hasRVDysfunction();
+            const biomarkersBoth = hasBiomarkerElevation();
+
+            if ((spesi >= 1 || pesi >= 86) && rvDysfunction && biomarkersBoth) {
+                return { category: 'Intermediate-High', level: 'intermediate-high', mortality: '3-15%' };
+            }
+
+            if ((spesi >= 1 || pesi >= 86) && (rvDysfunction || biomarkersBoth)) {
+                return { category: 'Intermediate-Low', level: 'intermediate-low', mortality: '1-5%' };
+            }
+
+            if (spesi === 0 || pesi <= 85) {
+                return { category: 'Low Risk', level: 'low', mortality: '<1%' };
+            }
+
+            return { category: 'Intermediate-Low', level: 'intermediate-low', mortality: '1-5%' };
+        }
+
+        function getManagement(riskLevel, age) {
+            const mgmt = {
+                high: {
+                    setting: 'ICU',
+                    primary: 'Systemic thrombolysis: Alteplase (see Thrombolysis tab)',
+                    alt: 'If contraindicated: surgical embolectomy or catheter-directed therapy',
+                    anticoag: 'UFH 80 units/kg bolus, 18 units/kg/h',
+                    ref: 'ESC 2019, Meyer NEJM 2014'
+                },
+                'intermediate-high': {
+                    setting: 'HDU/ICU monitoring',
+                    primary: 'Enoxaparin 1mg/kg BD + conditional thrombolysis if deterioration',
+                    note: age < 75 ? 'Consider rescue lysis if age <75, no bleeding risk' : 'Age ≥75: high bleeding risk with lysis',
+                    anticoag: 'Consider UFH (allows rapid reversal if needed)',
+                    ref: 'Meyer NEJM 2014 (PEITHO), ESC 2019'
+                },
+                'intermediate-low': {
+                    setting: 'Ward admission',
+                    primary: 'DOAC: apixaban 10 mg BD×7d→5 mg BD, or rivaroxaban 15 mg BD×21d→20 mg OD',
+                    alt: 'LMWH if eGFR 15-30 or high bleeding risk',
+                    duration: 'Min 3 months',
+                    ref: 'Büller Lancet 2012, ESC 2019'
+                },
+                low: {
+                    setting: 'Outpatient/early discharge if stable',
+                    primary: 'DOAC as above',
+                    note: 'Refer to Thrombosis Nurses within 24h. Ensure follow-up arranged.',
+                    ref: 'Zondag Lancet 2011, Aujesky AJRCCM 2011'
+                }
+            };
+            return mgmt[riskLevel] || mgmt['intermediate-low'];
+        }
+        
+        function getImagingFindings() {
+            let findings = [];
+            
+            // Oxygen therapy
+            const hasOxygen = document.getElementById('has-oxygen').checked;
+            if (hasOxygen) {
+                const oxygenType = document.getElementById('oxygen-type').value;
+                if (oxygenType === 'room-air') {
+                    findings.push('Room air');
+                } else if (oxygenType === 'nc-mask') {
+                    const flow = document.getElementById('o2-flow').value;
+                    if (flow) findings.push(`O₂ ${flow}L/min via NC/mask`);
+                } else if (oxygenType === 'hfnc') {
+                    const flow = document.getElementById('o2-flow').value;
+                    const fio2 = document.getElementById('fio2').value;
+                    findings.push(`HFNC ${fio2 ? fio2+'%' : ''} ${flow ? flow+'L/min' : ''}`);
+                } else if (oxygenType === 'niv') {
+                    const fio2 = document.getElementById('fio2').value;
+                    const peep = document.getElementById('peep').value;
+                    findings.push(`NIV/CPAP ${fio2 ? fio2+'%' : ''} ${peep ? 'PEEP '+peep : ''}`);
+                } else if (oxygenType === 'invasive') {
+                    const fio2 = document.getElementById('fio2').value;
+                    const peep = document.getElementById('peep').value;
+                    findings.push(`Invasive vent ${fio2 ? fio2+'%' : ''} ${peep ? 'PEEP '+peep : ''}`);
+                }
+            }
+            
+            // ABG findings
+            const hasABG = document.getElementById('has-abg').checked;
+            if (hasABG) {
+                const ph = parseFloat(document.getElementById('ph').value);
+                const po2 = parseFloat(document.getElementById('po2').value);
+                const pco2 = parseFloat(document.getElementById('pco2').value);
+                const lactate = parseFloat(document.getElementById('lactate').value);
+                
+                if (ph) findings.push(`pH ${ph.toFixed(2)}`);
+                if (po2) findings.push(`pO₂ ${po2.toFixed(1)} kPa`);
+                if (pco2) findings.push(`pCO₂ ${pco2.toFixed(1)} kPa`);
+                if (lactate) findings.push(`Lactate ${lactate.toFixed(1)} ${lactate >= 2 ? '(↑)' : ''}`);
+                
+                const pfRatio = calculatePfRatio();
+                if (pfRatio && pfRatio.value < 400) {
+                    findings.push(`P/F ${pfRatio.value.toFixed(0)}`);
+                }
+            }
+            
+            // CTPA findings
+            const hasCTPA = document.getElementById('has-ctpa').checked;
+            if (hasCTPA) {
+                const rvlv = parseFloat(document.getElementById('rvlv').value) || 0;
+                const clotLocation = document.getElementById('clot-location').value;
+                const clotBurden = document.getElementById('clot-burden').value;
+                const rvStrain = document.getElementById('rv-strain-ct').value;
+                
+                if (clotLocation) findings.push(`${clotLocation} PE`);
+                if (clotBurden) findings.push(`${clotBurden} burden`);
+                if (rvlv > 0) findings.push(`RV:LV ${rvlv.toFixed(1)} ${rvlv >= 0.9 ? '(↑)' : ''}`);
+                if (rvStrain && rvStrain !== 'none') findings.push(rvStrain);
+            }
+            
+            // Echo findings
+            const hasEcho = document.getElementById('has-echo').checked;
+            if (hasEcho) {
+                const rvDilatation = document.getElementById('rv-dilatation').value;
+                const rvDysfunction = document.getElementById('rv-dysfunction').value;
+                const mcconnell = document.getElementById('mcconnell').value;
+                const tapse = parseFloat(document.getElementById('tapse').value) || 0;
+                const trVelocity = parseFloat(document.getElementById('tr-velocity').value) || 0;
+                
+                if (rvDilatation && rvDilatation !== 'none') findings.push(`${rvDilatation} RV dilatation`);
+                if (rvDysfunction && rvDysfunction !== 'none') findings.push(`RV ${rvDysfunction}`);
+                if (mcconnell === 'present') findings.push(`McConnell's sign +`);
+                if (tapse > 0) findings.push(`TAPSE ${tapse}mm ${tapse < 17 ? '(↓)' : ''}`);
+                if (trVelocity > 0) findings.push(`TR vel ${trVelocity}m/s ${trVelocity > 2.8 ? '(↑)' : ''}`);
+            }
+            
+            return findings;
+        }
+
+        function calculateRisk() {
+            const age = document.getElementById('age').value;
+            const haemodynamic = document.querySelector('input[name="haemodynamic"]:checked');
+
+            if (!age || !haemodynamic) {
+                alert('Please enter age and haemodynamic status');
+                return;
+            }
+
+            const pesiScore = calculatePESI();
+            const spesiScore = calculateSPESI();
+            const riskCategory = getRiskCategory();
+            const management = getManagement(riskCategory.level, parseInt(age));
+            const biomarkerSeverity = getBiomarkerSeverity();
+            const imagingFindings = getImagingFindings();
+
+            let alertClass = riskCategory.level === 'high' ? 'alert-danger' :
+                           riskCategory.level === 'intermediate-high' ? 'alert-warning' :
+                           riskCategory.level === 'intermediate-low' ? 'alert-info' : 'alert-success';
+
+            let resultsHTML = `
+                <div style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 0.6rem 1rem; margin: -0.5rem -0.5rem 0.8rem -0.5rem; border-radius: 3px;">
+                    <h2 style="color: white; margin: 0; font-size: 1.1rem;">Results</h2>
+                </div>
+                
+                <div class="alert ${alertClass}" style="padding: 0.6rem; margin-bottom: 0.8rem; font-size: 0.95rem;">
+                    <strong>${riskCategory.category} PE</strong> — 30-day mortality: ${riskCategory.mortality}
+                </div>
+
+                <div class="result-card" style="padding: 0.8rem; margin-bottom: 0.8rem;">
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem;">Scores & Classification</h3>
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.8rem; font-size: 0.85rem;">
+                        <span style="font-weight: 600;">PESI:</span>
+                        <span>${pesiScore} pts (${getPESIClass(pesiScore)})</span>
+                        <span style="font-weight: 600;">sPESI:</span>
+                        <span>${spesiScore} pts (${spesiScore === 0 ? 'Low' : 'High'} risk)</span>
+                        <span style="font-weight: 600;">Haemodynamic:</span>
+                        <span>${haemodynamic.value === 'unstable' ? '<strong style="color: #DA291C;">Unstable</strong>' : 'Stable'}</span>
+                        <span style="font-weight: 600;">RV dysfunction:</span>
+                        <span>${hasRVDysfunction() ? '<strong style="color: #ED8B00;">Present</strong>' : 'Absent'}</span>
+                        <span style="font-weight: 600;">Biomarkers:</span>
+                        <span>${hasBiomarkerElevation() ? '<strong>Both ↑</strong>' : 'Not both ↑'} ${biomarkerSeverity !== 'normal' ? `<span style="color: #9b59b6;">(${biomarkerSeverity})</span>` : ''}</span>
+                    </div>
+                </div>`;
+            
+            // Add clinical data if available
+            if (imagingFindings.length > 0) {
+                resultsHTML += `
+                <div class="result-card" style="padding: 0.8rem; margin-bottom: 0.8rem;">
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem;">Clinical Data</h3>
+                    <div style="font-size: 0.85rem; line-height: 1.5;">
+                        ${imagingFindings.map(f => `<div style="margin: 0.2rem 0;">• ${f}</div>`).join('')}
+                    </div>
+                </div>`;
+            }
+            
+            // Add respiratory/ABG interpretation if available
+            const hasABG = document.getElementById('has-abg').checked;
+            const hasOxygen = document.getElementById('has-oxygen').checked;
+            const oxygenType = document.getElementById('oxygen-type').value;
+            const lactate = parseFloat(document.getElementById('lactate').value);
+            const pfRatio = calculatePfRatio();
+            
+            if ((hasOxygen && oxygenType !== 'room-air') || (hasABG && pfRatio) || lactate >= 2) {
+                let respAlerts = [];
+                
+                if (oxygenType === 'hfnc' || oxygenType === 'niv' || oxygenType === 'invasive') {
+                    respAlerts.push('High oxygen requirement indicates severe respiratory compromise');
+                }
+                
+                if (pfRatio) {
+                    if (pfRatio.severe) {
+                        respAlerts.push('P/F ratio <200 suggests ARDS - consider ICU level care');
+                    } else if (pfRatio.moderate) {
+                        respAlerts.push('P/F ratio <300 indicates moderate-severe hypoxemic respiratory failure');
+                    }
+                }
+                
+                if (lactate >= 4.0) {
+                    respAlerts.push('Lactate ≥4 mmol/L strongly associated with shock and high mortality');
+                } else if (lactate >= 2.0) {
+                    respAlerts.push('Lactate ≥2 mmol/L independently predicts mortality in normotensive PE (Kostrubiec 2008)');
+                }
+                
+                const aaGrad = calculateAaGradient();
+                if (aaGrad && aaGrad.elevated) {
+                    respAlerts.push(`Elevated A-a gradient (${aaGrad.value.toFixed(1)} vs normal ${aaGrad.normal.toFixed(1)} kPa) typical in PE`);
+                }
+                
+                if (respAlerts.length > 0) {
+                    resultsHTML += `
+                    <div class="info-box" style="background: #fff4e5; border-left: 3px solid #9b59b6; padding: 0.6rem; margin-bottom: 0.8rem; font-size: 0.8rem; line-height: 1.5;">
+                        <strong>Respiratory/Perfusion:</strong><br>${respAlerts.join('<br>• ')}
+                    </div>`;
+                }
+            }
+            
+            // Add biomarker interpretation if elevated
+            if (biomarkerSeverity !== 'normal') {
+                let biomarkerNote = '';
+                if (biomarkerSeverity === 'severe') {
+                    biomarkerNote = 'Severely elevated biomarkers indicate significant myocardial strain. In normotensive patients suggests intermediate-high risk. Consider HDU monitoring.';
+                } else if (biomarkerSeverity === 'moderate') {
+                    biomarkerNote = 'Moderately elevated biomarkers suggest moderate RV strain. Monitor closely for deterioration.';
+                } else {
+                    biomarkerNote = 'Mildly elevated biomarkers indicate some cardiac strain but generally good prognosis if haemodynamically stable.';
+                }
+                
+                resultsHTML += `
+                <div class="info-box" style="background: #fff4e5; border-left: 3px solid #ED8B00; padding: 0.6rem; margin-bottom: 0.8rem; font-size: 0.8rem;">
+                    <strong>Biomarker Note:</strong> ${biomarkerNote}
+                </div>`;
+            }
+
+            resultsHTML += `
+                <div class="result-card" style="padding: 0.8rem; margin-bottom: 0.8rem;">
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.3rem;">Management Recommendation</h3>
+                    <div style="font-size: 0.85rem; line-height: 1.6;">
+                        <div style="margin: 0.3rem 0;"><strong>Setting:</strong> ${management.setting}</div>
+                        <div style="margin: 0.3rem 0;"><strong>Primary:</strong> ${management.primary}</div>
+                        ${management.alt ? `<div style="margin: 0.3rem 0;"><strong>Alternative:</strong> ${management.alt}</div>` : ''}
+                        ${management.note ? `<div class="info-box" style="margin: 0.5rem 0; padding: 0.5rem; font-size: 0.8rem;">${management.note}</div>` : ''}
+                        <div style="margin: 0.3rem 0;"><strong>Anticoagulation:</strong> ${management.anticoag || management.primary}</div>
+                        ${management.duration ? `<div style="margin: 0.3rem 0;"><strong>Duration:</strong> ${management.duration}</div>` : ''}
+                        <div style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #666;"><strong>Evidence:</strong> ${management.ref}</div>
+                    </div>
+                </div>
+
+                <div class="button-group" style="margin-top: 0.8rem;">
+                    <button onclick="window.print()">Print</button>
+                    <button onclick="copyToClipboard()">Copy</button>
+                </div>
+            `;
+
+            document.getElementById('results').innerHTML = resultsHTML;
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateTextSummary() {
+            const pesiScore = calculatePESI();
+            const spesiScore = calculateSPESI();
+            const riskCategory = getRiskCategory();
+            const age = document.getElementById('age').value;
+            const management = getManagement(riskCategory.level, parseInt(age));
+            const imagingFindings = getImagingFindings();
+
+            let summary = `PE RISK ASSESSMENT - UHBW\n`;
+            summary += `Date: ${new Date().toLocaleString('en-GB')}\n`;
+            summary += `Age: ${age} years\n\n`;
+            summary += `RISK: ${riskCategory.category} (30-day mortality ${riskCategory.mortality})\n`;
+            summary += `PESI: ${pesiScore} pts (${getPESIClass(pesiScore)})\n`;
+            summary += `sPESI: ${spesiScore} pts\n`;
+            summary += `RV dysfunction: ${hasRVDysfunction() ? 'Yes' : 'No'}\n`;
+            summary += `Biomarkers: ${hasBiomarkerElevation() ? 'Both elevated' : 'Not both elevated'}\n`;
+            
+            if (imagingFindings.length > 0) {
+                summary += `\nIMAGING:\n${imagingFindings.join('\n')}\n`;
+            }
+            
+            summary += `\nMANAGEMENT\n`;
+            summary += `Setting: ${management.setting}\n`;
+            summary += `Treatment: ${management.primary}\n`;
+            if (management.anticoag) summary += `Anticoagulation: ${management.anticoag}\n`;
+            summary += `\nReferences: ${management.ref}\n`;
+
+            return summary;
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(generateTextSummary()).then(() => {
+                alert('Summary copied to clipboard');
+            });
+        }
+
+        function resetForm() {
+            if (confirm('Reset all fields?')) {
+                document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
+                document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+                document.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+                document.querySelectorAll('select').forEach(s => s.value = '');
+                document.getElementById('results').classList.remove('show');
+                document.getElementById('ctpa-section').style.display = 'none';
+                document.getElementById('echo-section').style.display = 'none';
+                document.getElementById('oxygen-section').style.display = 'none';
+                document.getElementById('abg-section').style.display = 'none';
+                document.getElementById('abg-interpretation').style.display = 'none';
+                // Set haemodynamic status to stable by default
+                document.getElementById('stable').checked = true;
+            }
+        }
+
+        // sPESI simple calculator
+        function calculatesPESI() {
+            let score = 0;
+            
+            if (document.getElementById('spesi-age').checked) score++;
+            if (document.getElementById('spesi-cancer').checked) score++;
+            if (document.getElementById('spesi-cardiopulm').checked) score++;
+            if (document.getElementById('spesi-hr').checked) score++;
+            if (document.getElementById('spesi-sbp').checked) score++;
+            if (document.getElementById('spesi-spo2').checked) score++;
+            
+            document.getElementById('spesi-score').textContent = score;
+            
+            let interpretation = '';
+            if (score === 0) {
+                interpretation = `<p style="color: #007F3B; font-weight: 600;">LOW RISK</p>
+                    <p style="font-size: 0.85rem;">30-day mortality <3%. Consider outpatient management.</p>`;
+            } else {
+                interpretation = `<p style="color: #ED8B00; font-weight: 600;">NOT LOW RISK</p>
+                    <p style="font-size: 0.85rem;">30-day mortality ≥3%. Inpatient management. Assess for intermediate-high risk.</p>`;
+            }
+            
+            document.getElementById('spesi-interpretation').innerHTML = interpretation;
+            document.getElementById('spesi-result').classList.add('show');
+        }
+
+        // Alteplase calculator
+        function calculateAlteplase() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const scenario = document.getElementById('clinical-scenario').value;
+            
+            if (!weight || weight <= 0) {
+                alert('Please enter valid weight');
+                return;
+            }
+            
+            let doseInfo = '';
+            
+            if (scenario === 'shock') {
+                let bolus = 10;
+                let infusion = 90;
+                let totalDose = 100;
+                
+                if (weight < 65) {
+                    totalDose = weight * 1.5;
+                    bolus = 10;
+                    infusion = totalDose - bolus;
+                }
+                
+                doseInfo = `<h4>Cardiogenic Shock</h4>
+                    <div class="dose-line">Weight: ${weight} kg ${weight < 65 ? '(Adjusted)' : ''}</div>
+                    <div class="dose-line">BOLUS: ${bolus} mg (${bolus} mL) IV over 1-2 min</div>
+                    <div class="dose-line">INFUSION: ${infusion.toFixed(1)} mg over 2 hours</div>
+                    <div class="dose-line">Total: ${totalDose.toFixed(1)} mg</div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.5rem; background: #fff4e5; border-left: 3px solid #ED8B00;">
+                        Check APTT after completion. Start UFH 3h later if APTT <64 sec.
+                    </p>`;
+            } else {
+                doseInfo = `<h4>Cardiac Arrest</h4>
+                    <div class="dose-line">Weight: ${weight} kg</div>
+                    <div class="dose-line">BOLUS: 50 mg (50 mL) IV during CPR</div>
+                    <div class="dose-line">POST-ROSC: 40 mg over 1 hour</div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.5rem; background: #fff4e5; border-left: 3px solid #ED8B00;">
+                        Start infusion after ROSC only.
+                    </p>`;
+            }
+            
+            document.getElementById('alteplase-result').innerHTML = doseInfo;
+            document.getElementById('alteplase-result').classList.add('show');
+        }
+
+        // Enoxaparin calculator
+        function calculateEnoxaparin() {
+            const weight = parseFloat(document.getElementById('enox-weight').value);
+            const egfr = parseFloat(document.getElementById('egfr').value);
+            
+            if (!weight || weight <= 0) {
+                alert('Please enter valid weight');
+                return;
+            }
+            
+            if (!egfr || egfr <= 0) {
+                alert('Please enter valid eGFR');
+                return;
+            }
+            
+            let doseInfo = '';
+            
+            if (egfr >= 30) {
+                const dose = weight * 1.0;
+                doseInfo = `<div class="dose-line">Weight: ${weight} kg | eGFR: ${egfr}</div>
+                    <div class="dose-line">DOSE: ${dose.toFixed(1)} mg (${(dose/100).toFixed(2)} mL) SC BD</div>
+                    <p style="font-size: 0.85rem; margin-top: 0.4rem;">Standard dosing for normal renal function</p>`;
+            } else if (egfr >= 15) {
+                const dose = weight * 1.0;
+                doseInfo = `<div class="dose-line">Weight: ${weight} kg | eGFR: ${egfr} <strong style="color: #ED8B00;">(Impaired)</strong></div>
+                    <div class="dose-line">DOSE: ${dose.toFixed(1)} mg SC <strong>OD (once daily)</strong></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.5rem; background: #fff4e5; border-left: 3px solid #ED8B00;">
+                        Reduced frequency. Discuss haematology/renal. Consider DOAC when stable.
+                    </p>`;
+            } else {
+                doseInfo = `<div class="dose-line">Weight: ${weight} kg | eGFR: ${egfr} <strong style="color: #DA291C;">(Severe)</strong></div>
+                    <p style="margin-top: 0.5rem; padding: 0.8rem; background: #ffe5e5; border-left: 4px solid #DA291C; font-size: 0.85rem;">
+                        <strong>DOAC CONTRAINDICATED</strong><br><br>
+                        Enoxaparin unlicensed in eGFR <15. Use with anti-Xa monitoring.<br><br>
+                        <strong>Action:</strong> Discuss haematology/renal urgently. Alternative: UFH infusion.
+                    </p>`;
+            }
+            
+            document.getElementById('enoxaparin-result').innerHTML = doseInfo;
+            document.getElementById('enoxaparin-result').classList.add('show');
+        }
+    
+
+
+    </script>
+</body>
+</html>

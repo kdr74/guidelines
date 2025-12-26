@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airway & Respiratory Guidelines - UHBW Critical Care</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .guideline-list {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .guideline-item {
+            background: var(--nhs-white);
+            border: 2px solid var(--nhs-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .guideline-item:hover {
+            border-color: var(--nhs-blue);
+            box-shadow: 0 4px 12px rgba(0, 94, 184, 0.1);
+        }
+        .guideline-item h2 {
+            color: var(--nhs-blue);
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .guideline-meta {
+            color: var(--nhs-grey);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .guideline-item p {
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+        .guideline-features {
+            background: var(--nhs-light-grey);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.25rem;
+        }
+        .guideline-features h3 {
+            color: var(--nhs-blue);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .guideline-features ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .guideline-features li {
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+        .guideline-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .guideline-link {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-blue);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .guideline-link:hover {
+            background: var(--hover-blue);
+        }
+        .guideline-link.secondary {
+            background: var(--nhs-grey);
+        }
+        .guideline-link.secondary:hover {
+            background: var(--nhs-dark-blue);
+        }
+        .back-link {
+            display: inline-block;
+            margin: 2rem auto;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-grey);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            background: var(--nhs-dark-blue);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Airway & Respiratory Guidelines</h1>
+                <p class="subtitle">UHBW Critical Care</p>
+                <p class="units">Ventilation strategies, airway management, respiratory support protocols</p>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search guidelines..." aria-label="Search guidelines">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="guideline-list">
+        <div class="guideline-item">
+            <h2>Investigation and Management of Pulmonary Embolism</h2>
+            <p class="guideline-meta">Version 4.4 | October 2024 – August 2026 | UHBW Trust-wide Guideline</p>
+            
+            <p>Comprehensive trust-wide clinical guideline for the investigation and management of pulmonary embolism in adult patients, covering ED assessment, inpatient management, risk stratification, and treatment protocols.</p>
+            
+            <div class="guideline-features">
+                <h3>Key Topics Covered:</h3>
+                <ul>
+                    <li>Two-level Wells Score and PERC criteria for PE investigation</li>
+                    <li>D-dimer testing and age-adjusted interpretation</li>
+                    <li>Imaging modality selection (CTPA vs V/Q scanning)</li>
+                    <li>Risk stratification: High risk, intermediate risk, and low risk PE</li>
+                    <li>Thrombolysis protocols and contraindications</li>
+                    <li>Catheter-directed thrombectomy referral criteria</li>
+                    <li>Anticoagulation choice: Apixaban, Rivaroxaban, Enoxaparin</li>
+                    <li>Outpatient vs inpatient management (sPESI score)</li>
+                    <li>Special circumstances: renal impairment, pregnancy, malignancy</li>
+                    <li>Follow-up pathways and echocardiography protocols</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="PE-Guidelines-UHBW.pdf" class="guideline-link" target="_blank">📄 View PDF Guideline</a>
+            </div>
+        </div>
+
+        <div class="guideline-item">
+            <h2>PE Interactive Management Tool</h2>
+            <p class="guideline-meta">Interactive Clinical Decision Support Tool</p>
+            
+            <p>Interactive web-based tool for rapid clinical decision-making in pulmonary embolism management. Designed for use at the bedside in ED and ICU settings.</p>
+            
+            <div class="guideline-features">
+                <h3>Interactive Features:</h3>
+                <ul>
+                    <li><strong>Wells Score Calculator:</strong> Interactive two-level Wells score with automatic PE probability assessment</li>
+                    <li><strong>PERC Criteria:</strong> Pulmonary Embolism Rule-Out Criteria checklist</li>
+                    <li><strong>sPESI Calculator:</strong> Simplified Pulmonary Embolism Severity Index for outpatient suitability</li>
+                    <li><strong>Risk Stratification:</strong> Automatic classification into high/intermediate/low risk categories</li>
+                    <li><strong>Treatment Pathways:</strong> Step-by-step management algorithms based on risk level</li>
+                    <li><strong>Anticoagulation Dosing:</strong> Weight-based dosing calculators for LMWH and DOACs</li>
+                    <li><strong>Thrombolysis Decision Support:</strong> Contraindication checker and dosing guidance</li>
+                    <li><strong>Follow-up Planning:</strong> Automated follow-up pathway recommendations</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="pe-interactive-management-tool.html" class="guideline-link">�� Open Interactive Tool</a>
+                <a href="PE-Guidelines-UHBW.pdf" class="guideline-link secondary" target="_blank">📖 Full Guidelines Reference</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="../index.html" class="back-link">← Back to All Guidelines</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+            <p>For internal use by UHBW Critical Care staff</p>
+            <p class="version">PE Guidelines v4.4 | Oct 2024 – Aug 2026</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/search.js"></script>
+</body>
+</html>
