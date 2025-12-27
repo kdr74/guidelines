@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition in Critical Care - UHBW Clinical Guideline</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-blue: #41B6E6;
+            --nhs-grey: #768692;
+            --nhs-dark-grey: #425563;
+            --nhs-light-grey: #E8EDEE;
+            --nhs-pale-grey: #F0F4F5;
+            --nhs-white: #FFFFFF;
+            --nhs-black: #231f20;
+            --nhs-red: #DA291C;
+            --nhs-green: #007F3B;
+            --nhs-yellow: #FFB81C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Frutiger W01", Arial, Helvetica, sans-serif;
+            line-height: 1.5;
+            color: var(--nhs-black);
+            background-color: var(--nhs-pale-grey);
+            padding-top: 50px;
+            font-size: 15px;
+        }
+
+        .header {
+            background-color: var(--nhs-blue);
+            color: var(--nhs-white);
+            padding: 0.6rem 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-content {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.1rem;
+        }
+
+        .header p {
+            font-size: 0.8rem;
+            opacity: 0.95;
+        }
+        
+        .hamburger {
+            background: none;
+            border: none;
+            color: var(--nhs-white);
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+        }
+        
+        .hamburger:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hamburger:active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100vh;
+            background-color: var(--nhs-white);
+            box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+            z-index: 1001;
+            overflow-y: auto;
+            transition: right 0.3s ease;
+            padding: 1rem;
+        }
+        
+        .nav-menu.open {
+            right: 0;
+        }
+        
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .nav-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .nav-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--nhs-light-grey);
+            margin-bottom: 1rem;
+        }
+
+        .nav-menu-header h2 {
+            font-size: 1.2rem;
+            color: var(--nhs-blue);
+            margin: 0;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--nhs-dark-grey);
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .close-menu:hover {
+            background-color: var(--nhs-light-grey);
+        }
+
+        .nav-menu nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu nav ul li {
+            margin-bottom: 0;
+        }
+
+        .nav-menu nav ul li a {
+            color: var(--nhs-dark-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            padding: 0.7rem 0.75rem;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-menu nav ul li a:hover {
+            background-color: var(--nhs-light-grey);
+            border-left-color: var(--nhs-light-blue);
+        }
+
+        .nav-menu nav ul li a.active {
+            background-color: var(--nhs-light-blue);
+            color: var(--nhs-white);
+            font-weight: 600;
+            border-left-color: var(--nhs-blue);
+        }
+        
+        .nav-parent {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .submenu-arrow {
+            transition: transform 0.2s ease;
+            font-size: 0.8rem;
+        }
+        
+        .submenu-arrow.open {
+            transform: rotate(90deg);
+        }
+        
+        .nav-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding-left: 0;
+            margin: 0;
+            list-style: none;
+        }
+        
+        .nav-submenu.open {
+            max-height: 500px;
+        }
+        
+        .nav-submenu li {
+            margin: 0;
+        }
+        
+        .nav-sub {
+            font-size: 0.88rem !important;
+            padding-left: 1.5rem !important;
+            border-left-width: 2px !important;
+        }
+        
+        .nav-sub:hover {
+            background-color: var(--nhs-pale-grey) !important;
+            border-left-color: var(--nhs-blue) !important;
+        }
+        
+        .back-to-top-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--nhs-blue);
+            color: var(--nhs-white);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, background-color 0.2s;
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-to-top-float.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top-float:hover {
+            background-color: var(--nhs-dark-blue);
+        }
+        
+        .back-to-top-float:active {
+            transform: scale(0.95);
+        }
+
+        .content {
+            background-color: var(--nhs-white);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--nhs-light-grey);
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 0.6rem 1.2rem;
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--nhs-dark-grey);
+            transition: all 0.2s;
+        }
+
+        .tab-button:hover {
+            color: var(--nhs-blue);
+            background-color: var(--nhs-pale-grey);
+        }
+
+        .tab-button.active {
+            color: var(--nhs-blue);
+            border-bottom-color: var(--nhs-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 1.75rem;
+        }
+
+        .section h2 {
+            color: var(--nhs-blue);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--nhs-light-grey);
+        }
+
+        .section h3 {
+            color: var(--nhs-dark-blue);
+            font-size: 1.2rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .section h4 {
+            color: var(--nhs-dark-grey);
+            font-size: 1.05rem;
+            margin-top: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+        
+        .section p {
+            margin-bottom: 0.75rem;
+        }
+        
+        .section ul, .section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .section li {
+            margin-bottom: 0.3rem;
+        }
+
+        .info-box {
+            background-color: var(--nhs-light-blue);
+            color: var(--nhs-black);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--nhs-blue);
+        }
+
+        .info-box.warning {
+            background-color: #FFF7E6;
+            border-left-color: var(--nhs-yellow);
+        }
+
+        .info-box.critical {
+            background-color: #FFE6E6;
+            border-left-color: var(--nhs-red);
+        }
+
+        .info-box.success {
+            background-color: #E6F7F0;
+            border-left-color: var(--nhs-green);
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: inherit;
+        }
+
+        .info-box ul {
+            margin-left: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--nhs-white);
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background-color: var(--nhs-blue);
+            color: var(--nhs-white);
+        }
+
+        th {
+            padding: 0.7rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.7rem;
+            border-bottom: 1px solid var(--nhs-light-grey);
+        }
+
+        tbody tr:hover {
+            background-color: var(--nhs-pale-grey);
+        }
+
+        ul, ol {
+            margin: 0.75rem 0 0.75rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.3rem;
+        }
+
+        strong {
+            color: var(--nhs-dark-blue);
+            font-weight: 600;
+        }
+
+        .reference {
+            font-size: 0.85rem;
+            color: var(--nhs-grey);
+            font-style: italic;
+            margin-top: 0.75rem;
+            padding: 0.6rem;
+            background-color: var(--nhs-pale-grey);
+            border-radius: 4px;
+        }
+
+        .mermaid-container {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background-color: var(--nhs-pale-grey);
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .protocol-day {
+            background-color: var(--nhs-white);
+            border: 2px solid var(--nhs-light-blue);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        .protocol-day h4 {
+            color: var(--nhs-blue);
+            margin-top: 0;
+        }
+
+        .search-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            font-size: 0.95rem;
+            border: 2px solid var(--nhs-light-grey);
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--nhs-blue);
+        }
+
+        @media (max-width: 968px) {
+            .nav-menu {
+                width: 280px;
+                right: -280px;
+            }
+            
+            .header h1 {
+                font-size: 1.15rem;
+            }
+            
+            .header p {
+                font-size: 0.75rem;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 45px;
+                font-size: 14px;
+            }
+
+            .header {
+                padding: 0.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.05rem;
+            }
+
+            .header p {
+                font-size: 0.7rem;
+            }
+            
+            .hamburger {
+                font-size: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .nav-menu {
+                width: 260px;
+                right: -260px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .section {
+                margin-bottom: 1.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.3rem;
+            }
+
+            .section h3 {
+                font-size: 1.1rem;
+            }
+            
+            .section h4 {
+                font-size: 1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        @media print {
+            body {
+                padding-top: 0;
+            }
+
+            .header, .nav-menu, .nav-overlay, .tabs {
+                display: none;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .content {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Nutrition in Critical Care</h1>
+            <p>UHBW Clinical Guideline | Critical Care Units (GICU, CICU, WICU)</p>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()" aria-label="Open navigation menu">
+            ☰
+        </button>
+    </header>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
+    
+    <!-- Slide-out navigation menu -->
+    <nav class="nav-menu" id="navMenu">
+        <div class="nav-menu-header">
+            <h2>Contents</h2>
+            <button class="close-menu" onclick="closeMenu()" aria-label="Close navigation menu">×</button>
+        </div>
+        <ul>
+            <li><a href="#overview" class="nav-link">Overview</a></li>
+            <li><a href="#objectives" class="nav-link">Objectives</a></li>
+            <li><a href="#background" class="nav-link">Background</a></li>
+            <li><a href="#referral" class="nav-link">Dietitian Referral</a></li>
+            <li>
+                <a href="#enteral" class="nav-link nav-parent" onclick="toggleSubmenu(event, 'enteralSubmenu')">
+                    Enteral Nutrition <span class="submenu-arrow">▸</span>
+                </a>
+                <ul class="nav-submenu" id="enteralSubmenu">
+                    <li><a href="#nasogastric" class="nav-link nav-sub">Nasogastric/Gastrostomy</a></li>
+                    <li><a href="#nasojejunal" class="nav-link nav-sub">Nasojejunal/Jejunal</a></li>
+                </ul>
+            </li>
+            <li><a href="#feed-specs" class="nav-link">Feed Specifications</a></li>
+            <li><a href="#energy-protein" class="nav-link">Energy & Protein Requirements</a></li>
+            <li><a href="#evidence" class="nav-link">Evidence Base</a></li>
+            <li>
+                <a href="#monitoring" class="nav-link nav-parent" onclick="toggleSubmenu(event, 'monitoringSubmenu')">
+                    Nutritional Monitoring <span class="submenu-arrow">▸</span>
+                </a>
+                <ul class="nav-submenu" id="monitoringSubmenu">
+                    <li><a href="#daily-monitoring" class="nav-link nav-sub">Daily Monitoring</a></li>
+                    <li><a href="#weekly-monitoring" class="nav-link nav-sub">Weekly Monitoring</a></li>
+                </ul>
+            </li>
+            <li><a href="#grv-management" class="nav-link">GRV Management</a></li>
+            <li><a href="#refeeding" class="nav-link">Refeeding Syndrome</a></li>
+            <li><a href="#tolerance" class="nav-link">Feed Tolerance</a></li>
+            <li>
+                <a href="#special-populations" class="nav-link nav-parent" onclick="toggleSubmenu(event, 'specialSubmenu')">
+                    Special Clinical Scenarios <span class="submenu-arrow">▸</span>
+                </a>
+                <ul class="nav-submenu" id="specialSubmenu">
+                    <li><a href="#prone" class="nav-link nav-sub">Prone Positioning</a></li>
+                    <li><a href="#pancreatitis" class="nav-link nav-sub">Severe Acute Pancreatitis</a></li>
+                    <li><a href="#whipple" class="nav-link nav-sub">Post-Whipple's Procedure</a></li>
+                    <li><a href="#obesity" class="nav-link nav-sub">Obesity</a></li>
+                    <li><a href="#burns" class="nav-link nav-sub">Burns</a></li>
+                    <li><a href="#tracheostomy" class="nav-link nav-sub">Tracheostomy Patients</a></li>
+                    <li><a href="#head-injury" class="nav-link nav-sub">Head Injury & Neurocritical Care</a></li>
+                </ul>
+            </li>
+            <li><a href="#parenteral" class="nav-link">Parenteral Nutrition</a></li>
+            <li><a href="#oral" class="nav-link">Oral Nutrition</a></li>
+            <li><a href="#references" class="nav-link">References</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <main class="content">
+            <div class="search-container">
+                <input type="text" id="searchBox" class="search-box" placeholder="Search guideline..." />
+            </div>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="openTab(event, 'general')">General Guidance</button>
+                <button class="tab-button" onclick="openTab(event, 'jejunostomy-protocol')">Jejunostomy Protocol</button>
+                <button class="tab-button" onclick="openTab(event, 'algorithms')">Clinical Algorithms</button>
+            </div>
+
+            <!-- General Guidance Tab -->
+            <div id="general" class="tab-content active">
+                <section id="overview" class="section">
+                    <h2>Overview</h2>
+                    <p><strong>Setting:</strong> Critical Care Units across all UHBW adult critical care units (GICU, CICU, WICU)</p>
+                    <p><strong>For Staff:</strong> Clinical staff working across Critical Care</p>
+                    <p><strong>Patients:</strong> All Critical Care patients</p>
+                </section>
+
+                <section id="objectives" class="section">
+                    <h2>Objectives of Guideline and Algorithm</h2>
+                    <ol>
+                        <li>Safely feed critically ill patients prior to dietetic assessment</li>
+                        <li>Early initiation of enteral nutrition (within 24 hours of admission)</li>
+                        <li>Initiate and build up energy, protein, and micronutrients with protocolised regimens</li>
+                        <li>Guide identification and management of refeeding syndrome</li>
+                        <li>Management of tolerance issues and appropriate feeding cessation</li>
+                        <li>Appropriate use of total and supplementary parenteral nutrition</li>
+                        <li>Guide oral nutrition support</li>
+                    </ol>
+                </section>
+
+                <section id="referral" class="section">
+                    <h2 id="icu-context">Critical Care Context and Special Populations</h2>
+                    
+                    <h3>Metabolic Phases in Critical Illness</h3>
+                    <div class="info-box">
+                        <p><strong>Acute/Catabolic Phase (Days 1-7):</strong></p>
+                        <ul>
+                            <li>Hypermetabolic state with increased energy expenditure</li>
+                            <li>Accelerated protein catabolism (muscle breakdown)</li>
+                            <li>Insulin resistance and hyperglycaemia</li>
+                            <li>Inflammatory response with cytokine release</li>
+                            <li>Increased micronutrient requirements (vitamins C, E, selenium)</li>
+                            <li><strong>Nutritional approach:</strong> Permissive underfeeding (70-80% of target), prioritise early EN, avoid overfeeding</li>
+                        </ul>
+                        
+                        <p><strong>Recovery/Anabolic Phase (Day 7 onwards):</strong></p>
+                        <ul>
+                            <li>Resolving inflammation and metabolic stabilisation</li>
+                            <li>Protein synthesis predominates</li>
+                            <li>Improving insulin sensitivity</li>
+                            <li>Restoration of lean body mass</li>
+                            <li><strong>Nutritional approach:</strong> Progress to full energy/protein targets, optimise anabolism</li>
+                        </ul>
+                    </div>
+
+                    <h3>Special Clinical Contexts</h3>
+                    
+                    <div class="warning-box">
+                        <h4>Sedated and Ventilated Patients</h4>
+                        <ul>
+                            <li><strong>Energy expenditure:</strong> Often reduced due to sedation (15-25% decrease)</li>
+                            <li><strong>Propofol calories:</strong> Must be counted - propofol provides 1.1 kcal/ml (e.g., 100ml/hr = 2,640 kcal/day)</li>
+                            <li><strong>Gastric emptying:</strong> Often delayed - monitor GRVs closely, consider prokinetics early</li>
+                            <li><strong>Position:</strong> Head of bed elevation 30-45° reduces aspiration risk</li>
+                            <li><strong>Extubation planning:</strong> Ensure adequate nutrition pre-extubation to support respiratory muscles</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Patients on Renal Replacement Therapy (RRT)</h4>
+                        <ul>
+                            <li><strong>Protein requirements:</strong> Increased to 1.5-2.5 g/kg/day (higher losses via dialysate/filtrate)</li>
+                            <li><strong>Amino acid losses:</strong> Approximately 10-15g lost per day of CRRT</li>
+                            <li><strong>Micronutrient losses:</strong> Water-soluble vitamins (especially thiamine, folate), trace elements</li>
+                            <li><strong>Fluid restriction:</strong> May require concentrated feeds (e.g., Nutrison Concentrated 2.0 kcal/ml)</li>
+                            <li><strong>Electrolytes:</strong> Monitor closely - potassium, phosphate, magnesium frequently deranged</li>
+                            <li><strong>Timing:</strong> Citrate-based CRRT may affect calcium/magnesium - adjust monitoring accordingly</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Hepatic Dysfunction</h4>
+                        <ul>
+                            <li><strong>Protein metabolism:</strong> Altered - may require modified amino acid profile</li>
+                            <li><strong>Encephalopathy risk:</strong> Standard protein intake usually tolerated; reduce only if encephalopathy worsens</li>
+                            <li><strong>Branched-chain amino acids (BCAA):</strong> Consider specialist feeds if severe encephalopathy</li>
+                            <li><strong>Micronutrients:</strong> Deficiencies common (thiamine, folate, zinc, vitamins A, D, E, K)</li>
+                            <li><strong>Glucose control:</strong> Risk of hypoglycaemia due to impaired gluconeogenesis</li>
+                            <li><strong>Fluid management:</strong> May require concentrated feeds if ascites/oedema present</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Febrile Patients</h4>
+                        <ul>
+                            <li><strong>Metabolic rate:</strong> Increases approximately 10% per 1°C rise above 37°C</li>
+                            <li><strong>Protein requirements:</strong> Increased catabolism - aim for upper target range</li>
+                            <li><strong>Fluid requirements:</strong> Increased insensible losses</li>
+                            <li><strong>Micronutrients:</strong> Increased vitamin C and zinc requirements</li>
+                            <li><strong>Energy calculation:</strong> Adjust targets upward if persistent fever (>38.5°C for >48 hours)</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Post-Operative Patients</h4>
+                        <p><strong>Elective Surgery:</strong></p>
+                        <ul>
+                            <li>Early EN within 24 hours if haemodynamically stable</li>
+                            <li>Enhanced recovery protocols - early oral intake encouraged</li>
+                            <li>Jejunostomy tubes (if placed) - follow specific protocol (see Jejunostomy tab)</li>
+                        </ul>
+                        
+                        <p><strong>Emergency Surgery (GI Pathology):</strong></p>
+                        <ul>
+                            <li>Higher risk of feed intolerance and anastomotic complications</li>
+                            <li>Often require post-pyloric feeding</li>
+                            <li>Longer period before establishing full feeds (5-7 days typical)</li>
+                            <li>Consider supplementary PN if EN <60% by day 7</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Malabsorption and GI Dysfunction</h4>
+                        <ul>
+                            <li><strong>Short bowel syndrome:</strong> May require peptide feeds, PN supplementation</li>
+                            <li><strong>Pancreatic insufficiency:</strong> Use peptide feed (Nutrison Peptisorb Plus HEHP) + pancreatic enzyme replacement</li>
+                            <li><strong>High-output stoma/fistula:</strong> Fluid/electrolyte replacement, consider PN</li>
+                            <li><strong>Severe diarrhoea:</strong> Consider peptide feeds, reduce fibre content, exclude C. difficile</li>
+                            <li><strong>Gastroparesis:</strong> Post-pyloric feeding, prokinetics</li>
+                        </ul>
+                    </div>
+
+                    <h3>Drug-Nutrient Interactions</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Drug</th>
+                                <th>Interaction with Enteral Nutrition</th>
+                                <th>Management</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Phenytoin</td>
+                                <td>Significantly reduced absorption when given with EN (up to 70% reduction)</td>
+                                <td>Stop feed 1-2 hours before and after dose. Monitor levels closely. Consider IV route or alternative anticonvulsant.</td>
+                            </tr>
+                            <tr>
+                                <td>Warfarin</td>
+                                <td>Vitamin K content in feeds reduces warfarin effect</td>
+                                <td>Monitor INR closely. May require increased warfarin dose. Maintain consistent feeding pattern.</td>
+                            </tr>
+                            <tr>
+                                <td>Fluoroquinolones (ciprofloxacin)</td>
+                                <td>Chelation with divalent cations (calcium, magnesium) reduces absorption</td>
+                                <td>Stop feed 1 hour before and 2 hours after oral dose. IV route preferred in ICU.</td>
+                            </tr>
+                            <tr>
+                                <td>Propofol</td>
+                                <td>Lipid emulsion provides 1.1 kcal/ml</td>
+                                <td>Calculate and subtract propofol calories from total energy prescription.</td>
+                            </tr>
+                            <tr>
+                                <td>Suxamethonium/atracurium</td>
+                                <td>Gastric distension increases aspiration risk</td>
+                                <td>Stop feed before intubation/theatre. Aspirate gastric contents.</td>
+                            </tr>
+                            <tr>
+                                <td>Lactulose</td>
+                                <td>May worsen diarrhoea when combined with fibre-containing feeds</td>
+                                <td>Consider low-fibre feed if diarrhoea problematic.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h2>Referral to Dietitian</h2>
+                    <div class="info-box">
+                        <h4>Mandatory Referrals via CareFlow EPR</h4>
+                        <p>The following patients must be referred to the dietitian via the CareFlow EPR system so that patients can be prioritised for nutritional assessment:</p>
+                    </div>
+                    
+                    <ol>
+                        <li><strong>Receiving enteral tube feeding</strong> - refer all tube feeds on day 1 of feeding</li>
+                        <li><strong>Jejunostomy tube feeding post-oesophagogastric surgery</strong> - follow protocol for days 1-5</li>
+                        <li><strong>Parenteral nutrition (supplementary and total)</strong> - by telephone before 1100hrs BRI / 1200hrs WICU</li>
+                        <li><strong>Health professional concerns regarding nutritional status</strong></li>
+                        <li><strong>Patient or family concerns regarding nutritional status</strong></li>
+                        <li><strong>Chronic liver disease</strong></li>
+                        <li><strong>Acute pancreatitis</strong></li>
+                        <li><strong>Burns</strong></li>
+                        <li><strong>Tracheostomy</strong></li>
+                        <li><strong>Obesity (BMI >35 kg/m²)</strong></li>
+                        <li><strong>Complex care discharge planning</strong></li>
+                    </ol>
+                </section>
+
+                <section id="enteral" class="section">
+                    <h2>Enteral Nutrition</h2>
+                    
+                    <h3>Route Selection</h3>
+                    <div style="padding: 1.5rem; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; margin: 1.5rem 0;">
+<!-- NUTRITIONAL PATHWAY - Simplified Table Layout -->
+<div style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 13px;">
+    <!-- Start -->
+    <div style="background: #E3F2FD; border: 2px solid #1976D2; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 400px;">
+        <strong>Patient requires nutritional support</strong>
+    </div>
+    <div style="text-align: center; font-size: 20px; color: #666;">↓</div>
+    
+    <!-- First Decision -->
+    <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 300px;">
+        <strong>Can patient maintain<br>adequate oral intake?</strong>
+    </div>
+    
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+        <!-- YES Path -->
+        <div style="flex: 0 0 280px; text-align: center;">
+            <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px;">↓ YES</div>
+            <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 15px;">
+                <strong>Oral nutrition support</strong><br>
+                <div style="margin-top: 8px; font-size: 12px;">
+                    • High-energy diet<br>
+                    • Oral nutritional supplements
+                </div>
+            </div>
+        </div>
+        
+        <!-- NO Path -->
+        <div style="flex: 0 0 400px; text-align: center;">
+            <div style="color: #C62828; font-weight: bold; margin-bottom: 10px;">↓ NO</div>
+            
+            <!-- Second Decision -->
+            <div style="background: #FFCCBC; border: 2px solid #D84315; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <strong>Is GI tract functional?</strong>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <!-- GI YES -->
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ YES</div>
+                    <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 12px; font-size: 11px;">
+                        <strong>Gastric feeding appropriate?</strong><br>
+                        <div style="margin-top: 8px; font-size: 10px; text-align: left;">
+                            <strong>Yes →</strong> NG/Gastrostomy<br>
+                            <strong>No →</strong> NJ/Jejunostomy
+                        </div>
+                        <div style="margin-top: 10px; font-style: italic; font-size: 10px;">
+                            ↓ Initiate Enteral Feeding
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GI NO -->
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #C62828; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ NO</div>
+                    <div style="background: #FFCDD2; border: 2px solid #C62828; border-radius: 8px; padding: 15px; font-size: 11px;">
+                        <strong>Consider<br>Parenteral<br>Nutrition</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+
+                    <h3 id="nasogastric">Nasogastric/Gastrostomy Tube Feeding</h3>
+                    <ul>
+                        <li>Initiate enteral feeding as per Enteral Feeding Algorithm</li>
+                        <li>Start within 24 hours of admission when clinically appropriate</li>
+                        <li>Monitor gastric residual volumes</li>
+                        <li>Consider prokinetics if feed intolerance develops</li>
+                    </ul>
+
+                    <h3 id="nasojejunal">Nasojejunal/Other Jejunal Feeding</h3>
+                    <ul>
+                        <li>Initiate and increase as per advice from surgical and ICU teams</li>
+                        <li>For post-oesophagogastric surgery, follow specific jejunostomy protocol (see Jejunostomy Protocol tab)</li>
+                        <li>Jejunal feeds typically require slower initiation and advancement</li>
+                    </ul>
+
+                    <h2 id="feed-specs">Complete Feed Specifications</h2>
+                    
+                    <h3>Standard Enteral Feeds</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feed Name</th>
+                                <th>Energy Density</th>
+                                <th>Protein (per 100ml)</th>
+                                <th>Fibre</th>
+                                <th>Indications</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Nutrison Protein Plus Multifibre</strong></td>
+                                <td>1.28 kcal/ml</td>
+                                <td>6.25g (20% energy)</td>
+                                <td>Yes (1.5g/100ml)</td>
+                                <td><strong>STANDARD ICU FEED</strong><br>
+                                • First-line for most ICU patients<br>
+                                • Adequate protein for critical illness<br>
+                                • Fibre to support gut health
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nutrison Concentrated 2.0</strong></td>
+                                <td>2.0 kcal/ml</td>
+                                <td>7.5g (15% energy)</td>
+                                <td>No</td>
+                                <td>• Fluid restriction required<br>
+                                • Prone positioning<br>
+                                • RRT with fluid limits<br>
+                                • Cardiac/renal failure<br>
+                                <em>Lower protein density - may need protein supplement</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nutrison Peptisorb Plus HEHP</strong></td>
+                                <td>1.5 kcal/ml</td>
+                                <td>10g (27% energy)</td>
+                                <td>No</td>
+                                <td><strong>PEPTIDE FEED (semi-elemental)</strong><br>
+                                • Severe acute pancreatitis<br>
+                                • Post-Whipple's procedure<br>
+                                • Malabsorption syndromes<br>
+                                • Short bowel syndrome<br>
+                                <em>High energy, high protein - ideal for complex GI cases</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ensure Plus</strong></td>
+                                <td>1.5 kcal/ml</td>
+                                <td>6.25g (17% energy)</td>
+                                <td>No</td>
+                                <td>• Oral supplement<br>
+                                • Bolus regimen via NG (200ml QDS)<br>
+                                • Transition to oral nutrition<br>
+                                <em>Available in various flavours for oral use</em>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Standard Feeding Regimens</h3>
+                    
+                    <div class="info-box">
+                        <h4>Continuous Overnight Regimen (Most Common)</h4>
+                        <p><strong>Feed:</strong> Nutrison Protein Plus Multifibre 1.28 kcal/ml</p>
+                        <ul>
+                            <li><strong>Volume:</strong> 1000ml</li>
+                            <li><strong>Rate:</strong> 100ml/hr</li>
+                            <li><strong>Duration:</strong> 10 hours (usually 22:00-08:00)</li>
+                            <li><strong>Provides:</strong> 1,280 kcal and 62.5g protein per day</li>
+                        </ul>
+                        
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Allows mobilisation during day</li>
+                            <li>Facilitates physiotherapy and procedures</li>
+                            <li>Reduces aspiration risk (patient supine at night)</li>
+                            <li>Standard approach in most ICUs</li>
+                        </ul>
+                        
+                        <p><strong>To increase intake:</strong></p>
+                        <ul>
+                            <li>Increase rate to 125ml/hr = 1,600 kcal, 78g protein</li>
+                            <li>Or extend duration to 24 hours continuous</li>
+                            <li>Or switch to concentrated feed</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Bolus/Intermittent Regimen</h4>
+                        <p><strong>Feed:</strong> Ensure Plus 1.5 kcal/ml (or equivalent)</p>
+                        <ul>
+                            <li><strong>Volume:</strong> 200-300ml per bolus</li>
+                            <li><strong>Frequency:</strong> 4-6 times daily (QDS to 6-hourly)</li>
+                            <li><strong>Typical schedule:</strong> 08:00, 12:00, 17:00, 22:00</li>
+                            <li><strong>Provides (200ml QDS):</strong> 1,200 kcal and 50g protein per day</li>
+                        </ul>
+                        
+                        <p><strong>Indications:</strong></p>
+                        <ul>
+                            <li>Step-down from continuous feeding</li>
+                            <li>Transition to oral nutrition</li>
+                            <li>Patients mobilising frequently</li>
+                            <li>More physiological (mimics meals)</li>
+                        </ul>
+                        
+                        <p><strong>Contraindications:</strong></p>
+                        <ul>
+                            <li>Gastroparesis or delayed gastric emptying</li>
+                            <li>High GRV risk</li>
+                            <li>Post-pyloric feeding (must be continuous)</li>
+                            <li>Critically unwell/sedated patients</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Concentrated Feed Regimen (Fluid Restriction)</h4>
+                        <p><strong>Feed:</strong> Nutrison Concentrated 2.0 kcal/ml</p>
+                        <ul>
+                            <li><strong>Rate:</strong> 40-60ml/hr</li>
+                            <li><strong>Provides (50ml/hr × 24hrs):</strong> 2,400 kcal and 90g protein</li>
+                            <li><strong>Volume:</strong> Only 1,200ml per day (vs 1,875ml for same calories with standard feed)</li>
+                        </ul>
+                        
+                        <p><strong>Indications:</strong></p>
+                        <ul>
+                            <li>Fluid restriction (cardiac/renal failure, ARDS)</li>
+                            <li>Prone positioning (lower GRV threshold)</li>
+                            <li>RRT with tight fluid balance</li>
+                        </ul>
+                        
+                        <p><strong>Important notes:</strong></p>
+                        <ul>
+                            <li>Lower protein concentration (15% vs 20% in Protein Plus)</li>
+                            <li>May require protein supplement (e.g. Protifar) to meet targets</li>
+                            <li>No fibre - higher risk of diarrhoea or constipation</li>
+                            <li>More viscous - ensure adequate tube flushing</li>
+                        </ul>
+                    </div>
+
+                    <h3>Jejunostomy/Nasojejunal Protocol</h3>
+                    <div class="info-box">
+                        <p>See <strong>Jejunostomy Protocol tab</strong> for complete 5-day advancement protocol for post-operative jejunal feeding.</p>
+                        
+                        <p><strong>Quick reference (Nutrison Protein Plus Multifibre):</strong></p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Rate (ml/hr)</th>
+                                    <th>Daily Energy (kcal)</th>
+                                    <th>Daily Protein (g)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>10</td>
+                                    <td>307</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>20</td>
+                                    <td>614</td>
+                                    <td>30</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>30</td>
+                                    <td>922</td>
+                                    <td>45</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>40</td>
+                                    <td>1,229</td>
+                                    <td>60</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>50</td>
+                                    <td>1,536</td>
+                                    <td>76</td>
+                                </tr>
+                                <tr>
+                                    <td>6+</td>
+                                    <td>Bespoke</td>
+                                    <td colspan="2">Dietitian to prescribe final regimen</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Feed Administration Guidelines</h3>
+                    <div class="info-box">
+                        <p><strong>Tube flushing:</strong></p>
+                        <ul>
+                            <li>Flush with 30-50ml water before and after each feed</li>
+                            <li>Flush every 4-6 hours during continuous feeding</li>
+                            <li>Flush after medications (give separately from feeds if possible)</li>
+                            <li>Use sterile water for jejunal tubes</li>
+                        </ul>
+                        
+                        <p><strong>Hang time:</strong></p>
+                        <ul>
+                            <li>Maximum 24 hours for closed systems (ready-to-hang bottles)</li>
+                            <li>Maximum 4 hours for decanted feeds (opened in clinical area)</li>
+                            <li>Label with patient details, date, and time prepared</li>
+                        </ul>
+                        
+                        <p><strong>Temperature:</strong></p>
+                        <ul>
+                            <li>Feeds should be given at room temperature</li>
+                            <li>Do not refrigerate feeds once opened</li>
+                            <li>Discard unused feed after 24 hours</li>
+                        </ul>
+                        
+                        <p><strong>Equipment:</strong></p>
+                        <ul>
+                            <li>Use dedicated feeding pump for continuous feeds</li>
+                            <li>Change giving sets every 24 hours</li>
+                            <li>Keep pump elevated above bed height to reduce reflux</li>
+                        </ul>
+                    </div>
+                    <h2 id="energy-protein">Energy and Protein Requirements</h2>
+                    
+                    <h3>Calculating Energy Requirements</h3>
+                    <div class="info-box">
+                        <p><strong>Target Energy Intake:</strong> 20-25 kcal/kg/day (using actual body weight)</p>
+                        <ul>
+                            <li><strong>Acute phase (days 1-7):</strong> Permissive underfeeding at 70-80% of calculated target (typically 15-18 kcal/kg/day)</li>
+                            <li><strong>Recovery phase (day 7+):</strong> Progress to 100% of target energy (20-25 kcal/kg/day)</li>
+                            <li><strong>Obesity (BMI >30):</strong> Use adjusted body weight: IBW + 0.4(actual weight - IBW)</li>
+                            <li><strong>Indirect calorimetry:</strong> Gold standard when available - measures actual metabolic rate</li>
+                        </ul>
+                        
+                        <p><strong>Adjustments for Clinical Context:</strong></p>
+                        <ul>
+                            <li>Fever: Add 10% per 1°C rise above 37°C</li>
+                            <li>Burns: 20-40 kcal/kg depending on total body surface area</li>
+                            <li>Sedation: Reduce by 15-25%</li>
+                            <li>Propofol: Subtract 1.1 kcal/ml from daily target</li>
+                        </ul>
+                    </div>
+
+                    <h3>Protein Requirements</h3>
+                    <div class="info-box">
+                        <p><strong>Standard ICU Target:</strong> 1.3 g/kg/day minimum</p>
+                        <ul>
+                            <li><strong>General critical illness:</strong> 1.3-1.5 g/kg/day</li>
+                            <li><strong>As clinically tolerated:</strong> Progress to 1.5-2.0 g/kg/day</li>
+                            <li><strong>Renal replacement therapy:</strong> 1.5-2.5 g/kg/day (compensates for losses)</li>
+                            <li><strong>Burns:</strong> 1.5-2.5 g/kg/day</li>
+                            <li><strong>Severe sepsis:</strong> 1.5-2.0 g/kg/day</li>
+                            <li><strong>Obesity (BMI >30):</strong> Use adjusted body weight for calculation</li>
+                        </ul>
+                        
+                        <p><strong>Contraindications to high protein:</strong></p>
+                        <ul>
+                            <li>Severe hepatic encephalopathy (reduce temporarily until stabilised)</li>
+                            <li>Inborn errors of metabolism</li>
+                            <li>Acute kidney injury without RRT (limit to 1.0-1.2 g/kg/day)</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="evidence">Evidence Base for ICU Nutrition</h2>
+                    
+                    <h3>Timing of Enteral Nutrition</h3>
+                    <div class="info-box">
+                        <p><strong>Recommendation:</strong> Initiate EN within 24-48 hours of ICU admission if haemodynamically stable.</p>
+                        
+                        <p><strong>Key Evidence:</strong></p>
+                        <ul>
+                            <li><strong>Early EN (Doig et al., JAMA 2013):</strong> Systematic review showed early EN associated with reduced mortality and infectious complications</li>
+                            <li><strong>NUTRIREA-2 (Reignier et al., NEJM 2018):</strong> Early EN via gastric route was non-inferior to early EN via post-pyloric route</li>
+                            <li><strong>Haemodynamic stability:</strong> Avoid EN if on high/increasing vasopressor doses or evidence of gut ischaemia</li>
+                        </ul>
+                    </div>
+
+                    <h3>Caloric Targets and Permissive Underfeeding</h3>
+                    <div class="info-box">
+                        <p><strong>Recommendation:</strong> Target 70-80% of calculated energy requirements in first 7-10 days.</p>
+                        
+                        <p><strong>Key Evidence:</strong></p>
+                        <ul>
+                            <li><strong>PermiT trial (Arabi et al., NEJM 2015):</strong> Permissive underfeeding (40-60% target) vs full feeding showed no difference in mortality but some benefits in duration of ventilation</li>
+                            <li><strong>EPaNIC trial (Casaer et al., NEJM 2011):</strong> Late PN (day 8+) superior to early PN (day 3) - suggests avoiding aggressive early nutrition</li>
+                            <li><strong>NUTRIREA-2 (2018):</strong> Full energy target not necessary in acute phase</li>
+                            <li><strong>Overfeeding risks:</strong> Hyperglycaemia, hepatic steatosis, increased CO₂ production (difficulty weaning), immune dysfunction</li>
+                        </ul>
+                    </div>
+
+                    <h3>Route of Nutrition</h3>
+                    <div class="info-box">
+                        <p><strong>Recommendation:</strong> Gastric feeding appropriate for most patients. Consider post-pyloric if high GRV or aspiration risk.</p>
+                        
+                        <p><strong>Key Evidence:</strong></p>
+                        <ul>
+                            <li><strong>NUTRIREA-2 (2018):</strong> Gastric feeding non-inferior to post-pyloric feeding for clinical outcomes</li>
+                            <li><strong>Gastric advantages:</strong> Easier to place, maintains gastric function, physiological</li>
+                            <li><strong>Post-pyloric indications:</strong> Gastroparesis, high aspiration risk, pancreatitis, gastric surgery</li>
+                        </ul>
+                    </div>
+
+                    <h3>Supplementary Parenteral Nutrition</h3>
+                    <div class="info-box">
+                        <p><strong>Recommendation:</strong> Avoid early PN (<7 days). Consider supplementary PN after day 7-10 if EN achieving <60% of target.</p>
+                        
+                        <p><strong>Key Evidence:</strong></p>
+                        <ul>
+                            <li><strong>EPaNIC trial (Casaer et al., NEJM 2011):</strong> Late PN (day 8+) associated with fewer infections, shorter ICU stay, lower costs compared to early PN</li>
+                            <li><strong>CALORIES trial (Harvey et al., JAMA 2014):</strong> Early PN vs early EN showed no mortality difference but PN group had more infections and longer ICU stay</li>
+                            <li><strong>Current practice:</strong> Allow time for EN to establish before adding PN</li>
+                        </ul>
+                    </div>
+
+                    <h3>Gastric Residual Volumes</h3>
+                    <div class="info-box">
+                        <p><strong>Recommendation:</strong> GRV threshold of 400ml (250ml if prone). Do not stop feeds for GRV <400ml.</p>
+                        
+                        <p><strong>Key Evidence:</strong></p>
+                        <ul>
+                            <li><strong>ESPEN ICU Guidelines (2019):</strong> GRV >500ml should trigger intervention; <500ml generally safe</li>
+                            <li><strong>NUTRIREA-2 (2018):</strong> No GRV monitoring vs routine monitoring showed no difference in aspiration or pneumonia</li>
+                            <li><strong>Local practice:</strong> We monitor GRV but use higher threshold (400ml) to avoid unnecessary feed interruptions</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="monitoring">Nutritional Monitoring</h2>
+                    
+                    <h3 id="daily-monitoring">Daily Monitoring Requirements</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Frequency</th>
+                                <th>Target/Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Feed volume delivered</td>
+                                <td>Daily</td>
+                                <td>Document actual vs prescribed. Investigate if <70% prescribed.</td>
+                            </tr>
+                            <tr>
+                                <td>Gastric residual volume</td>
+                                <td>4-6 hourly (if monitoring)</td>
+                                <td>Action if >400ml (or >250ml if prone)</td>
+                            </tr>
+                            <tr>
+                                <td>Blood glucose</td>
+                                <td>Hourly initially, then 4-6 hourly</td>
+                                <td>Target 6-10 mmol/L. Avoid hypoglycaemia (<4.0 mmol/L).</td>
+                            </tr>
+                            <tr>
+                                <td>Bowel function</td>
+                                <td>Daily</td>
+                                <td>Document bowel movements. Bristol Stool Chart.</td>
+                            </tr>
+                            <tr>
+                                <td>Fluid balance</td>
+                                <td>Daily</td>
+                                <td>Feed contributes to fluid intake - adjust if positive balance</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="weekly-monitoring">Biochemical Monitoring</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Frequency</th>
+                                <th>Special Considerations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Electrolytes (Na, K, Cl)</td>
+                                <td>Daily minimum</td>
+                                <td>More frequent if RRT, GI losses, refeeding risk</td>
+                            </tr>
+                            <tr>
+                                <td>Phosphate</td>
+                                <td>Daily in first week, then alternate days</td>
+                                <td>Critical for refeeding syndrome detection. Replace if <0.8 mmol/L.</td>
+                            </tr>
+                            <tr>
+                                <td>Magnesium</td>
+                                <td>Alternate days minimum</td>
+                                <td>Often low in critical illness. Target >0.7 mmol/L.</td>
+                            </tr>
+                            <tr>
+                                <td>Calcium (corrected)</td>
+                                <td>Alternate days</td>
+                                <td>Correct for albumin. Monitor ionised Ca if on citrate CRRT.</td>
+                            </tr>
+                            <tr>
+                                <td>Liver function (ALT, bilirubin)</td>
+                                <td>Twice weekly</td>
+                                <td>Check for PN-associated liver dysfunction, cholestasis</td>
+                            </tr>
+                            <tr>
+                                <td>Triglycerides</td>
+                                <td>Twice weekly if on PN</td>
+                                <td>Target <4.0 mmol/L. Stop lipids if >5.0 mmol/L.</td>
+                            </tr>
+                            <tr>
+                                <td>Albumin</td>
+                                <td>Weekly</td>
+                                <td>Not a good marker of nutrition. Falls due to inflammation/capillary leak.</td>
+                            </tr>
+                            <tr>
+                                <td>C-reactive protein (CRP)</td>
+                                <td>Daily to alternate days</td>
+                                <td>Marker of inflammation. Falling CRP suggests entering anabolic phase.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Clinical Indicators</h3>
+                    <div class="info-box">
+                        <p><strong>Signs of adequate nutrition:</strong></p>
+                        <ul>
+                            <li>Stable or improving biochemical markers</li>
+                            <li>Wound healing progressing</li>
+                            <li>Muscle strength improving (grip strength, respiratory muscle function)</li>
+                            <li>Reduced vasopressor requirement</li>
+                            <li>Successful weaning from ventilation</li>
+                        </ul>
+                        
+                        <p><strong>Signs of inadequate nutrition or overfeeding:</strong></p>
+                        <ul>
+                            <li>Persistent hyperglycaemia (>10 mmol/L) despite insulin</li>
+                            <li>Rising triglycerides (>4.0 mmol/L)</li>
+                            <li>Difficulty weaning from ventilator (high VCO₂)</li>
+                            <li>Hepatic dysfunction (rising bilirubin/transaminases)</li>
+                            <li>Persistent electrolyte derangement despite replacement</li>
+                        </ul>
+                    </div>
+
+                    <h3>Dietetic Review</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Mandatory referral criteria:</strong> See "Referral to Dietitian" section</li>
+                            <li><strong>Weekly review minimum:</strong> All patients receiving nutrition support for >7 days</li>
+                            <li><strong>Energy/protein assessment:</strong> Calculate percentage achieved vs target</li>
+                            <li><strong>Route optimisation:</strong> Consider transition from EN to oral, or from PN to EN</li>
+                            <li><strong>Discharge planning:</strong> Involve dietitians early for home feeding plans</li>
+                        </ul>
+                    </div>
+                    <h2>Refeeding Syndrome</h2>
+                    
+                    <div class="info-box critical">
+                        <h4>High-Risk Patients</h4>
+                        <p>Refeeding syndrome can be fatal. Identify high-risk patients:</p>
+                        <ul>
+                            <li>BMI <16 kg/m²</li>
+                            <li>Unintentional weight loss >15% in 3-6 months</li>
+                            <li>Little or no nutritional intake for >10 days</li>
+                            <li>Low baseline potassium, phosphate, or magnesium</li>
+                        </ul>
+                    </div>
+
+                    <h3>Management Strategy</h3>
+                    <ol>
+                        <li><strong>Before feeding:</strong>
+                            <ul>
+                                <li>Check and correct electrolytes (K⁺, PO₄³⁻, Mg²⁺)</li>
+                                <li>Prescribe thiamine 200-300mg daily for 10 days</li>
+                                <li>Consider multivitamin and trace element supplementation</li>
+                            </ul>
+                        </li>
+                        <li><strong>During refeeding:</strong>
+                            <ul>
+                                <li>Slow calorie repletion (less than 50% protocol targets for first 72 hours)</li>
+                                <li>Monitor fluid balance and vital signs during refeeding</li>
+                                <li>Continue to monitor and correct electrolytes daily</li>
+                            </ul>
+                        </li>
+                        <li><strong>Refer to:</strong> UHBW Refeeding Syndrome Guideline for full protocol</li>
+                    </ol>
+
+                    <div class="reference">
+                        National Institute for Health and Care Excellence (NICE). Nutrition support for adults: oral nutrition support, enteral tube feeding and parenteral nutrition. Clinical guideline [CG32]. Published February 2006.
+                    </div>
+                </section>
+
+                <section id="tolerance" class="section">
+                    <h2 id="grv-management">Gastric Residual Volume Management</h2>
+                    
+                    <div class="warning-box">
+                        <h3>GRV Monitoring Protocol</h3>
+                        <p><strong>Standard Threshold: 400ml</strong> (250ml if patient in prone position)</p>
+                        
+                        <p><strong>Measurement Technique:</strong></p>
+                        <ul>
+                            <li>Aspirate gastric contents using 60ml syringe via NGT/gastrostomy</li>
+                            <li>Measure volume in graduated container</li>
+                            <li>Return aspirate to stomach (unless bilious, faeculent, or >500ml)</li>
+                            <li>Document GRV on fluid balance chart</li>
+                        </ul>
+                        
+                        <p><strong>Frequency:</strong> Check 4-6 hourly for first 48 hours, then reduce if consistently low</p>
+                    </div>
+
+                    <h3>Management Algorithm for Elevated GRV</h3>
+                    
+                    <div class="info-box">
+                        <p><strong>GRV 250-400ml (or >250ml if prone):</strong></p>
+                        <ul>
+                            <li>Continue feeding at current rate</li>
+                            <li>Return aspirate to stomach</li>
+                            <li>Increase GRV monitoring frequency to 4 hourly</li>
+                            <li>Optimise head of bed elevation (30-45°)</li>
+                            <li>Review medications affecting gut motility</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>GRV 400-500ml (first occurrence):</strong></p>
+                        <ol>
+                            <li><strong>Continue feeding</strong> but increase monitoring to 2-4 hourly</li>
+                            <li><strong>Start prokinetic therapy:</strong> Metoclopramide 10mg TDS IV/SC (first-line)</li>
+                            <li>Return aspirate to stomach unless faeculent/bilious</li>
+                            <li>Optimise patient positioning (semi-recumbent, right lateral)</li>
+                            <li>Review sedation - reduce if possible</li>
+                            <li>Exclude abdominal pathology (examine abdomen, check X-ray)</li>
+                        </ol>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>GRV >500ml or repeated GRV >400ml despite metoclopramide:</strong></p>
+                        <ol>
+                            <li><strong>Stop feed for 4 hours</strong></li>
+                            <li><strong>Add second prokinetic:</strong> Erythromycin 250mg QDS IV (second-line)</li>
+                            <li>Recheck GRV after 4 hours</li>
+                            <li>If GRV <250ml, restart feed at 50% of previous rate</li>
+                            <li>If GRV still >400ml, consider post-pyloric feeding (NJT/jejunostomy)</li>
+                            <li>Discuss with dietitian and medical team</li>
+                        </ol>
+                        
+                        <p><strong>Warning signs requiring urgent review:</strong></p>
+                        <ul>
+                            <li>Bilious or faeculent aspirate</li>
+                            <li>Abdominal distension or pain</li>
+                            <li>Absent bowel sounds</li>
+                            <li>Vomiting (risk of aspiration)</li>
+                            <li>Haemodynamic instability</li>
+                        </ul>
+                    </div>
+
+                    <h3>Prokinetic Medications</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Drug</th>
+                                <th>Dose</th>
+                                <th>Mechanism</th>
+                                <th>Cautions/Contraindications</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Metoclopramide</strong><br>(First-line)</td>
+                                <td>10mg TDS IV/SC<br>(Max 30mg/24hrs)</td>
+                                <td>Dopamine antagonist<br>Increases gastric emptying</td>
+                                <td>
+                                    • Prolonged QTc (monitor ECG)<br>
+                                    • Parkinson's disease<br>
+                                    • GI obstruction<br>
+                                    • Dystonic reactions<br>
+                                    • Maximum 5 days treatment
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Erythromycin</strong><br>(Second-line)</td>
+                                <td>250mg QDS IV<br>(over 60 minutes)</td>
+                                <td>Motilin receptor agonist<br>Enhances gastric emptying</td>
+                                <td>
+                                    • Prolonged QTc (monitor ECG)<br>
+                                    • Hepatic impairment<br>
+                                    • Drug interactions (warfarin, statins)<br>
+                                    • Risk of tachyphylaxis (effectiveness decreases over time)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="info-box">
+                        <p><strong>Notes on Prokinetic Use:</strong></p>
+                        <ul>
+                            <li><strong>Metoclopramide changed to first-line:</strong> Previous version listed erythromycin first, now metoclopramide is preferred initial choice</li>
+                            <li><strong>Combined therapy:</strong> Can use both metoclopramide and erythromycin together if single agent ineffective</li>
+                            <li><strong>Duration:</strong> Review need for prokinetics daily - discontinue if no longer required</li>
+                            <li><strong>ECG monitoring:</strong> Check baseline ECG and monitor for QTc prolongation with both drugs</li>
+                            <li><strong>Alternative:</strong> If both prokinetics fail, consider post-pyloric feeding route</li>
+                        </ul>
+                    </div>
+
+                    <h3>Post-Pyloric Feeding Considerations</h3>
+                    <div class="info-box">
+                        <p><strong>Indications for post-pyloric feeding:</strong></p>
+                        <ul>
+                            <li>Persistent high GRV (>400ml) despite dual prokinetic therapy</li>
+                            <li>Recurrent vomiting or aspiration</li>
+                            <li>Gastroparesis (documented delayed gastric emptying)</li>
+                            <li>Severe acute pancreatitis</li>
+                            <li>High aspiration risk (bulbar dysfunction, reduced consciousness)</li>
+                            <li>Gastric surgery or anatomical abnormality</li>
+                        </ul>
+                        
+                        <p><strong>Post-pyloric feeding options:</strong></p>
+                        <ul>
+                            <li><strong>Nasojejunal tube (NJT):</strong> Requires endoscopic or fluoroscopic placement</li>
+                            <li><strong>Surgical jejunostomy:</strong> Placed at time of surgery (see Jejunostomy Protocol tab)</li>
+                            <li><strong>Post-pyloric NG tube:</strong> Spontaneous migration beyond pylorus (unreliable)</li>
+                        </ul>
+                        
+                        <p><strong>Advantages of post-pyloric feeding:</strong></p>
+                        <ul>
+                            <li>Bypasses delayed gastric emptying</li>
+                            <li>Lower aspiration risk</li>
+                            <li>Can achieve higher feeding rates</li>
+                            <li>No GRV monitoring required</li>
+                        </ul>
+                        
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul>
+                            <li>Requires endoscopy/radiology for placement (NJT)</li>
+                            <li>Higher risk of tube displacement</li>
+                            <li>Cannot give medications via jejunal route</li>
+                            <li>Requires continuous feeding (no bolus regimen)</li>
+                        </ul>
+                    </div>
+                    <h2>Feed Tolerance and Management Issues</h2>
+                    
+                    <h3>Assessing Feed Tolerance</h3>
+                    <div class="mermaid-container">
+                        <div class="info-box" style="background-color: #fff3e0; border-left: 4px solid #f57c00;">
+                        <h4>📊 GRV Management Flowchart</h4>
+                        <p><a href="https://mermaid.live/edit#pako:eNplkE1vgzAMhv-KxR2JST3t0GktjHZSd6DTpIlxQMGFqCFGiek0Qf_7kn6sbMvRsd_nsYdAUIXBfVCbsmvgNf7Q4N5jviEtmYzUNewQK2BSaEotsIAwnMNiSEvLRgowaGXVlwoOpPoWYT6LolY9HM9BC989vtAIy3xJmqXu8RTogotpyzvaEeJ8y9SdgTsyMIOGemMhhAxFg2IPafZ2GYtPHsngKmBZKvWHnPyQn_IMrVf7zU1u3NS7uTXQQGdoLzWyFB67QSahqDNl637hLmprd6PtJSE9KayGdeumDtii5it9dQtf_1scPiU3U1IxHfLKzxMhshx2X4r8sa8BhnrGIjh-A3vckrE" target="_blank" style="display: inline-block; background: #f57c00; color: white; padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold;">🎨 View Flowchart</a></p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;"><em>Decision algorithm for managing gastric residual volumes (GRV) >400ml with escalation to prokinetics and consideration of post-pyloric feeding.</em></p>
+                    </div>
+                    </div>
+
+                    <h3>Common Issues and Solutions</h3>
+                    
+                    <h4>High Gastric Residual Volumes</h4>
+                    <ul>
+                        <li>Consider prokinetic agents (metoclopramide, erythromycin)</li>
+                        <li>Elevate head of bed 30-45 degrees</li>
+                        <li>Consider post-pyloric feeding if persistent</li>
+                    </ul>
+
+                    <h4>Diarrhoea</h4>
+                    <ul>
+                        <li>Review medications (particularly antibiotics)</li>
+                        <li>Send stool sample for Clostridioides difficile testing</li>
+                        <li>Ensure adequate fluid intake</li>
+                        <li>Consider fibre-containing feed</li>
+                        <li>Do not routinely stop enteral feeding for diarrhoea</li>
+                    </ul>
+
+                    <h4>Constipation</h4>
+                    <ul>
+                        <li>Ensure adequate fluid intake</li>
+                        <li>Consider aperients as per bowel management protocol</li>
+                        <li>Use fibre-containing feed where appropriate</li>
+                    </ul>
+
+                    <div class="info-box warning">
+                        <h4>When to Stop Feeding</h4>
+                        <p>Immediately discontinue feeding if:</p>
+                        <ul>
+                            <li>Signs of bowel ischaemia</li>
+                            <li>Severe abdominal distension or pain</li>
+                            <li>Uncontrolled vomiting</li>
+                            <li>Procedures requiring fasting (as per protocol)</li>
+                        </ul>
+                        <p><strong>Inform consultant and senior nursing staff immediately</strong></p>
+                    </div>
+                </section>
+
+                <section id="special-populations" class="section">
+                    <h2>Special Populations and Clinical Scenarios</h2>
+                    
+                    <h3 id="prone">Prone Positioning</h3>
+                    <div class="warning-box">
+                        <p><strong>Modifications for prone ventilation:</strong></p>
+                        <ul>
+                            <li><strong>GRV threshold reduced to 250ml</strong> (vs 400ml in supine)</li>
+                            <li><strong>Feed rate:</strong> Consider using concentrated feed (Nutrison Concentrated 2.0 kcal/ml) to reduce volume</li>
+                            <li><strong>Monitoring:</strong> Check GRV every 4 hours minimum</li>
+                            <li><strong>Position:</strong> NG tube should be in optimal position - check X-ray if new tube or concerns</li>
+                            <li><strong>Aspiration risk:</strong> Higher due to positioning - maintain meticulous oral care</li>
+                            <li><strong>Before proning:</strong> Check GRV and aspirate stomach to minimise risk during turn</li>
+                        </ul>
+                        
+                        <p><strong>Typical regimen for prone patients:</strong></p>
+                        <ul>
+                            <li>Nutrison Concentrated 2.0 at 40-60ml/hr (1,920-2,880 kcal/24hr)</li>
+                            <li>Provides high energy in lower volume (important for fluid restriction)</li>
+                            <li>Protein content: 7.5g per 100ml</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="pancreatitis">Severe Acute Pancreatitis</h3>
+                    <div class="info-box">
+                        <p><strong>Nutritional management principles:</strong></p>
+                        <ul>
+                            <li><strong>Early EN recommended:</strong> Start within 48-72 hours if haemodynamically stable</li>
+                            <li><strong>Route:</strong> Nasojejunal feeding preferred (post-pyloric) to minimise pancreatic stimulation</li>
+                            <li><strong>Feed type:</strong> <strong>Nutrison Peptisorb Plus HEHP 1.5 kcal/ml</strong> (changed from Peptisorb 1.0)</li>
+                            <li><strong>Peptide feeds:</strong> Easier to absorb, reduced pancreatic stimulation</li>
+                            <li><strong>Start low, go slow:</strong> Begin at 20ml/hr, increase by 10-20ml/hr every 12-24 hours as tolerated</li>
+                            <li><strong>Monitoring:</strong> Abdominal pain, amylase/lipase levels (may not correlate with tolerance), inflammatory markers</li>
+                        </ul>
+                        
+                        <p><strong>Important notes:</strong></p>
+                        <ul>
+                            <li>Gastric feeding can be used in mild pancreatitis if no ileus</li>
+                            <li>PN only if EN not tolerated after 5-7 days or intestinal obstruction</li>
+                            <li>Avoid high-fat feeds initially</li>
+                            <li>Mandatory dietitian referral</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="whipple">Post-Whipple's Procedure (Pancreaticoduodenectomy)</h3>
+                    <div class="warning-box">
+                        <p><strong>Special considerations:</strong></p>
+                        <ul>
+                            <li><strong>Route:</strong> Usually surgical jejunostomy placed at time of operation</li>
+                            <li><strong>Feed type:</strong> <strong>Nutrison Peptisorb Plus HEHP 1.5 kcal/ml</strong> (peptide feed)</li>
+                            <li><strong>Pancreatic Exocrine Insufficiency (PEI):</strong> Almost universal after Whipple's</li>
+                            <li><strong>Pancreatic Enzyme Replacement Therapy (PERT):</strong> Essential with feeds</li>
+                            <li><strong>Starting regimen:</strong> Follow jejunostomy protocol (see Jejunostomy Protocol tab)</li>
+                        </ul>
+                        
+                        <p><strong>PERT administration:</strong></p>
+                        <ul>
+                            <li>Creon capsules: Give with each feed bolus/start of continuous feed</li>
+                            <li>Dose: Usually 25,000-50,000 units lipase per feed session</li>
+                            <li>Cannot be given down jejunostomy - give via NGT or orally when taking</li>
+                            <li>Monitor for steatorrhoea (fatty, pale, floating stools)</li>
+                        </ul>
+                        
+                        <p><strong>Transition to polymeric feeds:</strong></p>
+                        <ul>
+                            <li>Can transition from peptide to standard feed once tolerating full rate</li>
+                            <li>Requires adequate PERT with polymeric feeds</li>
+                            <li>Monitor fat-soluble vitamin levels (A, D, E, K)</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="obesity">Obesity (BMI >30)</h3>
+                    <div class="info-box">
+                        <p><strong>Weight calculations:</strong></p>
+                        <ul>
+                            <li><strong>Energy target:</strong> Use adjusted body weight (ABW)</li>
+                            <li><strong>Formula:</strong> ABW = IBW + 0.4 × (actual weight - IBW)</li>
+                            <li><strong>IBW calculation:</strong> Men: 50kg + 2.3kg per inch >5ft; Women: 45.5kg + 2.3kg per inch >5ft</li>
+                            <li><strong>Target:</strong> 20-25 kcal/kg ABW per day</li>
+                        </ul>
+                        
+                        <p><strong>Protein requirements:</strong></p>
+                        <ul>
+                            <li>Calculate using ABW</li>
+                            <li>Target 1.5-2.0 g/kg ABW (higher protein needs to preserve lean body mass)</li>
+                        </ul>
+                        
+                        <p><strong>Special considerations:</strong></p>
+                        <ul>
+                            <li>Higher risk of aspiration (increased intra-abdominal pressure)</li>
+                            <li>Often have comorbidities (diabetes, sleep apnoea, cardiovascular disease)</li>
+                            <li>Micronutrient deficiencies common (vitamin D, thiamine, folate)</li>
+                            <li>Avoid intentional weight loss during acute illness</li>
+                            <li>Higher rates of delayed gastric emptying</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="burns">Burns</h3>
+                    <div class="warning-box">
+                        <p><strong>Hypermetabolic response:</strong></p>
+                        <ul>
+                            <li><strong>Energy requirements:</strong> 20-40 kcal/kg/day depending on % total body surface area (TBSA)</li>
+                            <li><strong>Small burns (<20% TBSA):</strong> 25-30 kcal/kg/day</li>
+                            <li><strong>Major burns (>20% TBSA):</strong> 30-40 kcal/kg/day</li>
+                            <li><strong>Protein requirements:</strong> 1.5-2.5 g/kg/day (severe catabolism)</li>
+                        </ul>
+                        
+                        <p><strong>Route and timing:</strong></p>
+                        <ul>
+                            <li>Early EN crucial (within 24 hours)</li>
+                            <li>Gastric route usually tolerated</li>
+                            <li>May require post-pyloric feeding if ileus or high GRV</li>
+                        </ul>
+                        
+                        <p><strong>Micronutrients:</strong></p>
+                        <ul>
+                            <li>Increased requirements: Vitamin C (wound healing), zinc (immune function), selenium, vitamin A</li>
+                            <li>Consider supplementation beyond standard feed content</li>
+                        </ul>
+                        
+                        <p><strong>Monitoring:</strong></p>
+                        <ul>
+                            <li>Weekly nutritional assessment</li>
+                            <li>Nitrogen balance if feasible</li>
+                            <li>Weight (difficult due to oedema/fluid resuscitation)</li>
+                            <li>Mandatory dietitian involvement</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="tracheostomy">Tracheostomy Patients</h3>
+                    <div class="info-box">
+                        <p><strong>Considerations for EN:</strong></p>
+                        <ul>
+                            <li>Swallowing assessment essential before oral intake</li>
+                            <li>NG tube can remain in situ during oral trials</li>
+                            <li>Cuff deflation timing coordinated with feeding (usually deflate between feeds)</li>
+                            <li>Higher aspiration risk during transition to oral intake</li>
+                        </ul>
+                        
+                        <p><strong>Transition to oral nutrition:</strong></p>
+                        <ul>
+                            <li>Speech and Language Therapy (SALT) assessment required</li>
+                            <li>Blue dye test or Fibreoptic Endoscopic Evaluation of Swallowing (FEES)</li>
+                            <li>Gradual weaning from EN as oral intake increases</li>
+                            <li>Overnight NG feeding often used during transition phase</li>
+                            <li>See "Oral Nutrition Support" section for progression plan</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="head-injury">Head Injury and Neurocritical Care</h3>
+                    <div class="info-box">
+                        <p><strong>Special considerations:</strong></p>
+                        <ul>
+                            <li><strong>Energy requirements:</strong> May be increased (hypermetabolism) but assess individually</li>
+                            <li><strong>Protein:</strong> 1.5-2.0 g/kg/day to counteract catabolism</li>
+                            <li><strong>Timing:</strong> Early EN (within 24-48 hours) associated with better outcomes</li>
+                            <li><strong>Gastric emptying:</strong> Often delayed - monitor GRVs closely, low threshold for prokinetics</li>
+                        </ul>
+                        
+                        <p><strong>Complications to monitor:</strong></p>
+                        <ul>
+                            <li>Hyperglycaemia (stress response, raised ICP affects hypothalamus)</li>
+                            <li>Diabetes insipidus (fluid/sodium imbalance)</li>
+                            <li>SIADH (hyponatraemia)</li>
+                            <li>Autonomic dysfunction affecting gut motility</li>
+                        </ul>
+                        
+                        <p><strong>Micronutrients:</strong></p>
+                        <ul>
+                            <li>Consider thiamine supplementation (especially if alcohol-related injury)</li>
+                            <li>Vitamin D often deficient</li>
+                            <li>Selenium, zinc for antioxidant support</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section id="parenteral" class="section">
+                    <h2>Parenteral Nutrition (PN)</h2>
+                    
+                    <h3>Indications for PN</h3>
+                    <ul>
+                        <li>Non-functional or inaccessible gastrointestinal tract</li>
+                        <li>Persistent feed intolerance despite optimisation</li>
+                        <li>Intestinal failure</li>
+                        <li>Severe malnutrition when enteral feeding inadequate</li>
+                        <li>High output fistulae</li>
+                    </ul>
+
+                    <div class="info-box warning">
+                        <h4>PN Prescribing Requirements</h4>
+                        <p><strong>All PN must be discussed with dietitian before prescribing:</strong></p>
+                        <ul>
+                            <li><strong>BRI:</strong> Telephone before 1100hrs</li>
+                            <li><strong>WICU:</strong> Telephone before 1200hrs</li>
+                        </ul>
+                        <p>Refer to: UHBW Prescribing and Provision of PN for Adult Inpatients guideline</p>
+                    </div>
+
+                    <h3>Supplementary PN</h3>
+                    <p>Consider when enteral nutrition provides <50% of nutritional requirements after optimisation attempts, and patient expected to remain on critical care for >5 days.</p>
+
+                    <h3>Total PN</h3>
+                    <p>Required when enteral nutrition is contraindicated or not possible, and expected duration >5-7 days.</p>
+
+                    <h3>PN Monitoring</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Before Starting</th>
+                                    <th>During PN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Weight</td>
+                                    <td>✓</td>
+                                    <td>3 times weekly</td>
+                                </tr>
+                                <tr>
+                                    <td>FBC, U&E, LFT</td>
+                                    <td>✓</td>
+                                    <td>Daily initially, then 3 times weekly</td>
+                                </tr>
+                                <tr>
+                                    <td>Magnesium, Phosphate</td>
+                                    <td>✓</td>
+                                    <td>Daily initially, then 3 times weekly</td>
+                                </tr>
+                                <tr>
+                                    <td>Glucose</td>
+                                    <td>✓</td>
+                                    <td>4-6 hourly until stable</td>
+                                </tr>
+                                <tr>
+                                    <td>Triglycerides</td>
+                                    <td>✓</td>
+                                    <td>Weekly</td>
+                                </tr>
+                                <tr>
+                                    <td>CRP</td>
+                                    <td>✓</td>
+                                    <td>3 times weekly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="reference">
+                        Singer P, Blaser AR, Berger MM, et al. ESPEN guideline on clinical nutrition in the intensive care unit. Clinical Nutrition. 2019;38(1):48-79.
+                    </div>
+                </section>
+
+                <section id="oral" class="section">
+                    <h2>Oral Nutrition Support</h2>
+                    
+                    <h3>Indications</h3>
+                    <ul>
+                        <li>Patient able to swallow safely (refer to Speech and Language Therapy if concerns)</li>
+                        <li>Inadequate oral intake to meet nutritional requirements</li>
+                        <li>Patient recovering from critical illness</li>
+                    </ul>
+
+                    <h3>Strategies</h3>
+                    <ol>
+                        <li><strong>Food-first approach:</strong>
+                            <ul>
+                                <li>High-energy, high-protein diet</li>
+                                <li>Fortified foods and drinks</li>
+                                <li>Small, frequent meals</li>
+                                <li>Encourage patient choice and preference</li>
+                            </ul>
+                        </li>
+                        <li><strong>Oral nutritional supplements (ONS):</strong>
+                            <ul>
+                                <li>Prescribe when food alone is insufficient</li>
+                                <li>Standard: 300kcal per serving (e.g., Ensure Plus, Fortisip)</li>
+                                <li>Typically prescribe 2-3 servings per day</li>
+                                <li>Best taken between meals, not as meal replacements</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h3>Monitoring Oral Intake</h3>
+                    <ul>
+                        <li>Food charts for patients at nutritional risk</li>
+                        <li>Regular weight monitoring</li>
+                        <li>Refer to dietitian if intake remains inadequate</li>
+                    </ul>
+                </section>
+
+                <section id="references" class="section">
+                    <h2>References and Related Documents</h2>
+                    
+                    <h3>Key Guidelines</h3>
+                    <ul>
+                        <li>UHBW Refeeding Syndrome Guideline</li>
+                        <li>Guidelines for Management of Nasojejunal Tubes</li>
+                        <li>Insertion and Management of Fine-bore Nasogastric Feeding Tubes</li>
+                        <li>Management of Adult Patients Following Percutaneous Endoscopic Gastrostomy or Surgically Placed 'Open' Gastrostomy Tubes</li>
+                        <li>Protocol for Starting Feeding via Jejunostomy Tube Post-Oesophagogastric Surgery</li>
+                        <li>Prescribing and Provision of PN for Adult Inpatients</li>
+                        <li>WICU - OP99 Parenteral Nutrition Policy</li>
+                        <li>Care Plan: Management of Nasojejunal Feeding Tubes</li>
+                        <li>Care Plan: Post Insertion Management of Percutaneous Feeding Jejunostomy Tubes</li>
+                        <li>The Management of Pancreatic Exocrine Insufficiency in Enteral Tube Feeding</li>
+                    </ul>
+
+                    <h3>Evidence Base</h3>
+                    <div class="reference">
+                        <p>National Institute for Health and Care Excellence (NICE). Nutrition support for adults: oral nutrition support, enteral tube feeding and parenteral nutrition. Clinical guideline [CG32]. February 2006. Available at: http://www.nice.org.uk/CG032</p>
+                    </div>
+                    <div class="reference">
+                        <p>Singer P, Blaser AR, Berger MM, et al. ESPEN guideline on clinical nutrition in the intensive care unit. Clinical Nutrition. 2019;38(1):48-79.</p>
+                    </div>
+                    <div class="reference">
+                        <p>McClave SA, Taylor BE, Martindale RG, et al. Guidelines for the Provision and Assessment of Nutrition Support Therapy in the Adult Critically Ill Patient: Society of Critical Care Medicine (SCCM) and American Society for Parenteral and Enteral Nutrition (A.S.P.E.N.). JPEN J Parenter Enteral Nutr. 2016;40(2):159-211.</p>
+                    </div>
+
+                    <h3>Authorising Body</h3>
+                    <p><strong>GI Exec Board</strong></p>
+                    
+                    <h3>Version Control</h3>
+                    <p>Version 3.0 | June 2025 - June 2027</p>
+                    <p>Authors: S Casey, T Lander, Senior Dietitians (Jejunostomy Protocol)</p>
+                    <p>Adapted from the Oesophagectomy Enhanced Recovery Pathway</p>
+                </section>
+            </div>
+
+            <!-- Jejunostomy Protocol Tab -->
+            <div id="jejunostomy-protocol" class="tab-content">
+                <section class="section">
+                    <h2>Protocol for Feeding via Jejunostomy/Nasojejunal Tube Post-Oesophagogastric and Hepatobiliary Surgery</h2>
+                    
+                    <div class="info-box">
+                        <h4>Protocol Scope</h4>
+                        <p><strong>Setting:</strong> Intensive care units and surgical wards</p>
+                        <p><strong>For Staff:</strong> All clinical staff involved in caring for the patients below</p>
+                        <p><strong>Patients:</strong> All postoperative oesophagogastric (OG) and hepatobiliary (HPB) patients with a feeding jejunostomy or nasojejunal tube in situ</p>
+                    </div>
+
+                    <h3>Aim</h3>
+                    <p>To safely commence and advance enteral nutrition via a jejunostomy/nasojejunal tube in postoperative oesophagogastric and hepatobiliary patients.</p>
+
+                    <div class="info-box critical">
+                        <h4>Important Information – Please Read Before Commencing Feeding</h4>
+                        <ul>
+                            <li>Complete relevant CareFlow EPR Service order: "Adult Nutrition and Dietetics Referral (BRISTOL PATIENTS) or (WESTON PATIENTS)" for all patients starting this protocol</li>
+                            <li>If the patient is at risk of refeeding syndrome, refer to UHBW Refeeding Syndrome Guideline</li>
+                            <li>Commence the appropriate feeding tube care plan:
+                                <ul>
+                                    <li>Care Plan: Management of Nasojejunal Feeding Tubes</li>
+                                    <li>Care Plan: Post Insertion Management of Percutaneous Feeding Jejunostomy Tubes</li>
+                                </ul>
+                            </li>
+                            <li><strong>Jejunostomy feeding tubes should not be used for the first 24 hours post insertion</strong></li>
+                            <li><strong>If at any time your patient experiences abdominal bloating/cramping/distension or worsening/severe pain, immediately discontinue feeding until the patient has been reviewed by a consultant surgeon or registrar</strong></li>
+                            <li>If bowel ischaemia is suspected, appropriate investigations should be performed as directed by senior OG/HPB surgeon (e.g., blood gases, contrast CT scan)</li>
+                            <li>The protocol covers days 1-5 of feeding. Feeding rate should only be increased faster than the protocol if documented by a consultant OG/HPB surgeon. If there is no evidence of ileus, consider increasing feed rate to a bespoke Dietitian regimen from Day 3 onwards</li>
+                            <li>An alternative feed may be provided under the documented advice of a surgeon or dietitian</li>
+                        </ul>
+                    </div>
+
+                    <h3>Special Considerations</h3>
+
+                    <h4>Allergies</h4>
+                    <div class="info-box warning">
+                        <p>Nutrison Protein Plus Multifibre contains <strong>fish oils, milk protein and soya protein</strong>.</p>
+                        <p>If a patient is allergic to fish, soy or milk <strong>DO NOT use this regimen</strong> and await dietetic input.</p>
+                    </div>
+
+                    <h4>Cultural and Dietary Needs</h4>
+                    <p>This protocol feed is Halal and Kosher but <strong>not vegetarian or vegan</strong>.</p>
+
+                    <h4>Pancreatic Exocrine Insufficiency (PEI)</h4>
+                    <p>This feed is polymeric so at higher feed rates additional Pancreatic Enzyme Replacement Therapy (PERT) may be required for patients with Pancreatic Exocrine Insufficiency. Refer to UHBW clinical guideline "The Management Of Pancreatic Exocrine Insufficiency In Enteral Tube Feeding."</p>
+
+                    <h4>Diabetes</h4>
+                    <p>Diabetes medications/insulin may need reviewing with altered carbohydrate content and delivery of jejunal feed. Refer to the Diabetes Specialist Nurses by completing CareFlow EPR Service order "BRI Diabetes Specialist Nurse Inpatient Review."</p>
+
+                    <h4>Discharge Planning</h4>
+                    <p>Inform the Dietitian as soon as possible if the patient is going home with a feeding tube. This allows them to implement timely discharge planning and arrange training.</p>
+
+                    <h4>Drug-Nutrient Interactions</h4>
+                    <p>Be aware of possible drug-nutrient interactions. Consult with pharmacy.</p>
+
+                    <h3>Postoperative Jejunal Feeding Protocol</h3>
+                    <div class="info-box warning">
+                        <p><strong>Note:</strong> Giving sets and feed must be changed every 24 hours</p>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 1</h4>
+                        <div class="table-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Feed</strong></td>
+                                        <td>Nutrison Protein Plus Multifibre (1.28kcal/ml)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rate</strong></td>
+                                        <td>10ml/hour for 24 hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Water Flushes</strong></td>
+                                        <td>Minimum of 30ml sterile water 6-hourly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Volume</strong></td>
+                                        <td>240ml feed + 120ml water = 360ml fluid</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nutritional Content</strong></td>
+                                        <td>307 kcal, 15g protein, 34g carbohydrate<br/>12mmol sodium, 10mmol potassium</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 2</h4>
+                        <div class="table-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Feed</strong></td>
+                                        <td>Nutrison Protein Plus Multifibre (1.28kcal/ml)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rate</strong></td>
+                                        <td>20ml/hour for 24 hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Water Flushes</strong></td>
+                                        <td>Minimum of 30ml sterile water 6-hourly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Volume</strong></td>
+                                        <td>480ml feed + 120ml water = 600ml fluid</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nutritional Content</strong></td>
+                                        <td>614 kcal, 30g protein, 68g carbohydrate<br/>23mmol sodium, 21mmol potassium</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 3</h4>
+                        <div class="table-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Feed</strong></td>
+                                        <td>Nutrison Protein Plus Multifibre (1.28kcal/ml)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rate</strong></td>
+                                        <td>30ml/hour for 24 hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Water Flushes</strong></td>
+                                        <td>Minimum of 30ml sterile water 6-hourly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Volume</strong></td>
+                                        <td>720ml feed + 120ml water = 840ml fluid</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nutritional Content</strong></td>
+                                        <td>922 kcal, 45g protein, 102g carbohydrate<br/>35mmol sodium, 31mmol potassium</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 4</h4>
+                        <div class="table-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Feed</strong></td>
+                                        <td>Nutrison Protein Plus Multifibre (1.28kcal/ml)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rate</strong></td>
+                                        <td>40ml/hour for 24 hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Water Flushes</strong></td>
+                                        <td>Minimum of 30ml sterile water 6-hourly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Volume</strong></td>
+                                        <td>960ml feed + 120ml water = 1080ml fluid</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nutritional Content</strong></td>
+                                        <td>1229 kcal, 60g protein, 135g carbohydrate<br/>46mmol sodium, 41mmol potassium</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 5</h4>
+                        <div class="table-container">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Feed</strong></td>
+                                        <td>Nutrison Protein Plus Multifibre (1.28kcal/ml)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rate</strong></td>
+                                        <td>50ml/hour for 24 hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Water Flushes</strong></td>
+                                        <td>Minimum of 30ml sterile water 6-hourly</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Volume</strong></td>
+                                        <td>1200ml feed + 120ml water = 1320ml fluid</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Nutritional Content</strong></td>
+                                        <td>1536 kcal, 76g protein, 169g carbohydrate<br/>58mmol sodium, 52mmol potassium</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="protocol-day">
+                        <h4>Day 6 Onwards</h4>
+                        <p><strong>Feed as per Tube Feeding Regimen supplied by ward dietitian</strong></p>
+                    </div>
+
+                    <div class="info-box critical">
+                        <h4>Safety</h4>
+                        <p>Inform nurse in charge or surgical team if any concerns regarding jejunal feeding</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Queries</h4>
+                        <p>Please contact the dietetic service during working hours</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Clinical Algorithms Tab -->
+            <div id="algorithms" class="tab-content">
+                <section class="section">
+                    <h2>Clinical Decision-Making Algorithms</h2>
+
+                    <h3>Nutritional Support Pathway</h3>
+                    <div style="padding: 1.5rem; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; margin: 1.5rem 0;">
+<!-- NUTRITIONAL PATHWAY - Simplified Table Layout -->
+<div style="max-width: 800px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 13px;">
+    <!-- Start -->
+    <div style="background: #E3F2FD; border: 2px solid #1976D2; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 400px;">
+        <strong>Patient requires nutritional support</strong>
+    </div>
+    <div style="text-align: center; font-size: 20px; color: #666;">↓</div>
+    
+    <!-- First Decision -->
+    <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 300px;">
+        <strong>Can patient maintain<br>adequate oral intake?</strong>
+    </div>
+    
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+        <!-- YES Path -->
+        <div style="flex: 0 0 280px; text-align: center;">
+            <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px;">↓ YES</div>
+            <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 15px;">
+                <strong>Oral nutrition support</strong><br>
+                <div style="margin-top: 8px; font-size: 12px;">
+                    • High-energy diet<br>
+                    • Oral nutritional supplements
+                </div>
+            </div>
+        </div>
+        
+        <!-- NO Path -->
+        <div style="flex: 0 0 400px; text-align: center;">
+            <div style="color: #C62828; font-weight: bold; margin-bottom: 10px;">↓ NO</div>
+            
+            <!-- Second Decision -->
+            <div style="background: #FFCCBC; border: 2px solid #D84315; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <strong>Is GI tract functional?</strong>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <!-- GI YES -->
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ YES</div>
+                    <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 12px; font-size: 11px;">
+                        <strong>Gastric feeding appropriate?</strong><br>
+                        <div style="margin-top: 8px; font-size: 10px; text-align: left;">
+                            <strong>Yes →</strong> NG/Gastrostomy<br>
+                            <strong>No →</strong> NJ/Jejunostomy
+                        </div>
+                        <div style="margin-top: 10px; font-style: italic; font-size: 10px;">
+                            ↓ Initiate Enteral Feeding
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GI NO -->
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #C62828; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ NO</div>
+                    <div style="background: #FFCDD2; border: 2px solid #C62828; border-radius: 8px; padding: 15px; font-size: 11px;">
+                        <strong>Consider<br>Parenteral<br>Nutrition</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+
+                    <h3>Feed Intolerance Management</h3>
+                    <div style="padding: 1.5rem; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; margin: 1.5rem 0;">
+<!-- GRV MANAGEMENT -->
+<div style="max-width: 700px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 13px;">
+    <div style="background: #E3F2FD; border: 2px solid #1976D2; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 350px;">
+        <strong>Monitoring feed tolerance</strong>
+    </div>
+    <div style="text-align: center; font-size: 20px; color: #666;">↓</div>
+    
+    <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 300px;">
+        <strong>Gastric residual volume >400ml?</strong>
+    </div>
+    
+    <div style="display: flex; gap: 30px; justify-content: center; margin-top: 20px;">
+        <!-- NO Path -->
+        <div style="flex: 0 0 200px; text-align: center;">
+            <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px;">↓ NO</div>
+            <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 15px;">
+                <strong>Continue feeding</strong>
+            </div>
+        </div>
+        
+        <!-- YES Path -->
+        <div style="flex: 0 0 350px; text-align: center;">
+            <div style="color: #C62828; font-weight: bold; margin-bottom: 10px;">↓ YES</div>
+            <div style="background: #FFCCBC; border: 2px solid #D84315; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <strong>Stop feed for 4 hours<br>Recheck GRV</strong>
+            </div>
+            
+            <div style="text-align: center; font-size: 18px; color: #666; margin: 10px 0;">↓</div>
+            
+            <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 12px; margin-bottom: 15px;">
+                <strong>GRV still >400ml?</strong>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ NO</div>
+                    <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 12px; font-size: 12px;">
+                        <strong>Resume<br>feeding</strong>
+                    </div>
+                </div>
+                
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #C62828; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ YES</div>
+                    <div style="background: #FFCCBC; border: 2px solid #D84315; border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 11px;">
+                        <strong>Prokinetics</strong><br>
+                        <span style="font-size: 10px;">Metoclopramide 10mg TDS</span>
+                    </div>
+                    
+                    <div style="text-align: center; font-size: 16px; color: #666; margin: 8px 0;">↓</div>
+                    
+                    <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 11px;">
+                        <strong>Improvement?</strong>
+                    </div>
+                    
+                    <div style="display: flex; gap: 5px; font-size: 10px;">
+                        <div style="flex: 1; background: #C8E6C9; border: 1px solid #2E7D32; border-radius: 4px; padding: 8px;">
+                            <strong>YES:</strong> Continue with prokinetics
+                        </div>
+                        <div style="flex: 1; background: #FFCDD2; border: 1px solid #C62828; border-radius: 4px; padding: 8px;">
+                            <strong>NO:</strong> Post-pyloric feeding
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+
+                    <h3>Jejunostomy Feed Advancement Decision Tree</h3>
+                    <div class="mermaid-container">
+                        <div class="info-box" style="background-color: #f3e5f5; border-left: 4px solid #7b1fa2;">
+                        <h4>📊 Jejunostomy Feed Advancement Decision Tree</h4>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;"><em>Post-operative jejunostomy feeding protocol with day-by-day advancement schedule - see Jejunostomy Protocol tab for complete details and full decision tree.</em></p>
+                    </div>
+                    </div>
+
+                    <h3>Refeeding Syndrome Prevention</h3>
+                    <div style="padding: 1.5rem; background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; margin: 1.5rem 0;">
+<!-- REFEEDING SYNDROME -->
+<div style="max-width: 700px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 13px;">
+    <div style="background: #E3F2FD; border: 2px solid #1976D2; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 300px;">
+        <strong>ICU Patient Admission</strong>
+    </div>
+    <div style="text-align: center; font-size: 20px; color: #666;">↓</div>
+    
+    <div style="background: #FFF3E0; border: 2px solid #F57C00; border-radius: 8px; padding: 15px; text-align: center; margin: 10px auto; max-width: 250px;">
+        <strong>Nutritionally at risk?</strong>
+    </div>
+    
+    <div style="display: flex; gap: 30px; justify-content: center; margin-top: 20px;">
+        <!-- NO Path -->
+        <div style="flex: 0 0 220px; text-align: center;">
+            <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px;">↓ NO</div>
+            <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 15px;">
+                <strong>Standard monitoring</strong>
+            </div>
+        </div>
+        
+        <!-- YES Path -->
+        <div style="flex: 0 0 380px; text-align: center;">
+            <div style="color: #C62828; font-weight: bold; margin-bottom: 10px;">↓ YES</div>
+            
+            <div style="background: #FFCCBC; border: 2px solid #D84315; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <strong>Refeeding syndrome risk?</strong>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #2E7D32; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ NO</div>
+                    <div style="background: #C8E6C9; border: 2px solid #2E7D32; border-radius: 8px; padding: 15px; font-size: 12px;">
+                        <strong>Standard<br>feeding<br>protocol</strong>
+                    </div>
+                </div>
+                
+                <div style="flex: 1; text-align: center;">
+                    <div style="color: #C62828; font-weight: bold; margin-bottom: 10px; font-size: 11px;">↓ YES</div>
+                    <div style="background: #FFCDD2; border: 2px solid #C62828; border-radius: 8px; padding: 12px; font-size: 11px;">
+                        <strong>Refeeding Protocol:</strong><br>
+                        <div style="margin-top: 8px; font-size: 10px; text-align: left;">
+                            • Correct electrolytes<br>
+                            • Thiamine supplementation<br>
+                            • Slow calorie repletion
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; font-size: 18px; color: #666; margin: 15px 0;">↓</div>
+            
+            <div style="background: #E1F5FE; border: 2px solid #0277BD; border-radius: 8px; padding: 15px; max-width: 250px; margin: 0 auto;">
+                <strong>Daily monitoring</strong>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let content of tabContents) {
+                content.classList.remove("active");
+            }
+            
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let button of tabButtons) {
+                button.classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Navigation highlighting
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function highlightNavigation() {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightNavigation);
+
+        // Smooth scrolling for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    const headerOffset = 80;
+                    const elementPosition = targetSection.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Search functionality
+        const searchBox = document.getElementById('searchBox');
+        
+        searchBox.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                // Reset all highlighting
+                document.querySelectorAll('.highlight').forEach(el => {
+                    el.outerHTML = el.textContent;
+                });
+                return;
+            }
+
+            // Remove previous highlights
+            document.querySelectorAll('.highlight').forEach(el => {
+                el.outerHTML = el.textContent;
+            });
+
+            // Search in all text content
+            const contentArea = document.querySelector('.content');
+            const walker = document.createTreeWalker(
+                contentArea,
+                NodeFilter.SHOW_TEXT,
+                null,
+                false
+            );
+
+            const nodesToHighlight = [];
+            let node;
+
+            while (node = walker.nextNode()) {
+                if (node.parentElement.tagName !== 'SCRIPT' && 
+                    node.parentElement.tagName !== 'STYLE' &&
+                    node.textContent.toLowerCase().includes(searchTerm)) {
+                    nodesToHighlight.push(node);
+                }
+            }
+
+            nodesToHighlight.forEach(node => {
+                const parent = node.parentElement;
+                const text = node.textContent;
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                const highlightedText = text.replace(regex, '<mark class="highlight" style="background-color: #FFB81C; padding: 2px;">$1</mark>');
+                
+                const span = document.createElement('span');
+                span.innerHTML = highlightedText;
+                parent.replaceChild(span, node);
+            });
+
+            // Scroll to first match
+            const firstHighlight = document.querySelector('.highlight');
+            if (firstHighlight) {
+                firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+        // Hamburger menu functions
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navOverlay = document.getElementById('navOverlay');
+            
+            navMenu.classList.toggle('open');
+            navOverlay.classList.toggle('open');
+            
+            // Prevent body scroll when menu is open
+            if (navMenu.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function closeMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navOverlay = document.getElementById('navOverlay');
+            
+            navMenu.classList.remove('open');
+            navOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        
+        // Close menu when clicking a navigation link
+        document.querySelectorAll('.nav-link:not(.nav-parent)').forEach(link => {
+            link.addEventListener('click', () => {
+                closeMenu();
+            });
+        });
+        
+        // Toggle submenu
+        function toggleSubmenu(event, submenuId) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const submenu = document.getElementById(submenuId);
+            const arrow = event.currentTarget.querySelector('.submenu-arrow');
+            
+            submenu.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        // Print functionality optimization
+        window.addEventListener('beforeprint', () => {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'block';
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                if (!tab.classList.contains('active')) {
+                    tab.style.display = 'none';
+                }
+            });
+        });
+        
+        // Back to top button functionality
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.className = 'back-to-top-float';
+        backToTopBtn.innerHTML = '↑';
+        backToTopBtn.setAttribute('aria-label', 'Back to top');
+        backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.body.appendChild(backToTopBtn);
+        
+        // Show/hide back to top button on scroll
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

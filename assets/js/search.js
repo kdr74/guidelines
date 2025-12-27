@@ -23,6 +23,27 @@ const guidelineIndex = [
         excerpt: "Ventilation strategies, airway management, and respiratory support protocols"
     },
     {
+        title: "ICU Nutrition Guidelines",
+        url: "gastrointestinal-nutrition/nutrition-guideline.html",
+        category: "Gastrointestinal & Nutrition",
+        keywords: ["nutrition", "feeding", "enteral", "parenteral", "nutric", "energy", "protein", "refeeding", "ng", "nj", "pn", "tpn", "malnutrition", "icu", "critical", "illness"],
+        excerpt: "Comprehensive nutrition guideline for critically ill patients. Covers nutritional assessment, energy and protein requirements, enteral and parenteral feeding, refeeding syndrome, and nutrition in specific conditions."
+    },
+    {
+        title: "Nutrition Calculator",
+        url: "gastrointestinal-nutrition/nutrition-calculator.html",
+        category: "Gastrointestinal & Nutrition",
+        keywords: ["nutrition", "calculator", "energy", "protein", "requirements", "bmi", "ideal", "body", "weight", "feeding", "adequacy", "cumulative", "tracking", "metabolic", "state"],
+        excerpt: "Advanced nutrition calculator with multi-day cumulative tracking, metabolic state monitoring, and automated adequacy assessment. Calculates energy and protein requirements with comprehensive intake tracking."
+    },
+    {
+        title: "Gastrointestinal & Nutrition Guidelines",
+        url: "gastrointestinal-nutrition/index.html",
+        category: "Gastrointestinal & Nutrition",
+        keywords: ["nutrition", "gastrointestinal", "gi", "feeding", "enteral", "parenteral", "malnutrition"],
+        excerpt: "Nutritional support protocols, feeding guidelines, and GI management"
+    },
+    {
         title: "RRT Guidelines (2025)",
         url: "renal-metabolic/RRT-Guidelines-2025.pdf",
         category: "Renal & Metabolic",

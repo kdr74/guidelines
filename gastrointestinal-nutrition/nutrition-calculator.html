@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Nutrition Calculator - UHBW</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            padding: 0.5rem;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.1rem; font-weight: 600; }
+        .header .subtitle { font-size: 0.7rem; opacity: 0.9; }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+        
+        .card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            padding: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e3a5f;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.3rem;
+            margin-bottom: 0.4rem;
+        }
+        
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+        .four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
+        
+        @media (max-width: 768px) {
+            .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+        
+        label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #475569;
+        }
+        
+        input, select {
+            padding: 0.25rem 0.4rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+        }
+        
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .input-with-unit input { flex: 1; }
+        .unit { font-size: 0.65rem; color: #64748b; white-space: nowrap; }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0;
+        }
+        .checkbox-group input[type="checkbox"] { width: auto; margin: 0; }
+        .checkbox-group label { margin: 0; font-size: 0.75rem; }
+        
+        .result-box {
+            background: #f8fafc;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 0.4rem;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            font-size: 0.75rem;
+        }
+        
+        .result-row.highlight {
+            background: #eff6ff;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0.2rem 0;
+        }
+        
+        .result-label { color: #475569; }
+        .result-value { font-weight: 600; color: #1e3a5f; }
+        
+        .prescription-card {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: white;
+            border-radius: 6px;
+            padding: 0.6rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .prescription-card .card-title { color: white; border-bottom-color: rgba(255,255,255,0.3); }
+        
+        .prescription-main {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        
+        .prescription-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.15rem 0;
+            font-size: 0.75rem;
+            opacity: 0.95;
+        }
+        
+        .alert {
+            padding: 0.4rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+            font-size: 0.7rem;
+            border-left: 3px solid;
+        }
+        
+        .alert-info { background: #dbeafe; border-color: #3b82f6; color: #1e40af; }
+        .alert-warning { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+        .alert-danger { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .alert-success { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+        
+        .stat-box {
+            background: #f8fafc;
+            padding: 0.4rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.65rem;
+            color: #64748b;
+            margin-bottom: 0.15rem;
+        }
+        
+        .stat-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        
+        .stat-value.good { color: #059669; }
+        .stat-value.warning { color: #d97706; }
+        .stat-value.danger { color: #dc2626; }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.3rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+        
+        .progress-fill.good { background: #10b981; }
+        .progress-fill.warning { background: #f59e0b; }
+        .progress-fill.danger { background: #ef4444; }
+        
+        .section-divider {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+            margin: 0.6rem 0 0.3rem 0;
+            padding-bottom: 0.2rem;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        
+        .compact-table {
+            width: 100%;
+            font-size: 0.7rem;
+            border-collapse: collapse;
+        }
+        
+        .compact-table th,
+        .compact-table td {
+            padding: 0.25rem 0.3rem;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        
+        .compact-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            font-size: 0.65rem;
+        }
+        
+        .compact-table input {
+            width: 100%;
+            padding: 0.2rem;
+            font-size: 0.7rem;
+        }
+        
+        .btn {
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-secondary { background: #64748b; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        
+        .phase-indicator {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+        
+        .phase-acute { background: #fef3c7; color: #92400e; }
+        .phase-recovery { background: #d1fae5; color: #065f46; }
+        
+        .hidden { display: none; }
+        
+        .tab-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            background: #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background: #cbd5e1;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .day-tracker {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .day-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr 0.8fr 1fr 1fr 0.8fr 1fr;
+            gap: 0.5rem;
+            padding: 0.3rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.7rem;
+            align-items: center;
+        }
+        
+        .day-row:hover {
+            background: #f1f5f9;
+        }
+        
+        .day-row.header {
+            font-weight: 600;
+            background: #e2e8f0;
+            border-radius: 4px;
+        }
+        
+        .day-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .deficit-value {
+            font-weight: 600;
+        }
+        
+        .deficit-value.positive {
+            color: #059669;
+        }
+        
+        .deficit-value.negative {
+            color: #dc2626;
+        }
+        
+        .mini-chart {
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mini-bar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            transition: height 0.3s;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .mini-bar.energy {
+            background: linear-gradient(to top, #f59e0b, #fbbf24);
+        }
+        
+        .mini-bar.protein {
+            background: linear-gradient(to top, #8b5cf6, #a78bfa);
+        }
+        
+        .cumulative-box {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            border-radius: 6px;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cumulative-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .cumulative-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .cumulative-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+        
+        .cumulative-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        
+        .metabolic-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem;
+            background: #f8fafc;
+            border-radius: 4px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .indicator-dot.catabolic {
+            background: #dc2626;
+        }
+        
+        .indicator-dot.anabolic {
+            background: #059669;
+        }
+        
+        .indicator-dot.neutral {
+            background: #94a3b8;
+        }
+        
+        .metabolic-score-box {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            border-radius: 6px;
+            padding: 0.6rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metabolic-score-box.anabolic {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+        
+        .score-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        
+        .score-subtitle {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        @media print {
+            .no-print { display: none; }
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #e2e8f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>ICU Nutrition Calculator</h1>
+                <div class="subtitle">University Hospitals Bristol and Weston NHS Foundation Trust</div>
+            </div>
+            <div id="phaseIndicator" style="text-align: right;">
+                <div class="phase-indicator phase-acute">Acute Phase (Day 1-7)</div>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div style="background: white; border-radius: 6px; padding: 0.5rem; margin-bottom: 0.5rem; display: flex; gap: 0.25rem;">
+            <button class="tab-btn active" onclick="switchTab('daily')">📊 Daily Calculator</button>
+            <button class="tab-btn" onclick="switchTab('multiday')">📈 Multi-Day Tracking</button>
+            <button class="tab-btn" onclick="switchTab('metabolic')">🔬 Metabolic State</button>
+            <button class="tab-btn" onclick="switchTab('protocols')">📋 Protocols</button>
+        </div>
+        
+        <!-- DAILY CALCULATOR TAB -->
+        <div id="tab-daily" class="tab-content active">
+        <div class="main-grid">
+            <!-- LEFT COLUMN: INPUTS -->
+            <div class="input-column">
+                
+                <!-- PATIENT DETAILS & CLINICAL CONTEXT -->
+                <div class="card">
+                    <div class="card-title">Patient Details & Clinical Context</div>
+                    
+                    <div class="three-col">
+                        <div class="form-group">
+                            <label>Sex</label>
+                            <select id="sex" onchange="calculate()">
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Age (years)</label>
+                            <input type="number" id="age" value="50" min="18" max="120" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Height (cm)</label>
+                            <input type="number" id="height" value="170" min="100" max="250" onchange="calculate()">
+                        </div>
+                    </div>
+                    
+                    <div class="three-col" style="margin-top: 0.4rem;">
+                        <div class="form-group">
+                            <label>Actual Weight (kg)</label>
+                            <input type="number" id="weight" value="70" min="30" max="300" step="0.1" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Admission Weight (kg)</label>
+                            <input type="number" id="admissionWeight" value="70" min="30" max="300" step="0.1" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>ICU Day</label>
+                            <input type="number" id="icuDay" value="1" min="1" max="100" onchange="calculate()">
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-row">
+                            <span class="result-label">BMI:</span>
+                            <span class="result-value" id="bmiValue">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">IBW (Ideal Body Weight):</span>
+                            <span class="result-value" id="ibwValue">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Weight for calculation:</span>
+                            <span class="result-value" id="calcWeightValue">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="section-divider">Clinical Context</div>
+                    
+                    <div class="two-col">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="sedated" onchange="calculate()">
+                            <label for="sedated">Sedated & Ventilated</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="onRRT" onchange="calculate()">
+                            <label for="onRRT">On RRT</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="pronePosition" onchange="calculate()">
+                            <label for="pronePosition">Prone Position</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="hepaticDysfunction" onchange="calculate()">
+                            <label for="hepaticDysfunction">Hepatic Dysfunction</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="postOp" onchange="calculate()">
+                            <label for="postOp">Post-operative</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="burns" onchange="calculate()">
+                            <label for="burns">Burns Patient</label>
+                        </div>
+                    </div>
+                    
+                    <div class="three-col" style="margin-top: 0.4rem;">
+                        <div class="form-group">
+                            <label>Temperature (°C)</label>
+                            <input type="number" id="temperature" value="37.0" min="32" max="42" step="0.1" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group" id="tbsaGroup" class="hidden">
+                            <label>TBSA Burns (%)</label>
+                            <input type="number" id="tbsa" value="0" min="0" max="100" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Propofol Rate (ml/hr)</label>
+                            <input type="number" id="propofolRate" value="0" min="0" max="100" onchange="calculate()">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FEED SELECTION -->
+                <div class="card">
+                    <div class="card-title">Feed Selection & Route</div>
+                    
+                    <div class="two-col">
+                        <div class="form-group">
+                            <label>Feed Type</label>
+                            <select id="feedType" onchange="calculate()">
+                                <option value="nutrison-protein">Nutrison Protein Plus Multifibre 1.28 (STANDARD)</option>
+                                <option value="nutrison-concentrated">Nutrison Concentrated 2.0</option>
+                                <option value="peptisorb">Nutrison Peptisorb Plus HEHP 1.5</option>
+                                <option value="ensure">Ensure Plus 1.5</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Feeding Route</label>
+                            <select id="feedRoute" onchange="calculate()">
+                                <option value="gastric">Gastric (NG/PEG)</option>
+                                <option value="jejunal">Jejunal (NJ/Jejunostomy)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="two-col" style="margin-top: 0.4rem;">
+                        <div class="form-group">
+                            <label>Feed Rate (ml/hr)</label>
+                            <input type="number" id="feedRate" value="50" min="0" max="200" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Hours Running</label>
+                            <input type="number" id="hoursRunning" value="10" min="0" max="24" onchange="calculate()">
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-row">
+                            <span class="result-label">Daily Feed Volume:</span>
+                            <span class="result-value" id="dailyVolume">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Energy from Feed:</span>
+                            <span class="result-value" id="energyFromFeed">-</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Protein from Feed:</span>
+                            <span class="result-value" id="proteinFromFeed">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- GASTRIC RESIDUAL & TOLERANCE -->
+                <div class="card" id="gastricCard">
+                    <div class="card-title">Gastric Residual Volume & Tolerance</div>
+                    
+                    <div class="three-col">
+                        <div class="form-group">
+                            <label>Last GRV (ml)</label>
+                            <input type="number" id="grv" value="0" min="0" max="1000" onchange="calculate()">
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="onMetoclopramide" onchange="calculate()">
+                            <label for="onMetoclopramide">On Metoclopramide</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="onErythromycin" onchange="calculate()">
+                            <label for="onErythromycin">On Erythromycin</label>
+                        </div>
+                    </div>
+                    
+                    <div id="grvAlert"></div>
+                </div>
+                
+                <!-- PARENTERAL NUTRITION -->
+                <div class="card">
+                    <div class="card-title">Parenteral Nutrition (if applicable)</div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="onPN" onchange="calculate()">
+                        <label for="onPN">Patient receiving PN</label>
+                    </div>
+                    
+                    <div id="pnInputs" class="hidden" style="margin-top: 0.4rem;">
+                        <div class="three-col">
+                            <div class="form-group">
+                                <label>PN Volume (ml/24hr)</label>
+                                <input type="number" id="pnVolume" value="1000" min="0" max="3000" onchange="calculate()">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>PN Energy (kcal)</label>
+                                <input type="number" id="pnEnergy" value="1000" min="0" max="3000" onchange="calculate()">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>PN Protein (g)</label>
+                                <input type="number" id="pnProtein" value="50" min="0" max="200" onchange="calculate()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PROTEIN SUPPLEMENTATION -->
+                <div class="card">
+                    <div class="card-title">Protein Supplementation</div>
+                    
+                    <div class="alert alert-info" style="margin-bottom: 0.4rem;">
+                        If protein targets cannot be met with EN/PN alone, consider protein supplementation:
+                        <strong>Protifar</strong> (89% protein powder): 5.4g protein per 6g scoop
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="onProteinSupplement" onchange="calculate()">
+                        <label for="onProteinSupplement">Patient receiving protein supplement</label>
+                    </div>
+                    
+                    <div id="proteinSupplementInputs" class="hidden" style="margin-top: 0.4rem;">
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label>Supplement Type</label>
+                                <select id="proteinSupplementType" onchange="calculate()">
+                                    <option value="protifar">Protifar (5.4g protein/scoop)</option>
+                                    <option value="other">Other (specify protein content)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" id="proteinAmountGroup">
+                                <label>Scoops per day</label>
+                                <input type="number" id="proteinScoopsPerDay" value="2" min="0" max="10" step="0.5" onchange="calculate()">
+                            </div>
+                            
+                            <div class="form-group hidden" id="proteinOtherGroup">
+                                <label>Protein (g/day)</label>
+                                <input type="number" id="proteinOtherAmount" value="0" min="0" max="100" onchange="calculate()">
+                            </div>
+                        </div>
+                        
+                        <div class="result-box">
+                            <div class="result-row">
+                                <span class="result-label">Additional Protein:</span>
+                                <span class="result-value" id="additionalProtein">10.8 g/day</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- REFEEDING RISK -->
+                <div class="card">
+                    <div class="card-title">Refeeding Syndrome Risk Assessment</div>
+                    
+                    <div class="two-col">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="bmiLow" onchange="calculate()">
+                            <label for="bmiLow">BMI <16 (or >10% weight loss in 3-6 months)</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="npoExtended" onchange="calculate()">
+                            <label for="npoExtended">Little/no intake >5 days</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="alcoholism" onchange="calculate()">
+                            <label for="alcoholism">History of alcohol abuse</label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="lowElectrolytes" onchange="calculate()">
+                            <label for="lowElectrolytes">Low K, Mg, or PO4 pre-feeding</label>
+                        </div>
+                    </div>
+                    
+                    <div id="refeedingAlert" style="margin-top: 0.4rem;"></div>
+                    
+                    <div class="three-col" style="margin-top: 0.4rem;">
+                        <div class="form-group">
+                            <label>Phosphate (mmol/L)</label>
+                            <input type="number" id="phosphate" value="1.0" min="0" max="3" step="0.1" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Magnesium (mmol/L)</label>
+                            <input type="number" id="magnesium" value="0.8" min="0" max="2" step="0.1" onchange="calculate()">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Potassium (mmol/L)</label>
+                            <input type="number" id="potassium" value="4.0" min="2" max="7" step="0.1" onchange="calculate()">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- RIGHT COLUMN: RESULTS & PRESCRIPTION -->
+            <div class="results-column">
+                
+                <!-- PRESCRIPTION CARD -->
+                <div class="prescription-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 0.3rem; margin-bottom: 0.4rem;">
+                        <div class="card-title" style="border: none; padding: 0; margin: 0;">📋 Nutritional Prescription</div>
+                        <button class="btn" style="background: rgba(255,255,255,0.2); color: white; font-size: 0.65rem; padding: 0.2rem 0.5rem;" onclick="resetDailyCalculator()">🔄 Reset</button>
+                    </div>
+                    
+                    <div class="prescription-main">
+                        <span>Energy Target:</span>
+                        <span class="value" id="energyTarget">-</span>
+                    </div>
+                    
+                    <div class="prescription-main">
+                        <span>Protein Target:</span>
+                        <span class="value" id="proteinTarget">-</span>
+                    </div>
+                    
+                    <div style="margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                        <div class="prescription-detail">
+                            <span>Propofol calories:</span>
+                            <span id="propofolCalories">0 kcal</span>
+                        </div>
+                        <div class="prescription-detail">
+                            <span>Adjusted energy target:</span>
+                            <span id="adjustedEnergyTarget">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ACHIEVEMENT CARD -->
+                <div class="card">
+                    <div class="card-title">✅ Today's Achievement</div>
+                    
+                    <div class="result-row highlight">
+                        <span class="result-label">Total Energy Delivered:</span>
+                        <span class="result-value" id="totalEnergy">-</span>
+                    </div>
+                    
+                    <div class="result-row highlight">
+                        <span class="result-label">Total Protein Delivered:</span>
+                        <span class="result-value" id="totalProtein">-</span>
+                    </div>
+                    
+                    <div style="margin-top: 0.4rem;">
+                        <div class="result-row">
+                            <span class="result-label">Energy achievement:</span>
+                            <span class="result-value" id="energyPercent">-</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="energyProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 0.4rem;">
+                        <div class="result-row">
+                            <span class="result-label">Protein achievement:</span>
+                            <span class="result-value" id="proteinPercent">-</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="proteinProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RECOMMENDATIONS -->
+                <div class="card">
+                    <div class="card-title">💡 Recommendations</div>
+                    <div id="recommendations"></div>
+                </div>
+                
+                <!-- MONITORING -->
+                <div class="card">
+                    <div class="card-title">🔬 Key Monitoring</div>
+                    
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">PO4</div>
+                            <div class="stat-value" id="po4Status">-</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">Mg</div>
+                            <div class="stat-value" id="mgStatus">-</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">K</div>
+                            <div class="stat-value" id="kStatus">-</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 0.4rem; font-size: 0.7rem; color: #64748b;">
+                        <div>• Monitor electrolytes daily (minimum)</div>
+                        <div>• GRV 4-6 hourly if gastric feeding</div>
+                        <div>• Weekly dietetic review if >7 days</div>
+                    </div>
+                </div>
+                
+                <!-- CLINICAL GUIDANCE -->
+                <div class="card">
+                    <div class="card-title">📖 Clinical Guidance</div>
+                    <div id="clinicalGuidance" style="font-size: 0.7rem; line-height: 1.4;"></div>
+                </div>
+                
+            </div>
+        </div>
+        </div>
+        <!-- END DAILY CALCULATOR TAB -->
+        
+        <!-- MULTI-DAY TRACKING TAB -->
+        <div id="tab-multiday" class="tab-content">
+            <div class="card">
+                <div class="card-title">Multi-Day Nutrition Tracking</div>
+                
+                <div class="alert alert-info" style="margin-bottom: 0.5rem;">
+                    <strong>Automatic Tracking:</strong> Data from the Daily Calculator is automatically saved for each ICU day. 
+                    Change the "ICU Day" field on the Daily Calculator tab to enter data for different days.
+                    Current day being tracked: <strong>Day <span id="currentTrackedDay">1</span></strong>
+                </div>
+                
+                <div style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
+                    <button class="btn btn-primary" onclick="saveDailyData()">💾 Save Current Day</button>
+                    <button class="btn btn-secondary" onclick="removeLastDay()">− Remove Last Day</button>
+                    <button class="btn btn-danger" onclick="clearAllDailyData()">🗑️ Clear All</button>
+                    <span style="font-size: 0.7rem; color: #64748b;">Days tracked: <span id="daysTracked">0</span></span>
+                </div>
+                
+                <div class="cumulative-box">
+                    <div class="card-title" style="color: white; border-bottom-color: rgba(255,255,255,0.2);">Cumulative Totals</div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Total Energy Delivered:</span>
+                        <span class="cumulative-value" id="cumEnergyDelivered">0 kcal</span>
+                    </div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Total Energy Target:</span>
+                        <span class="cumulative-value" id="cumEnergyTarget">0 kcal</span>
+                    </div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Energy Balance:</span>
+                        <span class="cumulative-value" id="cumEnergyBalance">0 kcal</span>
+                    </div>
+                    
+                    <div style="margin: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 0.5rem;">
+                    </div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Total Protein Delivered:</span>
+                        <span class="cumulative-value" id="cumProteinDelivered">0 g</span>
+                    </div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Total Protein Target:</span>
+                        <span class="cumulative-value" id="cumProteinTarget">0 g</span>
+                    </div>
+                    
+                    <div class="cumulative-stat">
+                        <span class="cumulative-label">Protein Balance:</span>
+                        <span class="cumulative-value" id="cumProteinBalance">0 g</span>
+                    </div>
+                </div>
+                
+                <div class="section-divider">Day-by-Day Breakdown</div>
+                
+                <div class="day-tracker">
+                    <div class="day-row header">
+                        <div>Day</div>
+                        <div>Energy Delivered</div>
+                        <div>Energy Target</div>
+                        <div>Energy Balance</div>
+                        <div>Protein Delivered</div>
+                        <div>Protein Target</div>
+                        <div>Protein Balance</div>
+                        <div>Achievement</div>
+                    </div>
+                    <div id="dayByDayRows"></div>
+                </div>
+                
+                <div class="two-col" style="margin-top: 0.5rem;">
+                    <div class="card">
+                        <div class="card-title">Cumulative Energy Trend</div>
+                        <div id="energyTrendChart" style="height: 200px; background: #f8fafc; border-radius: 4px; padding: 0.5rem; position: relative;">
+                            <canvas id="energyCanvas" width="400" height="180"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Cumulative Protein Trend</div>
+                        <div id="proteinTrendChart" style="height: 200px; background: #f8fafc; border-radius: 4px; padding: 0.5rem; position: relative;">
+                            <canvas id="proteinCanvas" width="400" height="180"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MULTI-DAY TRACKING TAB -->
+        
+        <!-- INTEGRATED OVERVIEW -->
+        <div style="margin-top: 0.5rem;" class="hidden" id="integratedOverview">
+            <div class="card">
+                <div class="card-title">📊 Integrated Nutrition & Metabolic Overview</div>
+                
+                <div class="alert alert-info" style="margin-bottom: 0.5rem;">
+                    <strong>Combined Analysis:</strong> Linking metabolic state to nutrition delivery shows whether nutrition strategy aligns with metabolic phase.
+                </div>
+                
+                <div class="two-col">
+                    <div class="card" style="margin: 0;">
+                        <div class="card-title" style="font-size: 0.8rem;">Metabolic Trajectory</div>
+                        <div id="metabolicSummary" style="font-size: 0.75rem;"></div>
+                    </div>
+                    
+                    <div class="card" style="margin: 0;">
+                        <div class="card-title" style="font-size: 0.8rem;">Nutrition Strategy Appropriateness</div>
+                        <div id="nutritionAlignment" style="font-size: 0.75rem;"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 0.5rem;">
+                    <canvas id="integratedCanvas" width="800" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- END INTEGRATED OVERVIEW -->
+        
+        <!-- METABOLIC STATE TAB -->
+        <div id="tab-metabolic" class="tab-content">
+            <div class="alert alert-info" style="margin-bottom: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div>
+                        <label style="margin-bottom: 0.2rem; display: block;">Current ICU Day:</label>
+                        <select id="metabolicIcuDay" onchange="updateYesterdayValues()" style="width: 100px;">
+                            <option value="1">Day 1</option>
+                            <option value="2" selected>Day 2</option>
+                            <option value="3">Day 3</option>
+                            <option value="4">Day 4</option>
+                            <option value="5">Day 5</option>
+                            <option value="6">Day 6</option>
+                            <option value="7">Day 7</option>
+                            <option value="8">Day 8</option>
+                            <option value="9">Day 9</option>
+                            <option value="10">Day 10</option>
+                            <option value="11">Day 11</option>
+                            <option value="12">Day 12</option>
+                            <option value="13">Day 13</option>
+                            <option value="14">Day 14</option>
+                            <option value="15">Day 15+</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; font-size: 0.7rem;">
+                        Enter today's biochemistry values. Yesterday's values will auto-populate from previously saved data, or you can enter them manually.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="two-col">
+                <div>
+                    <div class="card">
+                        <div class="card-title">Biochemical Markers (Today vs Yesterday)</div>
+                        
+                        <div class="three-col" style="margin-bottom: 0.5rem;">
+                            <div class="form-group">
+                                <label>Urea Today (mmol/L)</label>
+                                <input type="number" id="ureaToday" value="9.0" min="0" max="50" step="0.1" onchange="saveMetabolicData(); calculateMetabolic()">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Urea Yesterday</label>
+                                <input type="number" id="ureaYesterday" value="8.0" min="0" max="50" step="0.1" onchange="calculateMetabolic()">
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-label">Δ Urea:</div>
+                                <div class="result-value" id="deltaUrea">+1.0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="three-col" style="margin-bottom: 0.5rem;">
+                            <div class="form-group">
+                                <label>Creatinine Today (μmol/L)</label>
+                                <input type="number" id="creatToday" value="95" min="0" max="1000" onchange="saveMetabolicData(); calculateMetabolic()">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Creatinine Yesterday</label>
+                                <input type="number" id="creatYesterday" value="90" min="0" max="1000" onchange="calculateMetabolic()">
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-label">Δ Creatinine:</div>
+                                <div class="result-value" id="deltaCreat">+5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="three-col" style="margin-bottom: 0.5rem;">
+                            <div class="form-group">
+                                <label>CRP Today (mg/L)</label>
+                                <input type="number" id="crpToday" value="120" min="0" max="500" onchange="saveMetabolicData(); calculateMetabolic()">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>CRP Yesterday</label>
+                                <input type="number" id="crpYesterday" value="150" min="0" max="500" onchange="calculateMetabolic()">
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-label">Δ CRP:</div>
+                                <div class="result-value" id="deltaCRP">-30</div>
+                            </div>
+                        </div>
+                        
+                        <div class="two-col">
+                            <div class="form-group">
+                                <label>Albumin (g/L)</label>
+                                <input type="number" id="albumin" value="25" min="10" max="50" onchange="saveMetabolicData(); calculateMetabolic()">
+                            </div>
+                            
+                            <div class="result-box">
+                                <div class="result-label">CRP:Albumin Ratio:</div>
+                                <div class="result-value" id="crpAlbRatio">4.8</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-divider">Nitrogen Balance</div>
+                        
+                        <div class="result-box">
+                            <div class="result-row">
+                                <span class="result-label">Urea generation (mmol/day):</span>
+                                <span class="result-value" id="ureaGeneration">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Nitrogen appearance (g/day):</span>
+                                <span class="result-value" id="nitrogenAppearance">-</span>
+                            </div>
+                            <div class="result-row highlight">
+                                <span class="result-label">Estimated N balance:</span>
+                                <span class="result-value" id="nitrogenBalance">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div id="metabolicScoreBox" class="metabolic-score-box">
+                        <div class="score-title" id="metabolicState">CATABOLIC STATE</div>
+                        <div class="score-subtitle">Score: <span id="catabolicScore">4/6</span></div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-title">Metabolic Indicators</div>
+                        
+                        <div class="metabolic-indicator">
+                            <div class="indicator-dot" id="ureaIndicator"></div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.75rem;">Urea Trend</div>
+                                <div style="font-size: 0.65rem; color: #64748b;" id="ureaInterpretation">-</div>
+                            </div>
+                            <div style="font-weight: 600;" id="ureaDirection">↑</div>
+                        </div>
+                        
+                        <div class="metabolic-indicator">
+                            <div class="indicator-dot" id="creatIndicator"></div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.75rem;">Creatinine Trend</div>
+                                <div style="font-size: 0.65rem; color: #64748b;" id="creatInterpretation">-</div>
+                            </div>
+                            <div style="font-weight: 600;" id="creatDirection">↑</div>
+                        </div>
+                        
+                        <div class="metabolic-indicator">
+                            <div class="indicator-dot" id="crpIndicator"></div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.75rem;">CRP Trend</div>
+                                <div style="font-size: 0.65rem; color: #64748b;" id="crpInterpretation">-</div>
+                            </div>
+                            <div style="font-weight: 600;" id="crpDirection">↓</div>
+                        </div>
+                        
+                        <div class="metabolic-indicator">
+                            <div class="indicator-dot" id="crpAlbIndicator"></div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.75rem;">CRP:Albumin Ratio</div>
+                                <div style="font-size: 0.65rem; color: #64748b;" id="crpAlbInterpretation">-</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metabolic-indicator">
+                            <div class="indicator-dot" id="nBalIndicator"></div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.75rem;">Nitrogen Balance</div>
+                                <div style="font-size: 0.65rem; color: #64748b;" id="nBalInterpretation">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <strong>Interpretation:</strong><br>
+                        <div style="margin-top: 0.3rem; font-size: 0.7rem; line-height: 1.4;">
+                        <strong>Catabolic (≥3 markers):</strong> Acute illness, inflammation, protein breakdown. Target permissive underfeeding 70-80%.<br><br>
+                        <strong>Anabolic (<3 markers):</strong> Recovery phase. Progress to 100% energy/protein targets. Optimize protein 1.5-2.0 g/kg.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- METABOLIC TREND CHART -->
+            <div class="card" style="margin-top: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; margin-bottom: 0.4rem;">
+                    <div class="card-title" style="border: none; padding: 0; margin: 0;">Metabolic State Trend Over ICU Stay</div>
+                    <button class="btn btn-danger" style="font-size: 0.65rem; padding: 0.2rem 0.5rem;" onclick="clearMetabolicData()">🗑️ Clear All Data</button>
+                </div>
+                
+                <div style="height: 250px; background: #f8fafc; border-radius: 4px; padding: 0.5rem; position: relative;">
+                    <canvas id="metabolicTrendCanvas" width="800" height="220"></canvas>
+                </div>
+                
+                <div style="margin-top: 0.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; font-size: 0.7rem;">
+                    <div style="display: flex; align-items: center; gap: 0.3rem;">
+                        <div style="width: 20px; height: 3px; background: #dc2626;"></div>
+                        <span>Catabolic Score (0-6)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.3rem;">
+                        <div style="width: 20px; height: 3px; background: #f59e0b;"></div>
+                        <span>Urea (mmol/L)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.3rem;">
+                        <div style="width: 20px; height: 3px; background: #8b5cf6;"></div>
+                        <span>CRP (mg/L ÷10)</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.3rem;">
+                        <div style="width: 20px; height: 3px; background: #10b981;"></div>
+                        <span>N Balance (g/day)</span>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info" style="margin-top: 0.5rem;">
+                    <strong>Trend Analysis:</strong> Track transition from catabolic → anabolic state. 
+                    Falling catabolic score + improving N balance = metabolic recovery. This informs when to progress from permissive underfeeding to full nutrition targets.
+                </div>
+            </div>
+        </div>
+        <!-- END METABOLIC STATE TAB -->
+        
+        <!-- PROTOCOLS TAB -->
+        <div id="tab-protocols" class="tab-content">
+            <div class="two-col">
+                <div class="card">
+                    <div class="card-title">Jejunostomy Feed Advancement Protocol</div>
+                    
+                    <div class="alert alert-info">
+                        Post-operative jejunal feeding (Whipple's, oesophagectomy). Use Nutrison Protein Plus Multifibre 1.28 kcal/ml.
+                    </div>
+                    
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Rate (ml/hr)</th>
+                                <th>Energy (kcal)</th>
+                                <th>Protein (g)</th>
+                                <th>Volume (ml)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Day 1</strong></td>
+                                <td>10</td>
+                                <td>307</td>
+                                <td>15</td>
+                                <td>360</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Day 2</strong></td>
+                                <td>20</td>
+                                <td>614</td>
+                                <td>30</td>
+                                <td>600</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Day 3</strong></td>
+                                <td>30</td>
+                                <td>922</td>
+                                <td>45</td>
+                                <td>840</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Day 4</strong></td>
+                                <td>40</td>
+                                <td>1,229</td>
+                                <td>60</td>
+                                <td>1,080</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Day 5</strong></td>
+                                <td>50</td>
+                                <td>1,536</td>
+                                <td>76</td>
+                                <td>1,320</td>
+                            </tr>
+                            <tr style="background: #fef3c7;">
+                                <td><strong>Day 6+</strong></td>
+                                <td colspan="4">Dietitian prescribes bespoke regimen</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="alert alert-warning" style="margin-top: 0.5rem;">
+                        <strong>Safety:</strong><br>
+                        • STOP if: abdominal distension, pain, high output from drain/stoma<br>
+                        • HOLD 4 hours pre-op if returning to theatre<br>
+                        • Never give medications down jejunostomy
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Drug-Nutrient Interactions</div>
+                    
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th>Drug</th>
+                                <th>Interaction</th>
+                                <th>Management</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Phenytoin</strong></td>
+                                <td>↓70% absorption with EN</td>
+                                <td>Stop feed 1-2hr before/after. Monitor levels.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Warfarin</strong></td>
+                                <td>Vitamin K reduces effect</td>
+                                <td>Monitor INR closely. May need ↑dose.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ciprofloxacin</strong></td>
+                                <td>Chelation with Ca/Mg</td>
+                                <td>Stop feed 1hr before, 2hr after oral dose.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Propofol</strong></td>
+                                <td>1.1 kcal/ml lipid</td>
+                                <td>Subtract from daily energy target.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lactulose</strong></td>
+                                <td>May worsen diarrhoea</td>
+                                <td>Consider low-fibre feed.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Quick Reference - Feed Types</div>
+                    
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th>Feed</th>
+                                <th>kcal/ml</th>
+                                <th>Protein (g/100ml)</th>
+                                <th>Use When</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #dbeafe;">
+                                <td><strong>Nutrison Protein Plus MF</strong></td>
+                                <td>1.28</td>
+                                <td>6.25</td>
+                                <td><strong>STANDARD</strong> - First-line ICU feed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nutrison Concentrated 2.0</strong></td>
+                                <td>2.0</td>
+                                <td>7.5</td>
+                                <td>Fluid restriction, prone position, RRT</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nutrison Peptisorb Plus HEHP</strong></td>
+                                <td>1.5</td>
+                                <td>10.0</td>
+                                <td>Pancreatitis, Whipple's, malabsorption</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ensure Plus</strong></td>
+                                <td>1.5</td>
+                                <td>6.25</td>
+                                <td>Oral supplement, bolus regimen (200ml QDS)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Protein Supplementation</div>
+                    
+                    <div class="alert alert-info">
+                        <strong>Indications:</strong> When protein targets (1.5-2.5 g/kg) cannot be achieved with EN/PN alone.
+                    </div>
+                    
+                    <table class="compact-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Protein Content</th>
+                                <th>Administration</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #dbeafe;">
+                                <td><strong>Protifar</strong></td>
+                                <td>89% protein<br>5.4g per 6g scoop</td>
+                                <td>Mix with EN feed or water. Can be given via NG/NJ tube. Start 1-2 scoops/day.</td>
+                                <td><strong>First-line</strong> protein supplement. Tasteless powder.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fortisip Compact Protein</strong></td>
+                                <td>18g protein per 125ml bottle</td>
+                                <td>Oral supplement. 1-2 bottles/day.</td>
+                                <td>For oral intake only. High protein:energy ratio.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fresubin Protein Energy</strong></td>
+                                <td>20g protein per 200ml bottle</td>
+                                <td>Oral supplement or via large bore NG tube.</td>
+                                <td>Higher energy content (300 kcal/200ml).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="alert alert-warning" style="margin-top: 0.5rem;">
+                        <strong>Monitoring:</strong><br>
+                        • Reassess protein intake daily<br>
+                        • Target protein 1.5-2.0 g/kg (RRT: 1.5-2.5 g/kg)<br>
+                        • Consider stopping supplement once target achievable with feed alone<br>
+                        • Monitor renal function (increased urea generation)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END PROTOCOLS TAB -->
+        
+        <div class="footer">
+            UHBW ICU Nutrition Calculator v2.0 | Based on ESPEN 2019, NUTRIREA-2, EPaNIC, PermiT trials<br>
+            For use by healthcare professionals only | Not a substitute for clinical judgement
+        </div>
+    </div>
+    
+    <script>
+        // Feed specifications aligned with guideline
+        const FEEDS = {
+            'nutrison-protein': { 
+                name: 'Nutrison Protein Plus Multifibre',
+                energy: 1.28, 
+                protein: 6.25,
+                indication: 'Standard ICU feed'
+            },
+            'nutrison-concentrated': { 
+                name: 'Nutrison Concentrated 2.0',
+                energy: 2.0, 
+                protein: 7.5,
+                indication: 'Fluid restriction, prone positioning'
+            },
+            'peptisorb': { 
+                name: 'Nutrison Peptisorb Plus HEHP 1.5',
+                energy: 1.5, 
+                protein: 10.0,
+                indication: 'Pancreatitis, Whipples, malabsorption'
+            },
+            'ensure': { 
+                name: 'Ensure Plus 1.5',
+                energy: 1.5, 
+                protein: 6.25,
+                indication: 'Oral supplement, bolus feeding'
+            }
+        };
+        
+        // Show/hide conditional fields
+        document.getElementById('onPN').addEventListener('change', function() {
+            document.getElementById('pnInputs').classList.toggle('hidden', !this.checked);
+        });
+        
+        document.getElementById('onProteinSupplement').addEventListener('change', function() {
+            document.getElementById('proteinSupplementInputs').classList.toggle('hidden', !this.checked);
+        });
+        
+        document.getElementById('proteinSupplementType').addEventListener('change', function() {
+            const isOther = this.value === 'other';
+            document.getElementById('proteinAmountGroup').classList.toggle('hidden', isOther);
+            document.getElementById('proteinOtherGroup').classList.toggle('hidden', !isOther);
+            calculate();
+        });
+        
+        document.getElementById('burns').addEventListener('change', function() {
+            document.getElementById('tbsaGroup').classList.toggle('hidden', !this.checked);
+        });
+        
+        document.getElementById('feedRoute').addEventListener('change', function() {
+            document.getElementById('gastricCard').classList.toggle('hidden', this.value === 'jejunal');
+        });
+        
+        function resetDailyCalculator() {
+            // Patient details
+            document.getElementById('sex').value = 'male';
+            document.getElementById('age').value = '50';
+            document.getElementById('height').value = '170';
+            document.getElementById('weight').value = '70';
+            document.getElementById('admissionWeight').value = '70';
+            document.getElementById('icuDay').value = '1';
+            
+            // Clinical context checkboxes
+            document.getElementById('sedated').checked = false;
+            document.getElementById('onRRT').checked = false;
+            document.getElementById('pronePosition').checked = false;
+            document.getElementById('hepaticDysfunction').checked = false;
+            document.getElementById('postOp').checked = false;
+            document.getElementById('burns').checked = false;
+            document.getElementById('tbsa').value = '0';
+            document.getElementById('tbsaGroup').classList.add('hidden');
+            
+            // Temperature and propofol
+            document.getElementById('temperature').value = '37.0';
+            document.getElementById('propofolRate').value = '0';
+            
+            // Feed inputs
+            document.getElementById('feedType').value = 'standard';
+            document.getElementById('feedRoute').value = 'gastric';
+            document.getElementById('feedRate').value = '0';
+            document.getElementById('hoursRunning').value = '0';
+            document.getElementById('gastricCard').classList.remove('hidden');
+            
+            // GRV
+            document.getElementById('grv').value = '0';
+            document.getElementById('onMetoclopramide').checked = false;
+            document.getElementById('onErythromycin').checked = false;
+            
+            // Parenteral nutrition
+            document.getElementById('onPN').checked = false;
+            document.getElementById('pnVolume').value = '0';
+            document.getElementById('pnEnergy').value = '0';
+            document.getElementById('pnProtein').value = '0';
+            document.getElementById('pnCard').classList.add('hidden');
+            
+            // Oral intake
+            document.getElementById('onOral').checked = false;
+            document.getElementById('oralEnergy').value = '0';
+            document.getElementById('oralProtein').value = '0';
+            document.getElementById('oralCard').classList.add('hidden');
+            
+            // Recalculate with defaults
+            calculate();
+        }
+        
+        function calculate() {
+            // Get inputs
+            const sex = document.getElementById('sex').value;
+            const age = parseFloat(document.getElementById('age').value) || 50;
+            const height = parseFloat(document.getElementById('height').value) || 170;
+            const weight = parseFloat(document.getElementById('weight').value) || 70;
+            const icuDay = parseInt(document.getElementById('icuDay').value) || 1;
+            const temperature = parseFloat(document.getElementById('temperature').value) || 37.0;
+            const propofolRate = parseFloat(document.getElementById('propofolRate').value) || 0;
+            
+            // Clinical context
+            const sedated = document.getElementById('sedated').checked;
+            const onRRT = document.getElementById('onRRT').checked;
+            const pronePosition = document.getElementById('pronePosition').checked;
+            const hepaticDysfunction = document.getElementById('hepaticDysfunction').checked;
+            const postOp = document.getElementById('postOp').checked;
+            const burns = document.getElementById('burns').checked;
+            const tbsa = parseFloat(document.getElementById('tbsa').value) || 0;
+            
+            // Feed inputs
+            const feedType = document.getElementById('feedType').value;
+            const feedRoute = document.getElementById('feedRoute').value;
+            const feedRate = parseFloat(document.getElementById('feedRate').value) || 0;
+            const hoursRunning = parseFloat(document.getElementById('hoursRunning').value) || 0;
+            
+            // GRV
+            const grv = parseFloat(document.getElementById('grv').value) || 0;
+            const onMetoclopramide = document.getElementById('onMetoclopramide').checked;
+            const onErythromycin = document.getElementById('onErythromycin').checked;
+            
+            // PN
+            const onPN = document.getElementById('onPN').checked;
+            const pnVolume = parseFloat(document.getElementById('pnVolume').value) || 0;
+            const pnEnergy = parseFloat(document.getElementById('pnEnergy').value) || 0;
+            const pnProtein = parseFloat(document.getElementById('pnProtein').value) || 0;
+            
+            // Protein supplementation
+            const onProteinSupplement = document.getElementById('onProteinSupplement').checked;
+            const proteinSupplementType = document.getElementById('proteinSupplementType').value;
+            let additionalProtein = 0;
+            
+            if (onProteinSupplement) {
+                if (proteinSupplementType === 'protifar') {
+                    const scoops = parseFloat(document.getElementById('proteinScoopsPerDay').value) || 0;
+                    additionalProtein = scoops * 5.4; // 5.4g protein per scoop
+                } else {
+                    additionalProtein = parseFloat(document.getElementById('proteinOtherAmount').value) || 0;
+                }
+                document.getElementById('additionalProtein').textContent = additionalProtein.toFixed(1) + ' g/day';
+            }
+            
+            // Refeeding risk
+            const bmiLow = document.getElementById('bmiLow').checked;
+            const npoExtended = document.getElementById('npoExtended').checked;
+            const alcoholism = document.getElementById('alcoholism').checked;
+            const lowElectrolytes = document.getElementById('lowElectrolytes').checked;
+            
+            // Electrolytes
+            const phosphate = parseFloat(document.getElementById('phosphate').value) || 1.0;
+            const magnesium = parseFloat(document.getElementById('magnesium').value) || 0.8;
+            const potassium = parseFloat(document.getElementById('potassium').value) || 4.0;
+            
+            // Calculate IBW (Ideal Body Weight)
+            let ibw;
+            if (sex === 'male') {
+                ibw = 50 + 2.3 * ((height / 2.54) - 60);
+            } else {
+                ibw = 45.5 + 2.3 * ((height / 2.54) - 60);
+            }
+            
+            // Calculate BMI
+            const bmi = weight / ((height / 100) ** 2);
+            
+            // Determine weight for calculations (ABW if obese)
+            let calcWeight = weight;
+            if (bmi > 30) {
+                // Adjusted body weight for obesity
+                calcWeight = ibw + 0.4 * (weight - ibw);
+            }
+            
+            // Calculate base energy requirement (20-25 kcal/kg)
+            let baseEnergy = calcWeight * 22.5; // Mid-range
+            
+            // Adjust for clinical factors
+            let energyMultiplier = 1.0;
+            
+            // Temperature adjustment (+10% per °C above 37)
+            if (temperature > 37) {
+                energyMultiplier += 0.1 * (temperature - 37);
+            }
+            
+            // Sedation adjustment (-20%)
+            if (sedated) {
+                energyMultiplier *= 0.8;
+            }
+            
+            // Burns adjustment
+            if (burns && tbsa > 0) {
+                if (tbsa < 20) {
+                    energyMultiplier *= 1.2;
+                } else {
+                    energyMultiplier *= 1.5;
+                }
+            }
+            
+            let targetEnergy = baseEnergy * energyMultiplier;
+            
+            // Apply permissive underfeeding in acute phase (days 1-7)
+            let permissiveFactor = 1.0;
+            if (icuDay <= 7) {
+                permissiveFactor = 0.75; // 70-80% target
+                targetEnergy *= permissiveFactor;
+            }
+            
+            // Calculate propofol calories (1.1 kcal/ml)
+            const propofolCalories = propofolRate * 24 * 1.1;
+            
+            // Adjusted energy target (subtract propofol)
+            const adjustedEnergyTarget = Math.max(0, targetEnergy - propofolCalories);
+            
+            // Calculate protein target
+            let proteinTarget;
+            if (onRRT) {
+                proteinTarget = calcWeight * 2.0; // 1.5-2.5 g/kg for RRT
+            } else if (burns && tbsa > 20) {
+                proteinTarget = calcWeight * 2.0;
+            } else {
+                proteinTarget = calcWeight * 1.5; // 1.3-1.5 baseline, aim for 1.5-2.0
+            }
+            
+            // Calculate feed delivery
+            const feed = FEEDS[feedType];
+            const feedVolume = feedRate * hoursRunning;
+            const energyFromFeed = (feedVolume / 100) * feed.energy * 100;
+            const proteinFromFeed = (feedVolume / 100) * feed.protein;
+            
+            // Total delivery (feed + PN + protein supplement)
+            let totalEnergy = energyFromFeed;
+            let totalProtein = proteinFromFeed + additionalProtein;
+            
+            if (onPN) {
+                totalEnergy += pnEnergy;
+                totalProtein += pnProtein;
+            }
+            
+            // Calculate achievement percentages
+            const energyPercent = (totalEnergy / adjustedEnergyTarget) * 100;
+            const proteinPercent = (totalProtein / proteinTarget) * 100;
+            
+            // Update phase indicator
+            const phaseIndicator = document.getElementById('phaseIndicator');
+            if (icuDay <= 7) {
+                phaseIndicator.innerHTML = '<div class="phase-indicator phase-acute">Acute Phase (Day ' + icuDay + '/7) - Target 70-80%</div>';
+            } else {
+                phaseIndicator.innerHTML = '<div class="phase-indicator phase-recovery">Recovery Phase (Day ' + icuDay + ') - Target 100%</div>';
+            }
+            
+            // Display basic results
+            document.getElementById('bmiValue').textContent = bmi.toFixed(1) + (bmi > 30 ? ' (Obese)' : bmi < 18.5 ? ' (Underweight)' : ' (Normal)');
+            document.getElementById('ibwValue').textContent = ibw.toFixed(1) + ' kg';
+            document.getElementById('calcWeightValue').textContent = calcWeight.toFixed(1) + ' kg' + (bmi > 30 ? ' (ABW)' : '');
+            
+            document.getElementById('dailyVolume').textContent = feedVolume.toFixed(0) + ' ml/day';
+            document.getElementById('energyFromFeed').textContent = energyFromFeed.toFixed(0) + ' kcal';
+            document.getElementById('proteinFromFeed').textContent = proteinFromFeed.toFixed(1) + ' g';
+            
+            document.getElementById('energyTarget').textContent = targetEnergy.toFixed(0) + ' kcal/day';
+            document.getElementById('proteinTarget').textContent = proteinTarget.toFixed(1) + ' g/day';
+            document.getElementById('propofolCalories').textContent = propofolCalories.toFixed(0) + ' kcal/day';
+            document.getElementById('adjustedEnergyTarget').textContent = adjustedEnergyTarget.toFixed(0) + ' kcal/day';
+            
+            document.getElementById('totalEnergy').textContent = totalEnergy.toFixed(0) + ' kcal';
+            document.getElementById('totalProtein').textContent = totalProtein.toFixed(1) + ' g';
+            
+            document.getElementById('energyPercent').textContent = energyPercent.toFixed(0) + '%';
+            document.getElementById('proteinPercent').textContent = proteinPercent.toFixed(0) + '%';
+            
+            // Update progress bars
+            updateProgressBar('energyProgress', energyPercent, icuDay <= 7 ? 75 : 100);
+            updateProgressBar('proteinProgress', proteinPercent, 80);
+            
+            // GRV Alert
+            updateGRVAlert(grv, pronePosition, feedRoute, onMetoclopramide, onErythromycin);
+            
+            // Refeeding alert
+            updateRefeedingAlert(bmiLow, npoExtended, alcoholism, lowElectrolytes, phosphate, magnesium, potassium);
+            
+            // Electrolyte monitoring
+            updateElectrolyteStatus(phosphate, magnesium, potassium);
+            
+            // Recommendations
+            generateRecommendations(energyPercent, proteinPercent, icuDay, onPN, onRRT, pronePosition, burns, feedRoute, grv);
+            
+            // Clinical guidance
+            generateClinicalGuidance(icuDay, sedated, onRRT, hepaticDysfunction, pronePosition, postOp, burns, feedRoute);
+            
+            // Update current day indicator in multi-day tab
+            const currentTrackedDaySpan = document.getElementById('currentTrackedDay');
+            if (currentTrackedDaySpan) {
+                currentTrackedDaySpan.textContent = icuDay;
+            }
+            
+            // Auto-save daily data (debounced - will save after user stops typing)
+            clearTimeout(window.saveTimeout);
+            window.saveTimeout = setTimeout(() => {
+                saveDailyData();
+            }, 1000);
+        }
+        
+        function updateProgressBar(id, percent, target) {
+            const bar = document.getElementById(id);
+            const width = Math.min(percent, 150); // Cap display at 150%
+            bar.style.width = width + '%';
+            
+            if (percent < target - 10) {
+                bar.className = 'progress-fill danger';
+            } else if (percent < target) {
+                bar.className = 'progress-fill warning';
+            } else {
+                bar.className = 'progress-fill good';
+            }
+        }
+        
+        function updateGRVAlert(grv, prone, route, metoclopramide, erythromycin) {
+            const alertDiv = document.getElementById('grvAlert');
+            const threshold = prone ? 250 : 400;
+            
+            if (route === 'jejunal') {
+                alertDiv.innerHTML = '<div class="alert alert-info">Post-pyloric feeding - GRV monitoring not required</div>';
+                return;
+            }
+            
+            if (grv === 0) {
+                alertDiv.innerHTML = '';
+                return;
+            }
+            
+            if (grv < threshold) {
+                alertDiv.innerHTML = '<div class="alert alert-success">GRV acceptable. Continue feeding.</div>';
+            } else if (grv >= threshold && grv < 500) {
+                if (!metoclopramide) {
+                    alertDiv.innerHTML = '<div class="alert alert-warning"><strong>GRV ' + grv + 'ml ≥ threshold (' + threshold + 'ml)</strong><br>• Continue feeding<br>• Start <strong>metoclopramide 10mg TDS IV/SC</strong> (first-line)<br>• Increase GRV monitoring to 2-4 hourly</div>';
+                } else {
+                    alertDiv.innerHTML = '<div class="alert alert-warning"><strong>GRV ' + grv + 'ml despite metoclopramide</strong><br>• Consider adding <strong>erythromycin 250mg QDS IV</strong><br>• Consider post-pyloric feeding if persistent</div>';
+                }
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-danger"><strong>GRV >500ml - ACTION REQUIRED</strong><br>• <strong>Stop feed for 4 hours</strong><br>• Add <strong>erythromycin 250mg QDS IV</strong><br>• Recheck GRV after 4 hours<br>• Consider <strong>post-pyloric feeding</strong> if persistent</div>';
+            }
+        }
+        
+        function updateRefeedingAlert(bmiLow, npoExtended, alcoholism, lowElectrolytes, phosphate, magnesium, potassium) {
+            const alertDiv = document.getElementById('refeedingAlert');
+            const riskFactors = [bmiLow, npoExtended, alcoholism, lowElectrolytes].filter(Boolean).length;
+            
+            if (riskFactors === 0) {
+                alertDiv.innerHTML = '<div class="alert alert-success">Low refeeding risk</div>';
+            } else if (riskFactors === 1) {
+                alertDiv.innerHTML = '<div class="alert alert-info"><strong>Moderate refeeding risk</strong><br>• Start at 50% target<br>• Monitor electrolytes daily<br>• Supplement thiamine, vitamins</div>';
+            } else {
+                alertDiv.innerHTML = '<div class="alert alert-danger"><strong>HIGH refeeding risk (' + riskFactors + ' factors)</strong><br>• Start at 25-50% target<br>• Replace PO4, Mg, K <strong>before</strong> feeding<br>• <strong>Thiamine 300mg IV</strong> before feeding<br>• Daily PO4, Mg, K monitoring<br>• Increase cautiously over 4-7 days</div>';
+            }
+        }
+        
+        function updateElectrolyteStatus(phosphate, magnesium, potassium) {
+            // Phosphate
+            const po4Elem = document.getElementById('po4Status');
+            if (phosphate < 0.8) {
+                po4Elem.textContent = phosphate.toFixed(1) + ' ↓';
+                po4Elem.className = 'stat-value danger';
+            } else {
+                po4Elem.textContent = phosphate.toFixed(1);
+                po4Elem.className = 'stat-value good';
+            }
+            
+            // Magnesium
+            const mgElem = document.getElementById('mgStatus');
+            if (magnesium < 0.7) {
+                mgElem.textContent = magnesium.toFixed(1) + ' ↓';
+                mgElem.className = 'stat-value danger';
+            } else {
+                mgElem.textContent = magnesium.toFixed(1);
+                mgElem.className = 'stat-value good';
+            }
+            
+            // Potassium
+            const kElem = document.getElementById('kStatus');
+            if (potassium < 3.5) {
+                kElem.textContent = potassium.toFixed(1) + ' ↓';
+                kElem.className = 'stat-value danger';
+            } else if (potassium > 5.5) {
+                kElem.textContent = potassium.toFixed(1) + ' ↑';
+                kElem.className = 'stat-value danger';
+            } else {
+                kElem.textContent = potassium.toFixed(1);
+                kElem.className = 'stat-value good';
+            }
+        }
+        
+        function generateRecommendations(energyPercent, proteinPercent, icuDay, onPN, onRRT, prone, burns, route, grv) {
+            const recs = [];
+            
+            // Energy recommendations
+            if (icuDay <= 7) {
+                if (energyPercent < 65) {
+                    recs.push('<div class="alert alert-warning">Energy delivery low. Increase feed rate or duration if tolerated.</div>');
+                } else if (energyPercent > 85) {
+                    recs.push('<div class="alert alert-info">Excellent energy delivery for acute phase (target 70-80%).</div>');
+                }
+            } else {
+                if (energyPercent < 80) {
+                    if (!onPN && energyPercent < 60) {
+                        recs.push('<div class="alert alert-warning">Energy <60% after day 7. Consider <strong>supplementary PN</strong>.</div>');
+                    } else {
+                        recs.push('<div class="alert alert-info">Increase energy delivery towards 100% target in recovery phase.</div>');
+                    }
+                } else if (energyPercent > 110) {
+                    recs.push('<div class="alert alert-warning">Energy delivery >110%. Risk of overfeeding - consider reducing.</div>');
+                }
+            }
+            
+            // Protein recommendations
+            if (proteinPercent < 70) {
+                recs.push('<div class="alert alert-warning">Protein delivery low (<70%). ' + (onRRT ? 'Critical for RRT patients.' : 'Increase protein provision.') + '</div>');
+            }
+            
+            // Route-specific
+            if (route === 'gastric' && grv > 300) {
+                recs.push('<div class="alert alert-info">Consider prokinetics or post-pyloric feeding if GRV remains high.</div>');
+            }
+            
+            // Special populations
+            if (prone) {
+                recs.push('<div class="alert alert-info"><strong>Prone positioning:</strong> Consider concentrated feed (Nutrison 2.0). GRV threshold 250ml.</div>');
+            }
+            
+            if (onRRT) {
+                recs.push('<div class="alert alert-info"><strong>RRT patient:</strong> Target protein 1.5-2.5g/kg. Monitor trace elements.</div>');
+            }
+            
+            if (burns) {
+                recs.push('<div class="alert alert-info"><strong>Burns patient:</strong> High protein target. Consider micronutrient supplementation (Vit C, zinc).</div>');
+            }
+            
+            document.getElementById('recommendations').innerHTML = recs.length > 0 ? recs.join('') : '<div class="alert alert-success">Nutrition plan appropriate for current clinical context.</div>';
+        }
+        
+        function generateClinicalGuidance(icuDay, sedated, onRRT, hepaticDysfunction, prone, postOp, burns, route) {
+            const guidance = [];
+            
+            if (icuDay <= 7) {
+                guidance.push('<strong>Acute Phase Management:</strong>');
+                guidance.push('• Target 70-80% of calculated energy needs');
+                guidance.push('• Prioritize early EN within 24-48 hours');
+                guidance.push('• Avoid aggressive nutrition (permissive underfeeding)');
+            } else {
+                guidance.push('<strong>Recovery Phase:</strong>');
+                guidance.push('• Progress to 100% energy target');
+                guidance.push('• Optimize protein delivery (1.5-2.0 g/kg)');
+                guidance.push('• Support anabolism and lean body mass restoration');
+            }
+            
+            guidance.push('');
+            
+            if (sedated) {
+                guidance.push('<strong>Sedated Patient:</strong>');
+                guidance.push('• Energy expenditure reduced by 15-25%');
+                guidance.push('• Monitor GRV closely (delayed gastric emptying)');
+                guidance.push('• Consider prokinetics early if GRV rising');
+            }
+            
+            if (onRRT) {
+                guidance.push('<strong>RRT Considerations:</strong>');
+                guidance.push('• Protein losses ~10-15g/day via filtrate');
+                guidance.push('• Target 1.5-2.5 g/kg protein');
+                guidance.push('• Monitor water-soluble vitamins (thiamine, folate)');
+                guidance.push('• May need concentrated feed for fluid restriction');
+            }
+            
+            if (hepaticDysfunction) {
+                guidance.push('<strong>Hepatic Dysfunction:</strong>');
+                guidance.push('• Standard protein usually tolerated');
+                guidance.push('• Reduce protein only if encephalopathy worsens');
+                guidance.push('• Monitor micronutrients (thiamine, zinc, vitamins A,D,E,K)');
+            }
+            
+            if (route === 'jejunal') {
+                guidance.push('<strong>Jejunal Feeding:</strong>');
+                guidance.push('• Must be continuous (no bolus regimen)');
+                guidance.push('• Cannot give medications via jejunal tube');
+                guidance.push('• No GRV monitoring required');
+                guidance.push('• If post-op: follow 5-day advancement protocol');
+            }
+            
+            document.getElementById('clinicalGuidance').innerHTML = guidance.join('<br>');
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            
+            // Activate button
+            event.target.classList.add('active');
+            
+            // Update specific tabs
+            if (tabName === 'multiday') {
+                updateMultiDayView();
+            } else if (tabName === 'metabolic') {
+                calculateMetabolic();
+            }
+        }
+        
+        // Multi-day tracking - dynamic storage
+        let dailyNutritionData = {};
+        
+        function saveDailyData() {
+            const currentDay = parseInt(document.getElementById('icuDay').value) || 1;
+            
+            // Get current day's data from calculator
+            const feedType = document.getElementById('feedType').value;
+            const feed = FEEDS[feedType];
+            const feedRate = parseFloat(document.getElementById('feedRate').value) || 0;
+            const hoursRunning = parseFloat(document.getElementById('hoursRunning').value) || 0;
+            const feedVolume = feedRate * hoursRunning;
+            const energyFromFeed = (feedVolume / 100) * feed.energy * 100;
+            const proteinFromFeed = (feedVolume / 100) * feed.protein;
+            
+            const onPN = document.getElementById('onPN').checked;
+            const pnEnergy = onPN ? (parseFloat(document.getElementById('pnEnergy').value) || 0) : 0;
+            const pnProtein = onPN ? (parseFloat(document.getElementById('pnProtein').value) || 0) : 0;
+            
+            // Get protein supplement
+            const onProteinSupplement = document.getElementById('onProteinSupplement').checked;
+            let additionalProtein = 0;
+            if (onProteinSupplement) {
+                const proteinSupplementType = document.getElementById('proteinSupplementType').value;
+                if (proteinSupplementType === 'protifar') {
+                    const scoops = parseFloat(document.getElementById('proteinScoopsPerDay').value) || 0;
+                    additionalProtein = scoops * 5.4;
+                } else {
+                    additionalProtein = parseFloat(document.getElementById('proteinOtherAmount').value) || 0;
+                }
+            }
+            
+            const totalEnergy = energyFromFeed + pnEnergy;
+            const totalProtein = proteinFromFeed + pnProtein + additionalProtein;
+            
+            // Get targets from current calculation
+            const energyTarget = parseFloat(document.getElementById('adjustedEnergyTarget').textContent) || 0;
+            const proteinTarget = parseFloat(document.getElementById('proteinTarget').textContent.split(' ')[0]) || 0;
+            
+            // Store data for this day
+            dailyNutritionData[currentDay] = {
+                day: currentDay,
+                energyDelivered: totalEnergy,
+                energyTarget: energyTarget,
+                proteinDelivered: totalProtein,
+                proteinTarget: proteinTarget,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Auto-save to localStorage
+            localStorage.setItem('dailyNutritionData', JSON.stringify(dailyNutritionData));
+            
+            // Update multi-day view if we're on that tab
+            updateMultiDayView();
+        }
+        
+        function loadDailyData() {
+            const stored = localStorage.getItem('dailyNutritionData');
+            if (stored) {
+                dailyNutritionData = JSON.parse(stored);
+            }
+        }
+        
+        function clearAllDailyData() {
+            if (confirm('Clear all multi-day tracking data? This cannot be undone.')) {
+                dailyNutritionData = {};
+                localStorage.removeItem('dailyNutritionData');
+                updateMultiDayView();
+            }
+        }
+        
+        function removeLastDay() {
+            const days = Object.keys(dailyNutritionData).map(Number).sort((a, b) => b - a);
+            if (days.length > 0) {
+                const lastDay = days[0];
+                delete dailyNutritionData[lastDay];
+                localStorage.setItem('dailyNutritionData', JSON.stringify(dailyNutritionData));
+                updateMultiDayView();
+            }
+        }
+        
+        function updateMultiDayView() {
+            // Get all days sorted
+            const days = Object.keys(dailyNutritionData).map(Number).sort((a, b) => a - b);
+            
+            // Update day count
+            document.getElementById('daysTracked').textContent = days.length;
+            
+            if (days.length === 0) {
+                // Clear displays
+                document.getElementById('cumEnergyDelivered').textContent = '0 kcal';
+                document.getElementById('cumEnergyTarget').textContent = '0 kcal';
+                document.getElementById('cumEnergyBalance').textContent = '0 kcal';
+                document.getElementById('cumProteinDelivered').textContent = '0 g';
+                document.getElementById('cumProteinTarget').textContent = '0 g';
+                document.getElementById('cumProteinBalance').textContent = '0 g';
+                document.getElementById('dayByDayRows').innerHTML = '<div style="padding: 1rem; text-align: center; color: #64748b;">No days tracked yet. Enter data in Daily Calculator and it will automatically save for each ICU day.</div>';
+                return;
+            }
+            
+            // Calculate cumulative totals
+            let cumEnergyDelivered = 0;
+            let cumEnergyTarget = 0;
+            let cumProteinDelivered = 0;
+            let cumProteinTarget = 0;
+            
+            days.forEach(dayNum => {
+                const day = dailyNutritionData[dayNum];
+                cumEnergyDelivered += day.energyDelivered;
+                cumEnergyTarget += day.energyTarget;
+                cumProteinDelivered += day.proteinDelivered;
+                cumProteinTarget += day.proteinTarget;
+            });
+            
+            const energyBalance = cumEnergyDelivered - cumEnergyTarget;
+            const proteinBalance = cumProteinDelivered - cumProteinTarget;
+            
+            // Update cumulative display
+            document.getElementById('cumEnergyDelivered').textContent = cumEnergyDelivered.toFixed(0) + ' kcal';
+            document.getElementById('cumEnergyTarget').textContent = cumEnergyTarget.toFixed(0) + ' kcal';
+            document.getElementById('cumEnergyBalance').textContent = 
+                (energyBalance >= 0 ? '+' : '') + energyBalance.toFixed(0) + ' kcal';
+            document.getElementById('cumEnergyBalance').style.color = energyBalance >= 0 ? '#10b981' : '#ef4444';
+            
+            document.getElementById('cumProteinDelivered').textContent = cumProteinDelivered.toFixed(1) + ' g';
+            document.getElementById('cumProteinTarget').textContent = cumProteinTarget.toFixed(1) + ' g';
+            document.getElementById('cumProteinBalance').textContent = 
+                (proteinBalance >= 0 ? '+' : '') + proteinBalance.toFixed(1) + ' g';
+            document.getElementById('cumProteinBalance').style.color = proteinBalance >= 0 ? '#10b981' : '#ef4444';
+            
+            // Build day-by-day rows
+            let rowsHtml = '';
+            days.forEach(dayNum => {
+                const day = dailyNutritionData[dayNum];
+                const energyBalance = day.energyDelivered - day.energyTarget;
+                const proteinBalance = day.proteinDelivered - day.proteinTarget;
+                const energyPercent = (day.energyDelivered / day.energyTarget * 100).toFixed(0);
+                const proteinPercent = (day.proteinDelivered / day.proteinTarget * 100).toFixed(0);
+                
+                rowsHtml += `
+                    <div class="day-row">
+                        <div class="day-badge">Day ${day.day}</div>
+                        <div>${day.energyDelivered.toFixed(0)} kcal</div>
+                        <div>${day.energyTarget.toFixed(0)} kcal</div>
+                        <div class="deficit-value ${energyBalance >= 0 ? 'positive' : 'negative'}">
+                            ${energyBalance >= 0 ? '+' : ''}${energyBalance.toFixed(0)} kcal
+                        </div>
+                        <div>${day.proteinDelivered.toFixed(1)} g</div>
+                        <div>${day.proteinTarget.toFixed(1)} g</div>
+                        <div class="deficit-value ${proteinBalance >= 0 ? 'positive' : 'negative'}">
+                            ${proteinBalance >= 0 ? '+' : ''}${proteinBalance.toFixed(1)} g
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; color: ${energyPercent >= 70 ? '#059669' : '#dc2626'}">
+                                E: ${energyPercent}%
+                            </div>
+                            <div style="font-weight: 600; color: ${proteinPercent >= 70 ? '#059669' : '#dc2626'}">
+                                P: ${proteinPercent}%
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('dayByDayRows').innerHTML = rowsHtml;
+            
+            // Convert to array for chart drawing
+            const dayArray = days.map(dayNum => dailyNutritionData[dayNum]);
+            
+            // Draw simple charts
+            drawCumulativeChart('energyCanvas', dayArray, 'energy');
+            drawCumulativeChart('proteinCanvas', dayArray, 'protein');
+            
+            // Show integrated overview if we have metabolic data too
+            updateIntegratedOverview();
+        }
+        
+        function drawCumulativeChart(canvasId, data, type) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            if (data.length === 0) return;
+            
+            // Calculate cumulative deficit/surplus for each day
+            let cumulative = [];
+            let runningTotal = 0;
+            
+            data.forEach(day => {
+                if (type === 'energy') {
+                    runningTotal += (day.energyDelivered - day.energyTarget);
+                } else {
+                    runningTotal += (day.proteinDelivered - day.proteinTarget);
+                }
+                cumulative.push(runningTotal);
+            });
+            
+            // Find max/min for scaling
+            const maxValue = Math.max(...cumulative, 0);
+            const minValue = Math.min(...cumulative, 0);
+            const range = maxValue - minValue;
+            const padding = 20;
+            
+            // Draw zero line
+            const zeroY = padding + ((maxValue) / range) * (height - 2 * padding);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(padding, zeroY);
+            ctx.lineTo(width - padding, zeroY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw cumulative line
+            ctx.strokeStyle = type === 'energy' ? '#f59e0b' : '#8b5cf6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            cumulative.forEach((value, index) => {
+                const x = padding + (index / (data.length - 1 || 1)) * (width - 2 * padding);
+                const y = padding + ((maxValue - value) / range) * (height - 2 * padding);
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Draw points
+            cumulative.forEach((value, index) => {
+                const x = padding + (index / (data.length - 1 || 1)) * (width - 2 * padding);
+                const y = padding + ((maxValue - value) / range) * (height - 2 * padding);
+                
+                ctx.fillStyle = value >= 0 ? '#10b981' : '#ef4444';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            
+            // Add labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            
+            cumulative.forEach((value, index) => {
+                const x = padding + (index / (data.length - 1 || 1)) * (width - 2 * padding);
+                ctx.fillText('D' + (index + 1), x, height - 5);
+            });
+        }
+        
+        // Metabolic data storage (by ICU day)
+        let metabolicData = {};
+        
+        function saveMetabolicData() {
+            const currentDay = parseInt(document.getElementById('metabolicIcuDay').value);
+            
+            // Get calculated values
+            const ureaToday = parseFloat(document.getElementById('ureaToday').value) || 0;
+            const creatToday = parseFloat(document.getElementById('creatToday').value) || 0;
+            const crpToday = parseFloat(document.getElementById('crpToday').value) || 0;
+            const albumin = parseFloat(document.getElementById('albumin').value) || 0;
+            
+            // Get calculated score and N balance from the display
+            const scoreText = document.getElementById('catabolicScore').textContent;
+            const score = parseInt(scoreText.split('/')[0]) || 0;
+            
+            const nBalanceText = document.getElementById('nitrogenBalance').textContent;
+            const nBalance = parseFloat(nBalanceText) || 0;
+            
+            metabolicData[currentDay] = {
+                urea: ureaToday,
+                creatinine: creatToday,
+                crp: crpToday,
+                albumin: albumin,
+                catabolicScore: score,
+                nitrogenBalance: nBalance,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Auto-save to localStorage
+            localStorage.setItem('metabolicData', JSON.stringify(metabolicData));
+            
+            // Update metabolic trend chart
+            drawMetabolicTrend();
+        }
+        
+        function loadMetabolicData() {
+            const stored = localStorage.getItem('metabolicData');
+            if (stored) {
+                metabolicData = JSON.parse(stored);
+            }
+        }
+        
+        function clearMetabolicData() {
+            if (confirm('Are you sure you want to clear all metabolic state data? This cannot be undone.')) {
+                // Clear the metabolicData object
+                metabolicData = {};
+                
+                // Clear localStorage
+                localStorage.removeItem('metabolicData');
+                
+                // Reset all form fields to defaults
+                document.getElementById('metabolicIcuDay').value = '2';
+                document.getElementById('ureaToday').value = '9.0';
+                document.getElementById('ureaYesterday').value = '8.0';
+                document.getElementById('creatToday').value = '95';
+                document.getElementById('creatYesterday').value = '90';
+                document.getElementById('crpToday').value = '120';
+                document.getElementById('crpYesterday').value = '150';
+                document.getElementById('albumin').value = '25';
+                
+                // Recalculate with defaults
+                calculateMetabolic();
+                
+                // Clear and redraw the chart
+                drawMetabolicTrend();
+                
+                alert('All metabolic state data has been cleared.');
+            }
+        }
+        
+        function updateYesterdayValues() {
+            const currentDay = parseInt(document.getElementById('metabolicIcuDay').value);
+            const yesterdayDay = currentDay - 1;
+            
+            if (yesterdayDay >= 1 && metabolicData[yesterdayDay]) {
+                // Auto-populate from saved data
+                const yesterdayData = metabolicData[yesterdayDay];
+                document.getElementById('ureaYesterday').value = yesterdayData.urea.toFixed(1);
+                document.getElementById('creatYesterday').value = yesterdayData.creatinine.toFixed(0);
+                document.getElementById('crpYesterday').value = yesterdayData.crp.toFixed(0);
+            } else if (currentDay === 1) {
+                // Day 1 - no yesterday values available
+                document.getElementById('ureaYesterday').value = '';
+                document.getElementById('creatYesterday').value = '';
+                document.getElementById('crpYesterday').value = '';
+            }
+            
+            // Load today's values if previously entered
+            if (metabolicData[currentDay]) {
+                const todayData = metabolicData[currentDay];
+                document.getElementById('ureaToday').value = todayData.urea.toFixed(1);
+                document.getElementById('creatToday').value = todayData.creatinine.toFixed(0);
+                document.getElementById('crpToday').value = todayData.crp.toFixed(0);
+                document.getElementById('albumin').value = todayData.albumin.toFixed(0);
+            }
+            
+            calculateMetabolic();
+        }
+        
+        // Metabolic state calculation
+        function calculateMetabolic() {
+            const ureaToday = parseFloat(document.getElementById('ureaToday').value) || 0;
+            const ureaYesterday = parseFloat(document.getElementById('ureaYesterday').value) || 0;
+            const creatToday = parseFloat(document.getElementById('creatToday').value) || 0;
+            const creatYesterday = parseFloat(document.getElementById('creatYesterday').value) || 0;
+            const crpToday = parseFloat(document.getElementById('crpToday').value) || 0;
+            const crpYesterday = parseFloat(document.getElementById('crpYesterday').value) || 0;
+            const albumin = parseFloat(document.getElementById('albumin').value) || 25;
+            
+            // Calculate deltas
+            const deltaUrea = ureaToday - ureaYesterday;
+            const deltaCreat = creatToday - creatYesterday;
+            const deltaCRP = crpToday - crpYesterday;
+            const crpAlbRatio = crpToday / albumin;
+            
+            // Display deltas
+            document.getElementById('deltaUrea').textContent = (deltaUrea >= 0 ? '+' : '') + deltaUrea.toFixed(1);
+            document.getElementById('deltaCreat').textContent = (deltaCreat >= 0 ? '+' : '') + deltaCreat.toFixed(0);
+            document.getElementById('deltaCRP').textContent = (deltaCRP >= 0 ? '+' : '') + deltaCRP.toFixed(0);
+            document.getElementById('crpAlbRatio').textContent = crpAlbRatio.toFixed(1);
+            
+            // Calculate nitrogen balance (simplified)
+            const weight = parseFloat(document.getElementById('weight').value) || 70;
+            const proteinIntake = parseFloat(document.getElementById('totalProtein').textContent.split(' ')[0]) || 0;
+            
+            // Urea generation (mmol/day) - simplified calculation
+            const ureaGeneration = deltaUrea * weight * 0.6; // Rough estimate
+            const nitrogenAppearance = ureaGeneration * 0.028; // Convert to grams
+            const nitrogenIntake = proteinIntake / 6.25; // Protein to nitrogen
+            const nitrogenBalance = nitrogenIntake - nitrogenAppearance - 4; // -4 for insensible losses
+            
+            document.getElementById('ureaGeneration').textContent = ureaGeneration.toFixed(1) + ' mmol/day';
+            document.getElementById('nitrogenAppearance').textContent = nitrogenAppearance.toFixed(1) + ' g/day';
+            document.getElementById('nitrogenBalance').textContent = 
+                (nitrogenBalance >= 0 ? '+' : '') + nitrogenBalance.toFixed(1) + ' g/day';
+            
+            // Score catabolic markers (0-6 scale)
+            let score = 0;
+            
+            // 1. Rising urea (catabolic)
+            const ureaRising = deltaUrea > 1.0;
+            if (ureaRising) score++;
+            
+            // 2. Rising creatinine (catabolic - muscle breakdown or AKI)
+            const creatRising = deltaCreat > 10;
+            if (creatRising) score++;
+            
+            // 3. High or rising CRP (inflammation)
+            const crpHigh = crpToday > 100;
+            if (crpHigh) score++;
+            
+            // 4. High CRP:Albumin ratio (acute inflammation)
+            const crpAlbHigh = crpAlbRatio > 3.0;
+            if (crpAlbHigh) score++;
+            
+            // 5. Falling albumin (synthesis impaired)
+            const albuminLow = albumin < 30;
+            if (albuminLow) score++;
+            
+            // 6. Negative nitrogen balance
+            const nBalNegative = nitrogenBalance < 0;
+            if (nBalNegative) score++;
+            
+            // Determine metabolic state
+            const catabolic = score >= 3;
+            
+            // Update score display
+            document.getElementById('catabolicScore').textContent = score + '/6';
+            document.getElementById('metabolicState').textContent = catabolic ? 'CATABOLIC STATE' : 'ANABOLIC STATE';
+            
+            const scoreBox = document.getElementById('metabolicScoreBox');
+            scoreBox.className = catabolic ? 'metabolic-score-box' : 'metabolic-score-box anabolic';
+            
+            // Update indicators
+            updateIndicator('ureaIndicator', 'ureaDirection', 'ureaInterpretation', ureaRising, 
+                'Rising urea suggests protein catabolism', 'Stable/falling urea');
+            
+            updateIndicator('creatIndicator', 'creatDirection', 'creatInterpretation', creatRising,
+                'Rising creatinine - muscle breakdown or AKI', 'Stable creatinine');
+            
+            updateIndicator('crpIndicator', 'crpDirection', 'crpInterpretation', deltaCRP > 0,
+                crpHigh ? 'High CRP - significant inflammation' : 'CRP rising',
+                'CRP falling - inflammation resolving');
+            
+            updateIndicator('crpAlbIndicator', null, 'crpAlbInterpretation', crpAlbHigh,
+                'High CRP:Albumin ratio - acute inflammation', 'CRP:Albumin ratio acceptable');
+            
+            updateIndicator('nBalIndicator', null, 'nBalInterpretation', nBalNegative,
+                'Negative nitrogen balance - inadequate protein', 'Positive nitrogen balance');
+        }
+        
+        function updateIndicator(dotId, directionId, interpretationId, isCatabolic, catabolicText, anabolicText) {
+            const dot = document.getElementById(dotId);
+            const interpretation = document.getElementById(interpretationId);
+            
+            if (isCatabolic) {
+                dot.className = 'indicator-dot catabolic';
+                interpretation.textContent = catabolicText;
+                if (directionId) {
+                    const direction = document.getElementById(directionId);
+                    direction.textContent = '↑';
+                    direction.style.color = '#dc2626';
+                }
+            } else {
+                dot.className = 'indicator-dot anabolic';
+                interpretation.textContent = anabolicText;
+                if (directionId) {
+                    const direction = document.getElementById(directionId);
+                    direction.textContent = '↓';
+                    direction.style.color = '#059669';
+                }
+            }
+        }
+        
+        function drawMetabolicTrend() {
+            const canvas = document.getElementById('metabolicTrendCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Get sorted days
+            const days = Object.keys(metabolicData).map(Number).sort((a, b) => a - b);
+            
+            if (days.length === 0) {
+                ctx.fillStyle = '#64748b';
+                ctx.font = '14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('No metabolic data tracked yet. Enter biochemistry values to see trend.', width / 2, height / 2);
+                return;
+            }
+            
+            const padding = 40;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+            
+            // Draw axes
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+            
+            // Draw grid lines and y-axis labels
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'right';
+            
+            for (let i = 0; i <= 6; i++) {
+                const y = height - padding - (i / 6) * chartHeight;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+                ctx.fillText(i.toString(), padding - 10, y + 3);
+            }
+            
+            // Y-axis label
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#1e3a5f';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText('Catabolic Score (0-6)', 0, 0);
+            ctx.restore();
+            
+            // Draw threshold line at score 3 (catabolic/anabolic boundary)
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            const thresholdY = height - padding - (3 / 6) * chartHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding, thresholdY);
+            ctx.lineTo(width - padding, thresholdY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Label threshold
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'italic 9px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('Catabolic threshold (≥3)', padding + 5, thresholdY - 5);
+            
+            // Prepare data series
+            const catabolicScores = [];
+            const ureaValues = [];
+            const crpValues = [];
+            const nBalanceValues = [];
+            
+            days.forEach(day => {
+                const data = metabolicData[day];
+                catabolicScores.push({ day, value: data.catabolicScore });
+                ureaValues.push({ day, value: data.urea });
+                crpValues.push({ day, value: data.crp / 10 }); // Scale CRP down
+                nBalanceValues.push({ day, value: Math.max(-3, Math.min(6, data.nitrogenBalance + 3)) }); // Shift and clamp N balance to 0-6 range
+            });
+            
+            // Draw catabolic score line (primary - bold)
+            drawMetabolicLine(ctx, catabolicScores, days, width, height, padding, chartHeight, '#dc2626', 3);
+            
+            // Draw urea line (secondary)
+            drawMetabolicLine(ctx, ureaValues, days, width, height, padding, chartHeight, '#f59e0b', 2);
+            
+            // Draw CRP line (secondary)
+            drawMetabolicLine(ctx, crpValues, days, width, height, padding, chartHeight, '#8b5cf6', 2);
+            
+            // Draw N balance line (secondary)
+            drawMetabolicLine(ctx, nBalanceValues, days, width, height, padding, chartHeight, '#10b981', 2);
+            
+            // Draw day labels on x-axis
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            
+            days.forEach((day, index) => {
+                const x = padding + (index / (days.length - 1 || 1)) * chartWidth;
+                ctx.fillText('D' + day, x, height - padding + 15);
+            });
+            
+            // Add metabolic state labels on data points
+            days.forEach((day, index) => {
+                const data = metabolicData[day];
+                const x = padding + (index / (days.length - 1 || 1)) * chartWidth;
+                const y = height - padding - (data.catabolicScore / 6) * chartHeight;
+                
+                // Draw state indicator
+                const isCatabolic = data.catabolicScore >= 3;
+                ctx.fillStyle = isCatabolic ? '#dc2626' : '#10b981';
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Add label
+                ctx.fillStyle = isCatabolic ? '#dc2626' : '#10b981';
+                ctx.font = 'bold 9px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(isCatabolic ? 'C' : 'A', x, y - 10);
+            });
+        }
+        
+        function drawMetabolicLine(ctx, dataPoints, days, width, height, padding, chartHeight, color, lineWidth) {
+            if (dataPoints.length === 0) return;
+            
+            const chartWidth = width - 2 * padding;
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            
+            dataPoints.forEach((point, index) => {
+                const x = padding + (index / (days.length - 1 || 1)) * chartWidth;
+                const y = height - padding - (Math.min(6, Math.max(0, point.value)) / 6) * chartHeight;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+        }
+        
+        function updateIntegratedOverview() {
+            const overviewDiv = document.getElementById('integratedOverview');
+            if (!overviewDiv) return;
+            
+            // Get days with both nutrition AND metabolic data
+            const nutritionDays = Object.keys(dailyNutritionData).map(Number);
+            const metabolicDays = Object.keys(metabolicData).map(Number);
+            const commonDays = nutritionDays.filter(day => metabolicDays.includes(day)).sort((a, b) => a - b);
+            
+            if (commonDays.length < 2) {
+                // Not enough data to show integrated view
+                overviewDiv.classList.add('hidden');
+                return;
+            }
+            
+            overviewDiv.classList.remove('hidden');
+            
+            // Analyze metabolic trajectory
+            const firstDay = commonDays[0];
+            const lastDay = commonDays[commonDays.length - 1];
+            const firstScore = metabolicData[firstDay].catabolicScore;
+            const lastScore = metabolicData[lastDay].catabolicScore;
+            
+            let metabolicSummaryHtml = '';
+            if (lastScore < firstScore) {
+                metabolicSummaryHtml = `
+                    <div class="alert alert-success" style="margin: 0;">
+                        <strong>✓ Improving</strong><br>
+                        Catabolic score: ${firstScore} → ${lastScore} (Day ${firstDay} to ${lastDay})<br>
+                        Metabolic recovery evident
+                    </div>
+                `;
+            } else if (lastScore > firstScore) {
+                metabolicSummaryHtml = `
+                    <div class="alert alert-warning" style="margin: 0;">
+                        <strong>⚠ Deteriorating</strong><br>
+                        Catabolic score: ${firstScore} → ${lastScore} (Day ${firstDay} to ${lastDay})<br>
+                        Increased catabolism
+                    </div>
+                `;
+            } else {
+                metabolicSummaryHtml = `
+                    <div class="alert alert-info" style="margin: 0;">
+                        <strong>→ Stable</strong><br>
+                        Catabolic score: ${lastScore} (unchanged)<br>
+                        No significant metabolic change
+                    </div>
+                `;
+            }
+            
+            document.getElementById('metabolicSummary').innerHTML = metabolicSummaryHtml;
+            
+            // Analyze nutrition strategy appropriateness
+            let alignmentHtml = '';
+            let misalignments = [];
+            
+            commonDays.forEach(day => {
+                const metab = metabolicData[day];
+                const nutr = dailyNutritionData[day];
+                const isCatabolic = metab.catabolicScore >= 3;
+                const energyPercent = (nutr.energyDelivered / nutr.energyTarget) * 100;
+                
+                if (isCatabolic && energyPercent > 85 && day <= 7) {
+                    misalignments.push(`Day ${day}: Catabolic but >85% energy target`);
+                } else if (!isCatabolic && energyPercent < 70 && day > 7) {
+                    misalignments.push(`Day ${day}: Anabolic but <70% energy target`);
+                }
+            });
+            
+            if (misalignments.length === 0) {
+                alignmentHtml = `
+                    <div class="alert alert-success" style="margin: 0;">
+                        <strong>✓ Well Aligned</strong><br>
+                        Nutrition strategy matches metabolic state across all ${commonDays.length} days with data
+                    </div>
+                `;
+            } else {
+                alignmentHtml = `
+                    <div class="alert alert-warning" style="margin: 0;">
+                        <strong>⚠ Review Needed</strong><br>
+                        ${misalignments.slice(0, 3).join('<br>')}
+                        ${misalignments.length > 3 ? `<br>...+${misalignments.length - 3} more` : ''}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('nutritionAlignment').innerHTML = alignmentHtml;
+            
+            // Draw integrated chart showing catabolic score vs energy achievement
+            drawIntegratedChart(commonDays);
+        }
+        
+        function drawIntegratedChart(commonDays) {
+            const canvas = document.getElementById('integratedCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            if (commonDays.length === 0) return;
+            
+            const padding = 40;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+            
+            // Draw background zones
+            // Catabolic zone (top half)
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.05)';
+            ctx.fillRect(padding, padding, chartWidth, chartHeight / 2);
+            
+            // Anabolic zone (bottom half)
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.05)';
+            ctx.fillRect(padding, padding + chartHeight / 2, chartWidth, chartHeight / 2);
+            
+            // Draw axes
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+            
+            // Y-axis labels (catabolic score)
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 6; i++) {
+                const y = height - padding - (i / 6) * chartHeight;
+                ctx.fillText(i.toString(), padding - 10, y + 3);
+            }
+            
+            // Threshold line at 3
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            const thresholdY = height - padding - (3 / 6) * chartHeight;
+            ctx.beginPath();
+            ctx.moveTo(padding, thresholdY);
+            ctx.lineTo(width - padding, thresholdY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw data points
+            commonDays.forEach((day, index) => {
+                const metab = metabolicData[day];
+                const nutr = dailyNutritionData[day];
+                
+                const x = padding + (index / (commonDays.length - 1 || 1)) * chartWidth;
+                const scoreY = height - padding - (metab.catabolicScore / 6) * chartHeight;
+                
+                // Catabolic score point
+                ctx.fillStyle = metab.catabolicScore >= 3 ? '#dc2626' : '#10b981';
+                ctx.beginPath();
+                ctx.arc(x, scoreY, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Energy achievement bar (as background)
+                const energyPercent = (nutr.energyDelivered / nutr.energyTarget) * 100;
+                const barHeight = (energyPercent / 100) * chartHeight;
+                ctx.fillStyle = energyPercent >= 70 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                ctx.fillRect(x - 8, height - padding - barHeight, 16, barHeight);
+                
+                // Day label
+                ctx.fillStyle = '#64748b';
+                ctx.font = '9px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('D' + day, x, height - padding + 15);
+            });
+            
+            // Legend
+            ctx.fillStyle = '#1e3a5f';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('Red dot = Catabolic (≥3) | Green dot = Anabolic (<3) | Bar = Energy achievement %', padding, 15);
+        }
+        
+        // Initialize
+        loadMetabolicData();
+        loadDailyData();
+        calculate();
+        calculateMetabolic();
+        
+        // Update multi-day view on load
+        updateMultiDayView();
+        
+        // Draw metabolic trend on load
+        drawMetabolicTrend();
+    </script>
+</body>
+</html>

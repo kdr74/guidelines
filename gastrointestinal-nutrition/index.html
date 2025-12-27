@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastrointestinal & Nutrition Guidelines - UHBW Critical Care</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        .guideline-list {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .guideline-item {
+            background: var(--nhs-white);
+            border: 2px solid var(--nhs-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .guideline-item:hover {
+            border-color: var(--nhs-blue);
+            box-shadow: 0 4px 12px rgba(0, 94, 184, 0.1);
+        }
+        .guideline-item h2 {
+            color: var(--nhs-blue);
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .guideline-meta {
+            color: var(--nhs-grey);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .guideline-item p {
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+        .guideline-features {
+            background: var(--nhs-light-grey);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.25rem;
+        }
+        .guideline-features h3 {
+            color: var(--nhs-blue);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .guideline-features ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .guideline-features li {
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+        .guideline-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .guideline-link {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-blue);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .guideline-link:hover {
+            background: var(--hover-blue);
+        }
+        .guideline-link.secondary {
+            background: var(--nhs-grey);
+        }
+        .guideline-link.secondary:hover {
+            background: var(--nhs-dark-blue);
+        }
+        .back-link {
+            display: inline-block;
+            margin: 2rem auto;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-grey);
+            color: var(--nhs-white);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            background: var(--nhs-dark-blue);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Gastrointestinal & Nutrition Guidelines</h1>
+                <p class="subtitle">UHBW Critical Care</p>
+                <p class="units">Nutritional support, feeding protocols, GI management</p>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search guidelines..." aria-label="Search guidelines">
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="guideline-list">
+        <div class="guideline-item">
+            <h2>ICU Nutrition Guidelines</h2>
+            <p class="guideline-meta">UHBW Critical Care | Interactive Clinical Guideline</p>
+            
+            <p>Comprehensive evidence-based nutrition guideline for critically ill adult patients, covering assessment, delivery methods, monitoring, and management of complications.</p>
+            
+            <div class="guideline-features">
+                <h3>Key Topics Covered:</h3>
+                <ul>
+                    <li>Nutritional assessment and screening (NUTRIC score)</li>
+                    <li>Energy and protein requirements calculation</li>
+                    <li>Route selection: enteral vs parenteral nutrition</li>
+                    <li>Enteral feeding: NG, OG, NJ, OJ tube feeding protocols</li>
+                    <li>Parenteral nutrition: indications and monitoring</li>
+                    <li>Feeding in specific conditions: sepsis, renal failure, liver failure, pancreatitis</li>
+                    <li>Management of feed intolerance and gastric residual volumes</li>
+                    <li>Refeeding syndrome: recognition, prevention, and management</li>
+                    <li>Micronutrient supplementation protocols</li>
+                    <li>Immune-modulating nutrition (glutamine, omega-3, arginine)</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="nutrition-guideline.html" class="guideline-link">📖 View Interactive Guideline</a>
+            </div>
+        </div>
+
+        <div class="guideline-item">
+            <h2>Nutrition Calculator</h2>
+            <p class="guideline-meta">Interactive Clinical Decision Support Tool</p>
+            
+            <p>Advanced nutrition calculator for critically ill patients with comprehensive metabolic tracking, multi-day cumulative analysis, and automated nutritional adequacy assessment.</p>
+            
+            <div class="guideline-features">
+                <h3>Interactive Features:</h3>
+                <ul>
+                    <li><strong>Patient Parameters:</strong> Weight, height, BMI, ideal body weight calculations</li>
+                    <li><strong>Energy Requirements:</strong> Multiple calculation methods (25-30 kcal/kg, Penn State, indirect calorimetry targets)</li>
+                    <li><strong>Protein Requirements:</strong> Adjusted for obesity, renal failure, liver disease, and critical illness</li>
+                    <li><strong>Daily Intake Tracking:</strong> Separate inputs for enteral, parenteral, and propofol nutrition</li>
+                    <li><strong>Cumulative Analysis:</strong> Multi-day tracking with running totals and averages</li>
+                    <li><strong>Metabolic State Tracking:</strong> Monitor fed/fasted states, feeding interruptions, and reasons</li>
+                    <li><strong>Adequacy Assessment:</strong> Automatic calculation of % energy and protein targets achieved</li>
+                    <li><strong>Visual Analytics:</strong> Graphs showing daily intake trends and cumulative adequacy</li>
+                    <li><strong>Refeeding Risk:</strong> Automated risk assessment and phosphate monitoring recommendations</li>
+                    <li><strong>Feed Prescription:</strong> Generates specific feeding regimen recommendations</li>
+                </ul>
+            </div>
+
+            <div class="guideline-features">
+                <h3>Advanced Capabilities:</h3>
+                <ul>
+                    <li>Multi-source nutrition tracking (EN + PN + propofol combined)</li>
+                    <li>Day-by-day cumulative totals with running averages</li>
+                    <li>Metabolic state monitoring (fed/fasted/transitioning)</li>
+                    <li>Feeding interruption logging with categorized reasons</li>
+                    <li>Automated protein adequacy alerts</li>
+                    <li>Obesity-adjusted calculations (using ideal body weight)</li>
+                    <li>Renal and hepatic failure dose adjustments</li>
+                    <li>Export capability for documentation and audit</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-links">
+                <a href="nutrition-calculator.html" class="guideline-link">🧮 Open Nutrition Calculator</a>
+                <a href="nutrition-guideline.html" class="guideline-link secondary">📖 View Guidelines</a>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="../index.html" class="back-link">← Back to All Guidelines</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+            <p>For internal use by UHBW Critical Care staff</p>
+            <p class="version">ICU Nutrition Guidelines | December 2025</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/search.js"></script>
+</body>
+</html>
