@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Screen & Waveforms - Impella ICU Guideline</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nhs-blue: #005EB8; --nhs-dark-blue: #003087; --nhs-white: #FFFFFF;
+            --nhs-black: #212B32; --nhs-grey: #4C6272; --nhs-light-grey: #AEB7BD;
+            --nhs-pale-grey: #F0F4F5; --nhs-pale-blue: #E8EDEE; --nhs-red: #DA291C;
+        }
+        body { font-family: "Frutiger W01", Arial, sans-serif; line-height: 1.6; color: var(--nhs-black); background-color: var(--nhs-pale-grey); }
+        .header { background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%); color: var(--nhs-white); padding: 1.5rem 2rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .breadcrumb { background: white; padding: 1rem 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .breadcrumb-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .breadcrumb a { color: var(--nhs-blue); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--nhs-grey); }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .content-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
+        .section-header { color: var(--nhs-blue); font-size: 2rem; margin-bottom: 0.5rem; padding-bottom: 1rem; border-bottom: 3px solid var(--nhs-blue); }
+        .section-meta { color: var(--nhs-grey); font-size: 0.9rem; margin-bottom: 2rem; }
+        h2 { color: var(--nhs-blue); font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--nhs-pale-blue); }
+        h3 { color: var(--nhs-dark-blue); font-size: 1.25rem; margin: 1.5rem 0 1rem 0; }
+        h4 { color: var(--nhs-grey); font-size: 1.1rem; margin: 1rem 0 0.5rem 0; }
+        p { margin-bottom: 1rem; }
+        ul { margin: 1rem 0 1rem 2rem; }
+        li { margin-bottom: 0.75rem; }
+        .waveform-box { background: var(--nhs-pale-blue); border-left: 4px solid var(--nhs-blue); padding: 1.5rem; margin: 1rem 0; border-radius: 4px; }
+        .waveform-box h4 { color: var(--nhs-blue); margin-top: 0; }
+        .red-waveform { border-left-color: var(--nhs-red); }
+        .red-waveform h4 { color: var(--nhs-red); }
+        .figure { margin: 2rem 0; text-align: center; }
+        .figure img { max-width: 100%; height: auto; border: 1px solid var(--nhs-light-grey); border-radius: 4px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+        .figure-caption { margin-top: 0.75rem; font-style: italic; color: var(--nhs-grey); font-size: 0.95rem; }
+        .alert-info { background: var(--nhs-pale-blue); border-left: 4px solid var(--nhs-blue); padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--nhs-pale-grey); }
+        .nav-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--nhs-blue); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.3s ease; }
+        .nav-button:hover { background: var(--nhs-dark-blue); }
+        .nav-button.secondary { background: var(--nhs-grey); }
+        .nav-button.secondary:hover { background: var(--nhs-dark-blue); }
+        footer { background: var(--nhs-dark-blue); color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; }
+        footer p { margin-bottom: 0.25rem; opacity: 0.9; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+            .container { padding: 0 1rem; }
+            .content-card { padding: 1.5rem; }
+            .navigation-buttons { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+            <a href="../../index.html" class="nav-button secondary">← Back to Contents</a>
+        </div>
+    </header>
+
+    <nav class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="../../index.html">Home</a>
+            <span>›</span>
+            <span>Section 2</span>
+            <span>›</span>
+            <span>Placement Screen & Waveforms</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-card">
+            <h1 class="section-header">Section 2: Placement Screen & Waveforms</h1>
+            <div class="section-meta">Version 3.2 | March 2025 – December 2026</div>
+
+            <h2>Placement Screen</h2>
+
+            <p>The screen displays <strong>3 waveforms</strong> (Figure 5), as long as the device is set to P4 or above. At P1-P3, the white LV placement signal waveform will not be displayed.</p>
+
+            <h3>UPPER BOX: Placement Signal Waveforms</h3>
+
+            <div class="waveform-box red-waveform">
+                <h4>1. Aortic Placement Signal Waveform – RED waveform</h4>
+                <ul>
+                    <li>A display of pressure being measured (via an optical pressure monitor) from close to the outlet area of the cannula</li>
+                    <li>This should look like a typical arterial line trace, with a normal arterial diastolic pressure</li>
+                </ul>
+            </div>
+
+            <div class="waveform-box">
+                <h4>2. LV Placement Signal Waveform – WHITE waveform</h4>
+                <ul>
+                    <li>A display of a derived pressure (NOT being measured) which estimates the LV pressures</li>
+                    <li>This should look like a typical LV pressure waveform - with a much lower diastolic, but approximately same systolic, pressure as the Aortic placement signal waveform</li>
+                </ul>
+            </div>
+
+            <h3>LOWER BOX:</h3>
+
+            <div class="waveform-box">
+                <h4>3. Motor Current Waveform – GREEN waveform</h4>
+                <ul>
+                    <li>Motor current is a measure of the energy intake of the Impella catheter motor</li>
+                    <li>The energy intake varies with motor speed and the pressure difference between the inlet and outlet areas of the cannula</li>
+                    <li>When the catheter is positioned correctly, the motor current is pulsatile, due to the differing pressure between the inlet and outlet areas throughout the cardiac cycle</li>
+                </ul>
+            </div>
+
+            <div class="figure">
+                <img src="../../images/figure_5_waveforms.png" alt="Waveforms on placement screen">
+                <p class="figure-caption">Figure 5: Waveforms on the placement screen</p>
+            </div>
+
+            <div class="alert-info">
+                <p><strong>Using waveforms for position assessment:</strong></p>
+                <p>Using a combination of these waveforms, the catheter position can be checked and pressure/cardiac output data can be estimated. The AIC will automatically detect if the waveforms indicate catheter misplacement – and an alarm will sound to alert staff to the need to adjust the Impella catheter position (see Section 8 for Common Alarms).</p>
+            </div>
+
+            <h2>AIC Common Screen Additional Elements</h2>
+
+            <p>The bottom of the AIC screen contains 3 sections:</p>
+
+            <h3>1. Impella Flow:</h3>
+            <ul>
+                <li>The large number is the average flow being achieved from the Impella catheter over the last 10 seconds, at the current P value setting</li>
+                <li>There is also a minimum and maximum flow, which is the highest and lowest flows achieved at the current P value during the same period as the average is calculated</li>
+                <li><strong>This is NOT the exact current Impella flow</strong></li>
+            </ul>
+
+            <h3>2. Purge System:</h3>
+            <ul>
+                <li>A moving bar shows the purge system is working</li>
+                <li>As the AIC automatically adjusts the purge flow to achieve a purge pressure of 300-1100mmHg – the pressure and flow will be different hour to hour, and needs to be recorded in the patient's notes</li>
+            </ul>
+
+            <h3>3. Cardiac Output (CO) / Cardiac Power Output (CPO):</h3>
+            <ul>
+                <li>If calibrated, this box will provide estimated values of CO and CPO, using an aortic waveform detection algorithm, similar to the PiCCO CCO technology</li>
+                <li>Initial calibration requires values from a separate invasive thermodilution technique (Pulmonary Artery Catheter or PiCCO study) to be inputted. Non-invasive techniques and echocardiography are not valid</li>
+                <li><strong>Re-calibration is required every 24 hours.</strong> Once the Impella is in-situ, only a PAC study will give a true estimate of the cardiac output – PiCCO is not accurate</li>
+            </ul>
+
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="equipment.html" class="nav-button">← Equipment Overview</a>
+            <a href="../../index.html" class="nav-button">Back to Contents →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </footer>
+</body>
+</html>

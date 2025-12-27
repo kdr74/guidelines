@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purge Alarms - Impella ICU Guideline</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nhs-blue: #005EB8; --nhs-dark-blue: #003087; --nhs-white: #FFFFFF;
+            --nhs-black: #212B32; --nhs-grey: #4C6272; --nhs-light-grey: #AEB7BD;
+            --nhs-pale-grey: #F0F4F5; --nhs-pale-blue: #E8EDEE; --warning-red: #DA291C; --warning-yellow: #FFB81C;
+        }
+        body { font-family: "Frutiger W01", Arial, sans-serif; line-height: 1.6; color: var(--nhs-black); background-color: var(--nhs-pale-grey); }
+        .header { background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%); color: var(--nhs-white); padding: 1.5rem 2rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .breadcrumb { background: white; padding: 1rem 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .breadcrumb-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .breadcrumb a { color: var(--nhs-blue); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--nhs-grey); }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .content-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
+        .section-header { color: var(--nhs-blue); font-size: 2rem; margin-bottom: 0.5rem; padding-bottom: 1rem; border-bottom: 3px solid var(--nhs-blue); }
+        .section-meta { color: var(--nhs-grey); font-size: 0.9rem; margin-bottom: 2rem; }
+        h2 { color: var(--nhs-blue); font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--nhs-pale-blue); }
+        h3 { color: var(--nhs-dark-blue); font-size: 1.25rem; margin: 1.5rem 0 1rem 0; }
+        p { margin-bottom: 1rem; }
+        ul, ol { margin: 1rem 0 1rem 2rem; }
+        li { margin-bottom: 0.75rem; }
+        strong { color: var(--nhs-dark-blue); }
+        .alarm-card { background: #FFE5E5; border-left: 4px solid var(--warning-red); padding: 1.5rem; margin: 2rem 0; border-radius: 4px; }
+        .alarm-card h3 { color: #8B0000; margin-top: 0; margin-bottom: 1rem; }
+        .info-box { background: var(--nhs-pale-blue); border-left: 4px solid var(--nhs-blue); padding: 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+        .info-box p { margin-bottom: 0.5rem; }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--nhs-pale-grey); }
+        .nav-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--nhs-blue); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.3s ease; }
+        .nav-button:hover { background: var(--nhs-dark-blue); }
+        .nav-button.secondary { background: var(--nhs-grey); }
+        .nav-button.secondary:hover { background: var(--nhs-dark-blue); }
+        footer { background: var(--nhs-dark-blue); color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; }
+        footer p { margin-bottom: 0.25rem; opacity: 0.9; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+            .container { padding: 0 1rem; }
+            .content-card { padding: 1.5rem; }
+            .navigation-buttons { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+            <a href="../../index.html" class="nav-button secondary">← Back to Contents</a>
+        </div>
+    </header>
+
+    <nav class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="../../index.html">Home</a>
+            <span>›</span>
+            <span>Section 8</span>
+            <span>›</span>
+            <span>Purge Alarms</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-card">
+            <h1 class="section-header">Section 8: Purge System Alarms</h1>
+            <div class="section-meta">Version 3.2 | March 2025 – December 2026</div>
+
+            <div class="info-box">
+                <p><strong>Purge System Function:</strong></p>
+                <p>Purge pressure must always be greater than systolic blood pressure. The purge system delivers rinsing fluid to the Impella pump motor and prevents blood from entering it.</p>
+                <p><strong>Standard Purge Fluid:</strong> 500ml 5% dextrose bag with either 12.5mls 8.4% sodium bicarbonate/500mls, or 25 units per ml of heparin.</p>
+                <p><strong>Normal Parameters:</strong> Purge flow usually 2-30ml/hr with a pressure of 300-1100mmHg.</p>
+            </div>
+
+            <!-- Alarm 1 -->
+            <div class="alarm-card">
+                <h3>🔴 Purge Pressure Low (RED ALARM)</h3>
+                <p><strong>Trigger:</strong> Purge pressure &lt;300mmHg and flow greater than 30ml/hr</p>
+                
+                <p><strong>Management:</strong></p>
+                <ol>
+                    <li>Check for leaks and/or loose connections along the whole of the purge cassette and line, including making sure the yellow luer lock is connected and secure to the purge sidearm</li>
+                    <li>Consider changing the purge fluid to a higher dextrose concentration (dextrose 10-20%) (through "Purge menu" soft key select "Change purge fluid")</li>
+                    <li>If despite changing the purge fluid the alarm continues for 20 minutes, change the purge cassette</li>
+                    <li>If continued alarm despite above, need to consider changing the Impella catheter</li>
+                </ol>
+            </div>
+
+            <!-- Alarm 2 -->
+            <div class="alarm-card">
+                <h3>🔴 Purge Flow Low or Purge System Blocked (RED ALARM)</h3>
+                
+                <p><strong>Management:</strong></p>
+                <ol>
+                    <li>Check for kinks in tubing</li>
+                    <li>Ensure Tuohy Borst on the repositioning sheath is not too tight</li>
+                    <li>Monitor motor current for any upward trends</li>
+                    <li>Consider replacing Impella catheter</li>
+                </ol>
+            </div>
+
+            <!-- Alarm 3 -->
+            <div class="alarm-card">
+                <h3>🔴 Purge System Open Alarm (RED ALARM)</h3>
+                <p><strong>Trigger:</strong> Purge pressure is less than 100mmHg</p>
+                
+                <p><strong>Management:</strong></p>
+                <ol>
+                    <li>Inspect purge system for leaks</li>
+                    <li>If no leaks, replace purge cassette</li>
+                    <li>If alarm continues, will need to consider replacing the Impella catheter</li>
+                </ol>
+            </div>
+
+            <!-- Alarm 4 -->
+            <div class="alarm-card">
+                <h3>🔴 High Purge Pressure with Purge Flow Low (RED ALARM)</h3>
+                <p><strong>Trigger:</strong> Purge pressure exceeds 1100mmHg</p>
+                
+                <p><strong>Management:</strong></p>
+                <ol>
+                    <li>Inspect the purge system for any kinks in the tubing</li>
+                    <li>If pressure remains high decrease the concentration of the dextrose in the purge fluid</li>
+                    <li>Motor current should be monitored. If dampening of signal or persistent alarms, the Impella catheter should be replaced</li>
+                </ol>
+            </div>
+
+            <!-- Alarm 5 -->
+            <div class="alarm-card">
+                <h3>🔴 Purge System Blocked Alarm (RED ALARM)</h3>
+                
+                <p><strong>Management:</strong></p>
+                <ol>
+                    <li>Check Purge System tubing and Impella catheter for kinks</li>
+                    <li>Decrease the concentration of dextrose in purge fluid</li>
+                    <li>Replace the purge cassette</li>
+                </ol>
+            </div>
+
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="position-alarms.html" class="nav-button">← Position Alarms</a>
+            <a href="../../index.html" class="nav-button">Back to Contents →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </footer>
+</body>
+</html>

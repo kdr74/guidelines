@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impella CP with SmartAssist - ICU Management Guideline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-white: #FFFFFF;
+            --nhs-black: #212B32;
+            --nhs-grey: #4C6272;
+            --nhs-pale-grey: #F0F4F5;
+        }
+
+        body {
+            font-family: "Frutiger W01", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--nhs-black);
+            background-color: var(--nhs-pale-grey);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%);
+            color: var(--nhs-white);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+        }
+
+        .header-meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .intro-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .intro-card h2 {
+            color: var(--nhs-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .intro-card p {
+            margin-bottom: 1rem;
+            color: var(--nhs-grey);
+        }
+
+        .pdf-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--nhs-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .pdf-download:hover {
+            background: var(--nhs-dark-blue);
+        }
+
+        .contents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-card-header {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .section-card-header h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-card-header .section-number {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .section-card-body {
+            padding: 1.5rem;
+        }
+
+        .section-card-body ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .section-card-body li {
+            margin-bottom: 0.75rem;
+        }
+
+        .section-card-body a {
+            color: var(--nhs-grey);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            border-left: 3px solid transparent;
+            padding-left: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .section-card-body a:hover {
+            color: var(--nhs-blue);
+            border-left-color: var(--nhs-blue);
+            background: var(--nhs-pale-grey);
+        }
+
+        .appendices-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .appendices-card .section-card-header {
+            background: var(--nhs-grey);
+        }
+
+        .emergency-contacts {
+            background: #fff7e5;
+            border-left: 4px solid #ffb81c;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 2rem;
+        }
+
+        .emergency-contacts h3 {
+            color: var(--nhs-dark-blue);
+            margin-bottom: 1rem;
+        }
+
+        .emergency-contacts ul {
+            list-style: none;
+        }
+
+        .emergency-contacts li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .emergency-contacts li::before {
+            content: "📞";
+            position: absolute;
+            left: 0;
+        }
+
+        footer {
+            background: var(--nhs-dark-blue);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .header-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .contents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Impella CP with SmartAssist</h1>
+        <div class="subtitle">Mechanical Circulatory Support Device - ICU Management Guideline</div>
+        <div class="header-meta">
+            <div class="header-meta-item"><strong>Version:</strong> 3.2</div>
+            <div class="header-meta-item"><strong>Valid:</strong> March 2025 – December 2026</div>
+            <div class="header-meta-item"><strong>Setting:</strong> Bristol site – Cardiac Cath labs, GICU (A600), CICU (C604), Cardiac theatres</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="intro-card">
+            <h2>About This Guideline</h2>
+            <p><strong>Authors:</strong> M Govier (ICU Consultant), T Johnson (Cardiology Consultant), M Mariathas (Cardiology Consultant), J Strange (Cardiology Consultant)</p>
+            <p><strong>For Staff:</strong> All staff managing patients with Impella devices</p>
+            <p><strong>Patients:</strong> Adult patients requiring mechanical circulatory support during high-risk primary percutaneous coronary intervention (PPCI), or for cardiogenic shock</p>
+            <p>This guideline provides comprehensive clinical protocols for the management of patients with Impella CP with SmartAssist mechanical circulatory support devices in the Intensive Care Unit setting.</p>
+            <a href="Impella_CP_Smart-Assist_Device.pdf" class="pdf-download" target="_blank">📥 Download Complete PDF Guideline</a>
+        </div>
+
+        <h2 style="color: var(--nhs-blue); margin-bottom: 1.5rem; font-size: 2rem;">Contents</h2>
+
+        <div class="contents-grid">
+            <!-- Section 1 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 1</div>
+                    <h3>Overview, Indications, Contraindications</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section1/overview.html">Device Overview</a></li>
+                        <li><a href="sections/section1/indications.html">Indications for Use</a></li>
+                        <li><a href="sections/section1/contraindications.html">Contraindications</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 2</div>
+                    <h3>Equipment</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section2/disposables.html">Disposables</a></li>
+                        <li><a href="sections/section2/aic-controller.html">Automated Impella Controller (AIC)</a></li>
+                        <li><a href="sections/section2/placement-screen.html">Placement Screen & Waveforms</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 3</div>
+                    <h3>Insertion</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section3/pre-insertion.html">Pre-Insertion Considerations</a></li>
+                        <li><a href="sections/section3/insertion-procedure.html">Insertion Procedure</a></li>
+                        <li><a href="sections/section3/catheter-preparation.html">Catheter Preparation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 4</div>
+                    <h3>Staffing</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section4/staffing.html">Physician & Nursing Responsibilities</a></li>
+                        <li><a href="sections/section4/troubleshooting-contacts.html">Troubleshooting Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 5</div>
+                    <h3>ICU Management</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section5/icu-checkin.html">ICU Check-in Procedure</a></li>
+                        <li><a href="sections/section5/ongoing-care.html">Ongoing Care Requirements</a></li>
+                        <li><a href="sections/section5/nursing-management.html">Nursing Management</a></li>
+                        <li><a href="sections/section5/purge-fluid-change.html">Changing Purge Fluid</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 6</div>
+                    <h3>Escalation</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section6/escalation.html">Escalation Criteria & Planning</a></li>
+                        <li><a href="sections/section6/shock-management.html">Management of Cardiogenic Shock</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 7</div>
+                    <h3>Weaning & Removal</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section7/weaning.html">Weaning Instructions</a></li>
+                        <li><a href="sections/section7/removal.html">Removal Procedures</a></li>
+                        <li><a href="sections/section7/ecmo-weaning.html">Weaning During VA-ECMO</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 8</div>
+                    <h3>Complications & Alarms</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section8/purge-alarms.html">Purge System Alarms</a></li>
+                        <li><a href="sections/section8/position-alarms.html">Position Alarms</a></li>
+                        <li><a href="sections/section8/flow-suction.html">Flow/Suction Alarms</a></li>
+                        <li><a href="sections/section8/haemolysis.html">Haemolysis</a></li>
+                        <li><a href="sections/section8/hit.html">Heparin-Induced Thrombocytopenia</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 9 -->
+            <div class="section-card">
+                <div class="section-card-header">
+                    <div class="section-number">Section 9</div>
+                    <h3>Training</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/section9/nursing-training.html">Nursing Training</a></li>
+                        <li><a href="sections/section9/physician-training.html">Physician/ACCP/Perfusion Training</a></li>
+                        <li><a href="sections/section9/spr-training.html">Cardiology SpR Training</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Appendices -->
+            <div class="section-card appendices-card">
+                <div class="section-card-header">
+                    <div class="section-number">Appendices</div>
+                    <h3>Supporting Information</h3>
+                </div>
+                <div class="section-card-body">
+                    <ul>
+                        <li><a href="sections/appendices/algorithm.html">Appendix 1: BHI Ventricular Support Algorithm</a></li>
+                        <li><a href="sections/appendices/candidacy.html">Appendix 2: Candidacy for Shock Assessment</a></li>
+                        <li><a href="sections/appendices/echo-repositioning.html">Appendix 3: Echocardiography & Repositioning</a></li>
+                        <li><a href="sections/appendices/distal-perfusion.html">Appendix 4: Distal Perfusion Cannula</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="emergency-contacts">
+            <h3>⚠️ Emergency Contacts</h3>
+            <ul>
+                <li><strong>Cardiology Registrar:</strong> Extension 6527</li>
+                <li><strong>Cardiac Physiologist:</strong> Via switchboard (if out of hours)</li>
+                <li><strong>Interventional Cardiology Consultant:</strong> Via switchboard</li>
+                <li><strong>Abiomed 24hr Helpline:</strong> 001-800-422-8666</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+        <p>For queries: Dr Matt Govier (matthew.govier@uhbw.nhs.uk) or Dr Julian Strange (julian.strange@uhbw.nhs.uk)</p>
+    </footer>
+</body>
+</html>

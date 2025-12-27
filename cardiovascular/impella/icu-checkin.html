@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Check-in Procedure - Impella ICU Guideline</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nhs-blue: #005EB8; --nhs-dark-blue: #003087; --nhs-white: #FFFFFF;
+            --nhs-black: #212B32; --nhs-grey: #4C6272; --nhs-light-grey: #AEB7BD;
+            --nhs-pale-grey: #F0F4F5; --nhs-pale-blue: #E8EDEE; --warning-yellow: #FFB81C;
+        }
+        body { font-family: "Frutiger W01", Arial, sans-serif; line-height: 1.6; color: var(--nhs-black); background-color: var(--nhs-pale-grey); }
+        .header { background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%); color: var(--nhs-white); padding: 1.5rem 2rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .breadcrumb { background: white; padding: 1rem 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .breadcrumb-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .breadcrumb a { color: var(--nhs-blue); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--nhs-grey); }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .content-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
+        .section-header { color: var(--nhs-blue); font-size: 2rem; margin-bottom: 0.5rem; padding-bottom: 1rem; border-bottom: 3px solid var(--nhs-blue); }
+        .section-meta { color: var(--nhs-grey); font-size: 0.9rem; margin-bottom: 2rem; }
+        h2 { color: var(--nhs-blue); font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--nhs-pale-blue); }
+        h3 { color: var(--nhs-dark-blue); font-size: 1.25rem; margin: 1.5rem 0 1rem 0; }
+        p { margin-bottom: 1rem; }
+        ol { margin: 1rem 0 1rem 1rem; counter-reset: item; }
+        ol > li { margin-bottom: 1.5rem; display: block; padding-left: 2rem; position: relative; }
+        ol > li:before { content: counter(item) ". "; counter-increment: item; font-weight: 700; color: var(--nhs-blue); font-size: 1.2rem; position: absolute; left: 0; }
+        ul { margin: 0.5rem 0 0.5rem 2rem; }
+        ul li { margin-bottom: 0.5rem; }
+        strong { color: var(--nhs-dark-blue); }
+        .alert-warning { background: #FFF7E5; border-left: 4px solid var(--warning-yellow); padding: 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+        .alert-warning p { margin-bottom: 0.5rem; }
+        .alert-warning p:last-child { margin-bottom: 0; }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--nhs-pale-grey); }
+        .nav-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--nhs-blue); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.3s ease; }
+        .nav-button:hover { background: var(--nhs-dark-blue); }
+        .nav-button.secondary { background: var(--nhs-grey); }
+        .nav-button.secondary:hover { background: var(--nhs-dark-blue); }
+        footer { background: var(--nhs-dark-blue); color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; }
+        footer p { margin-bottom: 0.25rem; opacity: 0.9; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+            .container { padding: 0 1rem; }
+            .content-card { padding: 1.5rem; }
+            .navigation-buttons { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+            <a href="../../index.html" class="nav-button secondary">← Back to Contents</a>
+        </div>
+    </header>
+
+    <nav class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="../../index.html">Home</a>
+            <span>›</span>
+            <span>Section 5</span>
+            <span>›</span>
+            <span>ICU Check-in Procedure</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-card">
+            <h1 class="section-header">Section 5: ICU Check-in Procedure</h1>
+            <div class="section-meta">Version 3.2 | March 2025 – December 2026</div>
+
+            <h2>ICU Check-in from the Catheter Laboratory</h2>
+
+            <ol>
+                <li><strong>Ensure spare purge cassette is brought with the patient.</strong></li>
+
+                <li><strong>Trans-thoracic echocardiogram required to check position following transfer.</strong> See Appendix 3 for details – most importantly the edge of the distal stainless steel bead, where the inlet is, should be 3.5cm from the aortic valve annulus. TTE should be performed by:
+                    <ul>
+                        <li>ICU physician competent in TTE: At anytime</li>
+                        <li>Cardiology SpR (Ext #6527): 1700-0900 weekdays and all weekend</li>
+                        <li>Echocardiographer: 0900-1700 Monday-Friday</li>
+                    </ul>
+                </li>
+
+                <li><strong>Document position of Impella (in cm)</strong> at the sheath hub using the graduations on the catheter shaft after transfer of patient from trolley to bed.</li>
+
+                <li><strong>Ensure adequate preload</strong> (PCWP >10 if available, no suction alarms on Impella)</li>
+
+                <li><strong>Check and document colour of the limb</strong> distal to the Impella insertion point, peripheral pulses manually and with Doppler.</li>
+
+                <li><strong>At 4 hours post ICU admission, perform a TEG</strong>, to determine the TEG-ACT. If the TEG-ACT is >160, continue to perform TEGs every 4 hours until it is <160.</li>
+
+                <li><strong>Once TEG-ACT is 160 or lower,</strong> start a heparin infusion (without bolus) as per the ECMO guidelines (target Anti-Xa 0.3-0.5).</li>
+
+                <li><strong>Check and document colour of urine</strong> looking for presence of haemolysis.</li>
+
+                <li><strong>If patient is moving,</strong> leg immobilisation with a knee brace should be strongly considered.</li>
+            </ol>
+
+            <h2>Ongoing Care Requirements</h2>
+
+            <p><strong>All patients with an Impella in-situ require:</strong></p>
+
+            <ul>
+                <li><strong>Standard critical care monitoring including:</strong>
+                    <ul>
+                        <li>Central arterial line (a PiCCO is NOT required and will not function correctly)</li>
+                        <li>CVC</li>
+                        <li>Strong consideration should be given to inserting a Pulmonary Artery Catheter, ideally with continuous cardiac output capabilities</li>
+                    </ul>
+                </li>
+
+                <li><strong>Daily screening echocardiography</strong> to assess Impella position and LV function</li>
+
+                <li><strong>Daily ICU bloods</strong> including LDH, plasma free haemoglobin and fibrinogen levels</li>
+
+                <li><strong>Daily review by the ECMO consultant</strong></li>
+
+                <li><strong>Anticoagulation with unfractionated heparin infusion,</strong> as per the ECMO guidelines:
+                    <ul>
+                        <li>Target Anti-Xa of 0.3-0.5</li>
+                        <li>Anti-Xa levels should be sent at a minimum of every 6 hours</li>
+                    </ul>
+                </li>
+
+                <li><strong>Access site management</strong> - regular assessment of access site for bleeding/sheath position</li>
+
+                <li><strong>Knee immobiliser where required</strong> – the leg with the Impella in-situ must stay straight at the knee, although the patient may be flexed at the hip to a maximum of 30 degrees</li>
+            </ul>
+
+            <h2>Key Tips</h2>
+
+            <div class="alert-warning">
+                <p><strong>⚠️ Suction and position alarms</strong> indicate less ideal support and may be a precursor for haemolysis. In the event of suspected haemolysis (plasma free Hb >0.5) - reduce Impella flow rate and assess for position of the Impella catheter.</p>
+            </div>
+
+            <ul>
+                <li><strong>Major bleeding:</strong> In the event of major bleeding complications, it is likely that heparin will need to be discontinued. Given the device's position in the LV there is a high risk of thrombus formation with subsequent embolic phenomena and device failure. A decision to discontinue heparin and device removal should be made by the treating cardiologist and intensive care consultant in combination.</li>
+
+                <li><strong>Sedation threshold:</strong> If a patient requires ongoing Impella support but is not tolerating lying flat/agitated/confused there should be a low threshold for providing sedation and invasive ventilation to facilitate the optimal Impella device function.</li>
+
+                <li><strong>Cardiac arrest:</strong> In the event of cardiac arrest, Impella support should continue, but flow rates should be reduced down to P2. Following return of spontaneous circulation position of the Impella should be checked with echo and if adequate position is confirmed, the P level can be returned to the previous support level. <strong>Defibrillation is safe during Impella support.</strong></li>
+            </ul>
+
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="../../index.html" class="nav-button">← Back to Contents</a>
+            <a href="nursing-management.html" class="nav-button">Nursing Management →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </footer>
+</body>
+</html>
