@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow/Suction Alarms - Impella ICU Guideline</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nhs-blue: #005EB8; --nhs-dark-blue: #003087; --nhs-white: #FFFFFF;
+            --nhs-black: #212B32; --nhs-grey: #4C6272; --nhs-light-grey: #AEB7BD;
+            --nhs-pale-grey: #F0F4F5; --nhs-pale-blue: #E8EDEE; --warning-red: #DA291C; --warning-yellow: #FFB81C;
+        }
+        body { font-family: "Frutiger W01", Arial, sans-serif; line-height: 1.6; color: var(--nhs-black); background-color: var(--nhs-pale-grey); }
+        .header { background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%); color: var(--nhs-white); padding: 1.5rem 2rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.5rem; font-weight: 600; }
+        .breadcrumb { background: white; padding: 1rem 2rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+        .breadcrumb-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+        .breadcrumb a { color: var(--nhs-blue); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--nhs-grey); }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .content-card { background: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin-bottom: 2rem; }
+        .section-header { color: var(--nhs-blue); font-size: 2rem; margin-bottom: 0.5rem; padding-bottom: 1rem; border-bottom: 3px solid var(--nhs-blue); }
+        .section-meta { color: var(--nhs-grey); font-size: 0.9rem; margin-bottom: 2rem; }
+        h2 { color: var(--nhs-blue); font-size: 1.5rem; margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 2px solid var(--nhs-pale-blue); }
+        p { margin-bottom: 1rem; }
+        ol { margin: 1rem 0 1rem 1rem; counter-reset: item; }
+        ol > li { margin-bottom: 1rem; display: block; padding-left: 2rem; position: relative; }
+        ol > li:before { content: counter(item) ". "; counter-increment: item; font-weight: 700; color: var(--nhs-blue); font-size: 1.2rem; position: absolute; left: 0; }
+        strong { color: var(--nhs-dark-blue); }
+        .alert-warning { background: #FFF7E5; border-left: 4px solid var(--warning-yellow); padding: 1.5rem; margin: 1.5rem 0; border-radius: 4px; }
+        .alert-warning h3 { color: #8B6914; margin-top: 0; margin-bottom: 1rem; }
+        .navigation-buttons { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--nhs-pale-grey); }
+        .nav-button { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--nhs-blue); color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.3s ease; }
+        .nav-button:hover { background: var(--nhs-dark-blue); }
+        .nav-button.secondary { background: var(--nhs-grey); }
+        .nav-button.secondary:hover { background: var(--nhs-dark-blue); }
+        footer { background: var(--nhs-dark-blue); color: white; text-align: center; padding: 1.5rem; margin-top: 3rem; }
+        footer p { margin-bottom: 0.25rem; opacity: 0.9; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; gap: 1rem; }
+            .container { padding: 0 1rem; }
+            .content-card { padding: 1.5rem; }
+            .navigation-buttons { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+            <a href="../../index.html" class="nav-button secondary">← Back to Contents</a>
+        </div>
+    </header>
+
+    <nav class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="../../index.html">Home</a>
+            <span>›</span>
+            <span>Section 8</span>
+            <span>›</span>
+            <span>Flow/Suction Alarms</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="content-card">
+            <h1 class="section-header">Section 8: Flow/Suction Alarms</h1>
+            <div class="section-meta">Version 3.2 | March 2025 – December 2026</div>
+
+            <p>Suction may occur if the blood volume is inadequate for the Impella catheter. <strong>Suction limits the amount of support that the Impella Catheter can provide to the patient and results in a decrease in arterial pressure and cardiac output. It can also lead to haemolysis.</strong> These alarms can also occur when the patient is developing right heart failure.</p>
+
+            <div class="alert-warning">
+                <h3>⚠️ AUTO Mode Behaviour</h3>
+                <p>If the AIC detects suction while running in AUTO mode, it automatically reduces the motor speed to a lower flow rate to resolve the suction and displays an 'Impella Flow Reduced' advisory alarm. If the suction is cleared, the controller will return to the flow rate of the desired setting. If suction is still detected at lowest motor speed the AIC will display the 'suction' alarm.</p>
+                <p><strong>In manual configuration, any suction will require adjustment of the P-level by the clinical team.</strong></p>
+            </div>
+
+            <h2>General Management Steps</h2>
+
+            <ol>
+                <li>Reduce P-level by 1 or 2 steps</li>
+                <li>Assess patient's volume status and trial a small fluid bolus (250mls crystalloid)</li>
+                <li>Check Impella position with echocardiography and reposition if needed</li>
+                <li>Review RV function by assessing CVP/PAPs and via echo – and instigate RV failure treatments as required</li>
+                <li>Once resolved, return P-level to pre alarm settings</li>
+            </ol>
+
+            <h2>If AIC Detects Suction or Low Flows at Start Up</h2>
+
+            <ol>
+                <li>If clot entrainment is suspected, the Impella catheter will need to be removed and have the inflow, cannula and outflow gently flushed looking for thrombus</li>
+                <li>Check ACT above 250</li>
+                <li>Before re insertion, test the Impella catheter in a basin of clean sterile water</li>
+                <li>Exclude LV thrombus prior to re-insertion of the Impella catheter using echocardiography</li>
+            </ol>
+
+        </div>
+
+        <div class="navigation-buttons">
+            <a href="purge-alarms.html" class="nav-button">← Purge Alarms</a>
+            <a href="haemolysis.html" class="nav-button">Haemolysis →</a>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </footer>
+</body>
+</html>
