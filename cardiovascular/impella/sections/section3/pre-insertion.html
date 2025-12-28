@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-Insertion Considerations - Impella CP ICU Guideline</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-grey: #f0f4f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--nhs-light-grey);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--nhs-blue) 0%, var(--nhs-dark-blue) 100%);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breadcrumb a {
+            color: var(--nhs-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            color: var(--nhs-blue);
+            border-bottom: 3px solid var(--nhs-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--nhs-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .alert-critical h3 {
+            color: #721c24;
+            margin-top: 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border-left: 4px solid var(--nhs-blue);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .checklist h3 {
+            color: var(--nhs-blue);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .checklist ol {
+            margin-left: 1.5rem;
+        }
+
+        .checklist li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .checklist li strong {
+            color: #333;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-button {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: var(--nhs-dark-blue);
+        }
+
+        .footer {
+            background: var(--nhs-dark-blue);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+        <p>Section 3: Insertion - Pre-Insertion Considerations</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span>›</span>
+        <a href="../index.html">Impella Guideline</a>
+        <span>›</span>
+        <a href="../sections/section3/insertion.html">Section 3: Insertion</a>
+        <span>›</span>
+        <strong>Pre-Insertion Considerations</strong>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h1 class="section-header">Pre-Insertion Considerations</h1>
+
+            <div class="alert-critical">
+                <h3>⚠️ Critical Requirement</h3>
+                <p><strong>All insertions of Impella catheters must be performed in the cardiac catheter laboratory or cardiac theatres by a trained consultant Interventional Cardiologist or Cardiac Surgeon.</strong></p>
+            </div>
+
+            <div class="checklist">
+                <h3>Pre-Insertion Checklist</h3>
+                <ol>
+                    <li>
+                        <strong>Peripheral Vascular Disease (PVD) Assessment</strong>
+                        <p>All patients planned electively for an Impella (either as an inpatient or outpatient) should be assessed for a history of peripheral vascular disease.</p>
+                        <ul>
+                            <li>If history of PVD or claudication: obtain <strong>CT aortic/iliac/femoral angiogram</strong> prior to planned device insertion</li>
+                            <li>Assess patency of peripheral vessels</li>
+                            <li>Plan appropriate insertion approach:
+                                <ul>
+                                    <li>Femoral (standard)</li>
+                                    <li>Subclavian (percutaneous or surgical)</li>
+                                    <li>Axillary (percutaneous or surgical)</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Blood Tests Required</strong>
+                        <p>All patients must have the following blood tests prior to the procedure:</p>
+                        <ul>
+                            <li>Full blood count</li>
+                            <li>Coagulation screen</li>
+                            <li>Renal biochemistry</li>
+                            <li>Two sets of group and save</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Baseline Echocardiography</strong>
+                        <p>Baseline echo required to ensure there is:</p>
+                        <ul>
+                            <li>No significant aortic valve disease</li>
+                            <li>No LV thrombus</li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>Patient Admission</strong>
+                        <p>If the patient is not a current inpatient, admit to a cardiac ward/CCU the day before the procedure.</p>
+                    </li>
+
+                    <li>
+                        <strong>Anaesthetic Support Planning</strong>
+                        <p>Strong consideration needs to be given to having anaesthetic support planned and available from the start of the case, given the high probability of deteriorating cardiogenic shock.</p>
+                        
+                        <div class="alert-warning" style="margin-top: 0.5rem;">
+                            <p><strong>Anaesthesia support should be requested via:</strong></p>
+                            <ul style="margin-top: 0.5rem;">
+                                <li><strong>Elective/Semi-Elective case:</strong> Cardiac Anaesthesia group, via the CICU consultant</li>
+                                <li><strong>Emergency case:</strong> General Anaesthesia group (Bleep 3036), or Cardiogenic Shock Team (CST) activation via 2222 if patient meets calling criteria</li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <strong>ICU Bed Planning</strong>
+                        <p>If the Impella is explanted successfully at the end of the procedure and there are no signs of shock (see Appendix 1 – BHI Ventricular Support Algorithm), the patient may be admitted to a cardiac ward or CCU.</p>
+                        <p><strong>However, if the Impella remains in situ post-procedure, an ICU bed must be arranged in advance.</strong></p>
+                    </li>
+                </ol>
+            </div>
+
+            <h2>Location Requirements</h2>
+            <div class="alert-info">
+                <p><strong>Insertion must take place in:</strong></p>
+                <ul>
+                    <li>Cardiac catheter laboratory (BHI), OR</li>
+                    <li>Cardiac theatres</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Do not attempt insertion in other locations.</strong></p>
+            </div>
+
+            <h2>Operator Requirements</h2>
+            <p>Only the following trained personnel may insert Impella catheters:</p>
+            <ul>
+                <li>Consultant Interventional Cardiologist (with Impella training)</li>
+                <li>Consultant Cardiac Surgeon (with Impella training)</li>
+            </ul>
+
+            <p>All operators must have completed:</p>
+            <ul>
+                <li>Abiomed online training programme</li>
+                <li>In-person training with Abiomed representative</li>
+                <li>Proctored cases as required</li>
+            </ul>
+
+            <h2>Team Preparation</h2>
+            <p>Ensure the following personnel are available and prepared:</p>
+            <ul>
+                <li>Interventional Cardiologist / Cardiac Surgeon</li>
+                <li>Cardiac Physiologist (for AIC setup and monitoring)</li>
+                <li>Anaesthetist (as per point 5 above)</li>
+                <li>Cath lab nursing staff</li>
+                <li>Receiving ICU team (if device remaining in situ)</li>
+            </ul>
+
+            <div class="navigation">
+                <a href="insertion.html" class="nav-button">← Back to Insertion</a>
+                <a href="insertion-procedure.html" class="nav-button">Insertion Procedure →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </div>
+</body>
+</html>

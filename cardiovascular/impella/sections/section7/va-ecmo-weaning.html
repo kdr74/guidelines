@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weaning During VA-ECMO - Impella CP ICU Guideline</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-grey: #f0f4f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--nhs-light-grey);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--nhs-blue) 0%, var(--nhs-dark-blue) 100%);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breadcrumb a {
+            color: var(--nhs-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            color: var(--nhs-blue);
+            border-bottom: 3px solid var(--nhs-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--nhs-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .alert-critical h3 {
+            color: #721c24;
+            margin-top: 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border-left: 4px solid var(--nhs-blue);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .decision-box {
+            background: #f8f9fa;
+            border: 2px solid var(--nhs-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .decision-box h3 {
+            color: var(--nhs-blue);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-button {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: var(--nhs-dark-blue);
+        }
+
+        .footer {
+            background: var(--nhs-dark-blue);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+        <p>Section 7: Weaning & Removal - Weaning During VA-ECMO</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span>›</span>
+        <a href="../index.html">Impella Guideline</a>
+        <span>›</span>
+        <a href="../sections/section7/weaning.html">Section 7: Weaning & Removal</a>
+        <span>›</span>
+        <strong>Weaning During VA-ECMO</strong>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h1 class="section-header">Weaning During VA-ECMO</h1>
+
+            <div class="alert-info">
+                <p><strong>Management of patients on both VA-ECMO and Impella requires coordinated multidisciplinary decision-making.</strong></p>
+                <p>This is one of the most complex scenarios in cardiac critical care, requiring careful balancing of support from both devices.</p>
+            </div>
+
+            <h2>Decision-Making Team</h2>
+
+            <div class="decision-box">
+                <h3>👥 Multidisciplinary Consultation Required</h3>
+                <p><strong>The following consultants must collaborate on weaning decisions:</strong></p>
+                <ul>
+                    <li><strong>ECMO consultant</strong></li>
+                    <li><strong>Interventional cardiology consultant</strong></li>
+                    <li><strong>Imaging cardiology consultant</strong></li>
+                </ul>
+            </div>
+
+            <h2>Assessment Parameters</h2>
+
+            <p>Weaning decisions are based on comprehensive assessment of multiple parameters:</p>
+
+            <div class="alert-warning">
+                <h3>Key Assessment Criteria</h3>
+                <ul>
+                    <li><strong>Native cardiac contractility and output</strong>
+                        <ul>
+                            <li>Serial echocardiography to assess LV function</li>
+                            <li>Pulse contour analysis when available</li>
+                            <li>Assessment during temporary flow reductions</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>LV size and dimensions</strong>
+                        <ul>
+                            <li>Echo measurements of LV end-diastolic diameter</li>
+                            <li>Assessment of chamber dilation</li>
+                            <li>Wall motion abnormalities</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Pulmonary congestion</strong>
+                        <ul>
+                            <li>Chest X-ray findings</li>
+                            <li>Lung ultrasound B-lines</li>
+                            <li>PCWP measurements if PAC in situ</li>
+                        </ul>
+                    </li>
+                    
+                    <li><strong>Overall haemodynamics</strong>
+                        <ul>
+                            <li>Blood pressure and MAP</li>
+                            <li>End-organ perfusion markers</li>
+                            <li>Lactate and ScvO₂</li>
+                            <li>Urine output</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>Weaning Strategy</h2>
+
+            <p>There is no single protocol for weaning ECMO and Impella simultaneously. The strategy must be individualized based on:</p>
+
+            <ul>
+                <li>Primary pathology (acute MI, post-cardiotomy, myocarditis, etc.)</li>
+                <li>Evidence of myocardial recovery</li>
+                <li>LV distension and risk of stasis/thrombus</li>
+                <li>RV function</li>
+                <li>Duration of support</li>
+                <li>Complications encountered</li>
+            </ul>
+
+            <div class="alert-info">
+                <h3>⚖️ Complex Balancing Act</h3>
+                <p>Weaning ECMO and Impella requires balancing:</p>
+                <ul>
+                    <li><strong>LV unloading</strong> (Impella benefit) vs <strong>systemic perfusion</strong> (ECMO benefit)</li>
+                    <li><strong>Myocardial work</strong> (increased as support reduced) vs <strong>recovery time</strong> (benefit of continued rest)</li>
+                    <li><strong>Device-related complications</strong> (thrombosis, bleeding, infection) vs <strong>continued support benefit</strong></li>
+                </ul>
+            </div>
+
+            <h2>Individual Assessment Required</h2>
+
+            <p><strong>This is a complex balance, with individual assessment required at multiple time points.</strong></p>
+
+            <p>Serial assessments should include:</p>
+            <ul>
+                <li>Daily multidisciplinary rounds with imaging review</li>
+                <li>Regular echocardiography (at least daily, more frequently during active weaning)</li>
+                <li>Trial reductions in support with close monitoring</li>
+                <li>Biomarker trends (troponin, BNP)</li>
+                <li>Assessment of end-organ function</li>
+            </ul>
+
+            <h2>Impella Removal During VA-ECMO</h2>
+
+            <div class="alert-critical">
+                <h3>🏥 Surgical Removal Required</h3>
+                <p><strong>The Impella should be removed in cardiac theatres with primary vascular repair of the vessel for all patients on ECMO.</strong></p>
+            </div>
+
+            <div class="alert-critical">
+                <h3>💉 Anticoagulation Management</h3>
+                <p><strong>Removal should be performed with heparin anticoagulation still running</strong></p>
+                <p>This differs from standard Impella removal protocols and is necessary to:</p>
+                <ul>
+                    <li>Maintain ECMO circuit patency</li>
+                    <li>Reduce risk of thrombotic complications</li>
+                    <li>Allow surgical haemostasis under controlled conditions</li>
+                </ul>
+            </div>
+
+            <h2>Surgical Removal Procedure</h2>
+
+            <p><strong>Location:</strong> Cardiac theatres</p>
+
+            <p><strong>Team required:</strong></p>
+            <ul>
+                <li>Cardiac surgeon or vascular surgeon</li>
+                <li>Anaesthetist</li>
+                <li>Cardiac theatre nursing team</li>
+                <li>ECMO specialist (to manage ECMO during procedure)</li>
+                <li>Interventional cardiologist (advisory role)</li>
+            </ul>
+
+            <p><strong>Procedure:</strong></p>
+            <ul>
+                <li>Maintain full ECMO support throughout</li>
+                <li>Continue heparin infusion</li>
+                <li>Surgical exposure of femoral artery</li>
+                <li>Controlled removal of Impella catheter</li>
+                <li>Primary vascular repair with sutures</li>
+                <li>Assessment of distal limb perfusion</li>
+                <li>Wound closure</li>
+            </ul>
+
+            <h2>Post-Removal Care</h2>
+
+            <p>Following Impella removal in a patient still on VA-ECMO:</p>
+            <ul>
+                <li>Continue ECMO support as per plan</li>
+                <li>Monitor limb perfusion closely</li>
+                <li>Watch for bleeding from surgical site</li>
+                <li>Serial assessment of haemodynamics</li>
+                <li>Consider need for ongoing LV unloading strategies if indicated</li>
+            </ul>
+
+            <div class="navigation">
+                <a href="removal.html" class="nav-button">← Removal Procedures</a>
+                <a href="../sections/section8/purge-alarms.html" class="nav-button">Section 8: Complications & Alarms →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </div>
+</body>
+</html>

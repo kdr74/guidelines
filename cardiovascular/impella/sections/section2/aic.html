@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Impella Controller - Impella CP ICU Guideline</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-grey: #f0f4f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: var(--nhs-light-grey);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--nhs-blue) 0%, var(--nhs-dark-blue) 100%);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breadcrumb a {
+            color: var(--nhs-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            color: var(--nhs-blue);
+            border-bottom: 3px solid var(--nhs-blue);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            color: var(--nhs-blue);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            color: #333;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border-left: 4px solid var(--nhs-blue);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .function-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .function-box h4 {
+            color: var(--nhs-blue);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .figure {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .figure-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-button {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .nav-button:hover {
+            background: var(--nhs-dark-blue);
+        }
+
+        .footer {
+            background: var(--nhs-dark-blue);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Impella CP with SmartAssist - ICU Guideline</h1>
+        <p>Section 2: Equipment - Automated Impella Controller (AIC)</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span>›</span>
+        <a href="../index.html">Impella Guideline</a>
+        <span>›</span>
+        <a href="../sections/section2/equipment.html">Section 2: Equipment</a>
+        <span>›</span>
+        <strong>Automated Impella Controller</strong>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <h1 class="section-header">Automated Impella Controller (AIC)</h1>
+
+            <p>The Automated Impella Controller (AIC) is the primary user control interface for the Impella catheters. It provides automated monitoring, alarms, performance control, and information on catheter position.</p>
+
+            <div class="figure">
+                <img src="../../images/figure_3_console.png" alt="Automated Impella Controller Console">
+                <p class="figure-caption">Figure 3: Impella Console - Automated Impella Controller (AIC)</p>
+            </div>
+
+            <h2>Key Functions</h2>
+
+            <ul>
+                <li><strong>Automated alarms</strong> for position, flow, and purge system issues</li>
+                <li><strong>Performance control</strong> via adjustable P-levels (P1-P9)</li>
+                <li><strong>Catheter position monitoring</strong> using optical sensors and waveform analysis</li>
+                <li><strong>Priming and de-airing</strong> capabilities</li>
+                <li><strong>Automatic purge system</strong> that adjusts pressure to maintain constant flow through the device, preventing thrombosis of the micro-axial pump</li>
+            </ul>
+
+            <h2>AIC Soft Button Functions</h2>
+
+            <div class="function-box">
+                <h4>🔇 Mute Alarm</h4>
+                <p>Silences or clears alarms for 2 minutes</p>
+            </div>
+
+            <div class="function-box">
+                <h4>⚡ Flow Control</h4>
+                <p>Adjusts flow from 0.5 to 4.3 L/min via P1-P9 levels or AUTO mode (see Figure 4)</p>
+            </div>
+
+            <div class="function-box">
+                <h4>📊 Display</h4>
+                <p>Opens menu to select different display screens and change time settings</p>
+            </div>
+
+            <div class="function-box">
+                <h4>💉 Purge Menu</h4>
+                <p>Opens purge menu for selecting various purge procedures</p>
+            </div>
+
+            <div class="function-box">
+                <h4>⚙️ Menu</h4>
+                <p>Access settings, alarm history, data recording, repositioning guide, and case start functions</p>
+            </div>
+
+            <h2>Operating Modes</h2>
+
+            <div class="alert-info">
+                <h3>AUTO Mode (Recommended)</h3>
+                <p>The Impella CP with SmartAssist will normally be run on <strong>"AUTO" mode</strong>, where:</p>
+                <ul>
+                    <li>The desired P-level is set by the clinical team</li>
+                    <li>The AIC automatically adjusts the P-level to derive the best flow rate</li>
+                    <li>Minimizes suction events and pressure alarms</li>
+                    <li>Optimizes device performance based on patient haemodynamics</li>
+                </ul>
+            </div>
+
+            <div class="alert-warning">
+                <h3>Manual Mode</h3>
+                <p>Manual mode maintains the P-level selected by the clinician without automatic adjustment. This mode:</p>
+                <ul>
+                    <li>Has an <strong>increased risk of suction alarms</strong></li>
+                    <li>Is useful for evaluating effects of preload and afterload changes on flow rates</li>
+                    <li><strong>Required during:</strong>
+                        <ul>
+                            <li>Cardiac arrest (reduce to P2 until ROSC achieved)</li>
+                            <li>Catheter repositioning (reduce to P2)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>P-Levels and Flow Rates</h2>
+
+            <p>The AIC provides 9 performance levels (P1-P9) that control the speed of the micro-axial pump and therefore the flow rate delivered by the device.</p>
+
+            <div class="figure">
+                <img src="../../images/figure_4_p_levels.png" alt="P-Level Flow Rates">
+                <p class="figure-caption">Figure 4: P (Performance) levels and likely flow rates with correct catheter position and loading conditions</p>
+            </div>
+
+            <p><strong>Key points about P-levels:</strong></p>
+            <ul>
+                <li>P1-P3: Lower flow rates (0.5-2.0 L/min) - white LV placement signal waveform not displayed</li>
+                <li>P4-P9: Higher flow rates (2.5-4.3 L/min) - all three waveforms visible</li>
+                <li>Actual flow achieved depends on catheter position and patient loading conditions</li>
+                <li>In AUTO mode, the AIC may adjust between adjacent P-levels to optimize flow</li>
+            </ul>
+
+            <h2>Console Displays</h2>
+
+            <p>The AIC provides several screen displays including:</p>
+            <ul>
+                <li><strong>Placement Screen</strong> - Shows pressure waveforms and motor current (see Placement Screen & Waveforms section)</li>
+                <li><strong>Trends Screen</strong> - Historical data on flow, pressures, and alarms</li>
+                <li><strong>Alarms Screen</strong> - Current and historical alarm information</li>
+                <li><strong>Purge Screen</strong> - Purge system parameters and settings</li>
+            </ul>
+
+            <h2>Data Recording</h2>
+
+            <p>The AIC automatically records:</p>
+            <ul>
+                <li>Continuous waveform data</li>
+                <li>Flow rates and P-level settings</li>
+                <li>Alarm events with timestamps</li>
+                <li>Purge system parameters</li>
+            </ul>
+
+            <p>This data can be downloaded for review and quality assurance purposes.</p>
+
+            <div class="navigation">
+                <a href="disposables.html" class="nav-button">← Disposables</a>
+                <a href="placement-screen.html" class="nav-button">Placement Screen & Waveforms →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Version 3.2</strong> | Valid: March 2025 – December 2026</p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+    </div>
+</body>
+</html>
