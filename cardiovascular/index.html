@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardiovascular Guidelines - UHBW Critical Care</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #005EB8 0%, #003087 100%);
+            color: white;
+            padding: 2rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .breadcrumb a {
+            color: #005EB8;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            margin: 0 0.5rem;
+            color: #666;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .intro h2 {
+            color: #005EB8;
+            margin-bottom: 1rem;
+        }
+
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .guideline-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #005EB8;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .guideline-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .guideline-card h3 {
+            color: #005EB8;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .guideline-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-live {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-coming {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #666;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .guidelines-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Cardiovascular Guidelines</h1>
+        <p>Haemodynamic management, cardiac support, arrhythmia protocols</p>
+    </div>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>›</span>
+        <strong>Cardiovascular</strong>
+    </div>
+
+    <div class="container">
+        <div class="intro">
+            <h2>Overview</h2>
+            <p>Comprehensive cardiovascular support protocols for intensive care management including mechanical circulatory support devices, temporary cardiac pacing, and vasoactive medication guidelines.</p>
+        </div>
+
+        <div class="guidelines-grid">
+            <!-- Live Guidelines -->
+            <a href="impella/index.html" class="guideline-card">
+                <h3>Impella CP SmartAssist</h3>
+                <p>Complete ICU management guideline covering insertion, monitoring, troubleshooting, weaning, and complications. Includes equipment setup, alarm management, and escalation protocols.</p>
+                <span class="status-badge status-live">Live</span>
+            </a>
+
+            <!-- Coming Soon -->
+            <div class="guideline-card" style="opacity: 0.7; cursor: default;">
+                <h3>Temporary Cardiac Pacing</h3>
+                <p>Indications, insertion techniques, programming, and management of temporary transvenous pacing wires in critical care.</p>
+                <span class="status-badge status-coming">Coming Soon</span>
+            </div>
+
+            <div class="guideline-card" style="opacity: 0.7; cursor: default;">
+                <h3>Intra-Aortic Balloon Pump (IABP)</h3>
+                <p>IABP insertion, timing optimisation, troubleshooting, and weaning protocols for cardiogenic shock and high-risk PCI support.</p>
+                <span class="status-badge status-coming">Coming Soon</span>
+            </div>
+
+            <div class="guideline-card" style="opacity: 0.7; cursor: default;">
+                <h3>Methylene Blue Protocol</h3>
+                <p>Use of methylene blue for refractory vasoplegia in post-cardiac surgery and septic shock. Dosing, monitoring, and contraindications.</p>
+                <span class="status-badge status-coming">Coming Soon</span>
+            </div>
+
+            <div class="guideline-card" style="opacity: 0.7; cursor: default;">
+                <h3>VA-ECMO Management</h3>
+                <p>Veno-arterial ECMO for cardiac support including cannulation strategies, anticoagulation, weaning, and complication management.</p>
+                <span class="status-badge status-coming">Coming Soon</span>
+            </div>
+
+            <div class="guideline-card" style="opacity: 0.7; cursor: default;">
+                <h3>Arrhythmia Protocols</h3>
+                <p>Management of atrial fibrillation, ventricular arrhythmias, and bradyarrhythmias in critical care patients.</p>
+                <span class="status-badge status-coming">Coming Soon</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>UHBW Critical Care Guidelines</strong></p>
+        <p>University Hospitals Bristol and Weston NHS Foundation Trust</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">For clinical use only. Always verify against latest protocols.</p>
+    </div>
+</body>
+</html>
