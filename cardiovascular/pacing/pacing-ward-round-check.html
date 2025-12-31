@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporary Pacing: Daily Ward Round Check - UHBW ICU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #005EB8 0%, #003087 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .metadata {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #005EB8;
+        }
+
+        .metadata-toggle {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            user-select: none;
+        }
+
+        .metadata-toggle:hover {
+            background-color: rgba(0, 94, 184, 0.05);
+            border-radius: 5px;
+        }
+
+        .metadata-arrow {
+            transition: transform 0.3s;
+            font-size: 1.2em;
+            color: #005EB8;
+        }
+
+        .metadata-arrow.expanded {
+            transform: rotate(180deg);
+        }
+
+        .metadata-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .metadata-content.expanded {
+            max-height: 300px;
+            margin-top: 15px;
+        }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .metadata-item {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .metadata-label {
+            font-weight: 600;
+            color: #005EB8;
+            margin-right: 8px;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #856404;
+            color: #856404;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #721c24;
+            color: #721c24;
+        }
+
+        h2 {
+            color: #005EB8;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #005EB8;
+        }
+
+        h3 {
+            color: #003087;
+            margin: 20px 0 10px 0;
+        }
+
+        .flowchart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .flowchart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .steps-section {
+            margin: 30px 0;
+        }
+
+        .step-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #005EB8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .step-card h3 {
+            color: #005EB8;
+            margin-top: 0;
+        }
+
+        .step-card ul {
+            margin: 10px 0 10px 20px;
+        }
+
+        .step-card li {
+            margin: 5px 0;
+        }
+
+        .parameters-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .parameters-table th {
+            background-color: #005EB8;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .parameters-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .parameters-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .parameters-table tr:hover {
+            background-color: #e8f4f8;
+        }
+
+        .safety-box {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .safety-box h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .escalation-box {
+            background-color: #f8d7da;
+            border: 2px solid #dc3545;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .escalation-box h3 {
+            color: #721c24;
+            margin-top: 0;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #005EB8;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s, background-color 0.3s;
+            font-size: 1.5em;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background-color: #003087;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .back-to-top {
+                display: none;
+            }
+
+            .metadata-content {
+                max-height: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .parameters-table {
+                font-size: 0.9em;
+            }
+
+            .parameters-table th,
+            .parameters-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Temporary Pacing: Daily Ward Round Check</h1>
+            <p>Clinical Decision Support Tool for ICU Medical Staff</p>
+        </div>
+
+        <div class="metadata">
+            <div class="metadata-toggle" onclick="toggleMetadata()">
+                <strong>Document Information</strong>
+                <span class="metadata-arrow">▼</span>
+            </div>
+            <div class="metadata-content" id="metadataContent">
+                <div class="metadata-grid">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Document Type:</span>
+                        <span>Clinical Decision Support Tool</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Setting:</span>
+                        <span>General ICU (GICU), Cardiac ICU (CICU)</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">For Staff:</span>
+                        <span>ICU medical staff conducting ward rounds</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Related Guideline:</span>
+                        <span>Temporary Pacing Clinical Guideline v1.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>Purpose:</strong> This flowchart provides a systematic approach to daily pacemaker checks during medical ward rounds, ensuring patient safety and appropriate documentation.
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>⚠️ Critical Safety Rule:</strong> If the patient is pacing-dependent, a Consultant must be present on the unit before proceeding with threshold checks. Do not proceed if the Consultant is unavailable.
+        </div>
+
+        <h2>Clinical Decision Flowchart</h2>
+
+        <div class="flowchart-container">
+            <img src="data:image/svg+xml;base64,PHN2ZyBpZD0ibWVybWFpZC0xNzM1NjM3ODI1OTY3IiB3aWR0aD0iMTAwJSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgaGVpZ2h0PSIzMDgwIiB2aWV3Qm94PSIwIDAgNDg0LjY5NTMxMjUgMzA4MCI+PHN0eWxlPiNtZXJtYWlkLTE3MzU2Mzc4MjU5Njd7Zm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO2ZvbnQtc2l6ZToxNnB4O2ZpbGw6IzMzMzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAuZXJyb3ItaWNvbntmaWxsOiM1NTIyMjI7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmVycm9yLXRleHR7ZmlsbDojNTUyMjIyO3N0cm9rZTojNTUyMjIyO30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5lZGdlLXRoaWNrbmVzcy1ub3JtYWx7c3Ryb2tlLXdpZHRoOjJweDt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAuZWRnZS10aGlja25lc3MtdGhpY2t7c3Ryb2tlLXdpZHRoOjMuNXB4O30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5lZGdlLXBhdHRlcm4tc29saWR7c3Ryb2tlLWRhc2hhcnJheTowO30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5lZGdlLXBhdHRlcm4tZGFzaGVke3N0cm9rZS1kYXNoYXJyYXk6Mzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAuZWRnZS1wYXR0ZXJuLWRvdHRlZHtzdHJva2UtZGFzaGFycmF5OjI7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLm1hcmtlcntmaWxsOiMzMzMzMzM7c3Ryb2tlOiMzMzMzMzM7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLm1hcmtlci5jcm9zc3tzdHJva2U6IzMzMzMzMzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyBzdmcge2ZvbnQtZmFtaWx5OiJ0cmVidWNoZXQgbXMiLHZlcmRhbmEsYXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6MTZweDt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAubGFiZWx7Zm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO2NvbG9yOiMzMzM7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmNsdXN0ZXItbGFiZWwgdGV4dHtmaWxsOiMzMzM7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmNsdXN0ZXItbGFiZWwgc3BhbixjbHVzdGVyLWxhYmVsIHAge2NvbG9yOiMzMzM7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmxhYmVsIHRleHQsI21lcm1haWQtMTczNTYzNzgyNTk2NyBzcGFuLCNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgcHtmaWxsOiMzMzM7Y29sb3I6IzMzMzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAubm9kZSByZWN0LCNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLm5vZGUgY2lyY2xlLCNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLm5vZGUgZWxsaXBzZSwjbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5ub2RlIHBvbHlnb24sI21lcm1haWQtMTczNTYzNzgyNTk2NyAubm9kZSBwYXRoe2ZpbGw6I0VDRUNGRjtzdHJva2U6I2ZmZjtzdHJva2Utd2lkdGg6MXB4O30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5mbG93Y2hhcnQtbGFiZWx7dGV4dC1hbmNob3I6bWlkZGxlO30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5ub2RlLmNsaWNrYWJsZXtjdXJzb3I6cG9pbnRlcjt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAuYXJyb3doZWFkTWFya2Vye2ZpbGw6IzMzMzMzMzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyAuZWRnZVBhdGggLnBhdGh7c3Ryb2tlOiMzMzMzMzM7c3Ryb2tlLXdpZHRoOjIuMHB4O30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5mbG93Y2hhcnQtbGluayxlZGdlUGF0aHtzdHJva2U6IzMzMzMzMztmaWxsOm5vbmU7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmVkZ2VMYWJlbHtiYWNrZ3JvdW5kLWNvbG9yOiNlOGU4ZTg7dGV4dC1hbmNob3I6bWlkZGxlO30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5lZGdlTGFiZWwgcmVjdHtvcGFjaXR5OjAuNTtiYWNrZ3JvdW5kLWNvbG9yOiNlOGU4ZTg7ZmlsbDojZThlOGU4O30jbWVybWFpZC0xNzM1NjM3ODI1OTY3IC5jbHVzdGVyIHJlY3R7ZmlsbDojZmZmZmRlO3N0cm9rZTojYWFhYTMzO3N0cm9rZS13aWR0aDoxcHg7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmNsdXN0ZXIgdGV4dHtmaWxsOiMzMzM7fSNtZXJtYWlkLTE3MzU2Mzc4MjU5NjcgLmNsdXN0ZXIgc3BhbixjbHVzdGVyIHB7Y29sb3I6IzMzMzt9I21lcm1haWQtMTczNTYzNzgyNTk2NyBkaXYubWVybWFpZFRvb2x0aXB7cG9zaXRpb246YWJzb2x1dGU7dGV4dC1hbGlnbjpjZW50ZXI7bWF4LXdpZHRoOjIwMHB4O3BhZGRpbmc6MnB4O2ZvbnQtZmFtaWx5OiJ0cmVidWNoZXQgbXMiLHZlcmRhbmEsYXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6MTJweDtiYWNrZ3JvdW5kOmhzbGEoODAsIDEwMCUsIDk2LjI3NDUwOTgwMzklLCAwLjk1KTtib3JkZXI6MXB4IHNvbGlkICNhYWFhMzM7Ym9yZGVyLXJhZGl1czoycHg7cG9pbnRlci1ldmVudHM6bm9uZTt6LWluZGV4OjEwMDt9I21lcm1haWQtMTczNTYzNzgyNTk2NyA6cm9vdHstLW1lcm1haWQtZm9udC1mYW1pbHk6InRyZWJ1Y2hldCBtcyIsdmVyZGFuYSxhcmlhbCxzYW5zLXNlcmlmO308L3N0eWxlPjxnPjxtYXJrZXIgaWQ9ImZsb3djaGFydC1wb2ludEVuZCIgY2xhc3M9Im1hcmtlciBmbG93Y2hhcnQiIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iNiIgcmVmWT0iNSIgbWFya2VyVW5pdHM9InN0cm9rZVdpZHRoIiBtYXJrZXJXaWR0aD0iMTAiIG1hcmtlckhlaWdodD0iMTAiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTSAwIDAgTCAxMCA1IEwgMCAxMCB6IiBjbGFzcz0iYXJyb3doZWFkTWFya2VyIiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIvPjwvbWFya2VyPjxtYXJrZXIgaWQ9ImZsb3djaGFydC1wb2ludFN0YXJ0IiBjbGFzcz0ibWFya2VyIGZsb3djaGFydCIgdmlld0JveD0iMCAwIDEwIDEwIiByZWZYPSI0LjUiIHJlZlk9IjUiIG1hcmtlclVuaXRzPSJzdHJva2VXaWR0aCIgbWFya2VyV2lkdGg9IjEwIiBtYXJrZXJIZWlnaHQ9IjEwIiBvcmllbnQ9ImF1dG8iPjxjaXJjbGUgY3g9IjUiIGN5PSI1IiByPSI1IiBjbGFzcz0iYXJyb3doZWFkTWFya2VyIiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIvPjwvbWFya2VyPjxtYXJrZXIgaWQ9ImZsb3djaGFydC1jaXJjbGVFbmQiIGNsYXNzPSJtYXJrZXIgZmxvd2NoYXJ0IiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjExIiByZWZZPSI1IiBtYXJrZXJVbml0cz0ic3Ryb2tlV2lkdGgiIG1hcmtlcldpZHRoPSIxMSIgbWFya2VySGVpZ2h0PSIxMSIgb3JpZW50PSJhdXRvIj48Y2lyY2xlIGN4PSI1IiBjeT0iNSIgcj0iNSIgY2xhc3M9ImFycm93aGVhZE1hcmtlciIgc3R5bGU9InN0cm9rZS13aWR0aDogMTsgc3Ryb2tlLWRhc2hhcnJheTogMSwgMDsiLz48L21hcmtlcj48bWFya2VyIGlkPSJmbG93Y2hhcnQtY2lyY2xlU3RhcnQiIGNsYXNzPSJtYXJrZXIgZmxvd2NoYXJ0IiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjAiIHJlZlk9IjUiIG1hcmtlclVuaXRzPSJzdHJva2VXaWR0aCIgbWFya2VyV2lkdGg9IjExIiBtYXJrZXJIZWlnaHQ9IjExIiBvcmllbnQ9ImF1dG8iPjxjaXJjbGUgY3g9IjUiIGN5PSI1IiByPSI1IiBjbGFzcz0iYXJyb3doZWFkTWFya2VyIiBzdHlsZT0ic3Ryb2tlLXdpZHRoOiAxOyBzdHJva2UtZGFzaGFycmF5OiAxLCAwOyIvPjwvbWFya2VyPjxtYXJrZXIgaWQ9ImZsb3djaGFydC1jcm9zc0VuZCIgY2xhc3M9Im1hcmtlciBjcm9zcyBmbG93Y2hhcnQiIHZpZXdCb3g9IjAgMCAxMSAxMSIgcmVmWD0iMTIiIHJlZlk9IjUuMiIgbWFya2VyVW5pdHM9InN0cm9rZVdpZHRoIiBtYXJrZXJXaWR0aD0iMTEiIG1hcmtlckhlaWdodD0iMTEiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTSAxLDEgbCA5LDkgTSAxMCwxIGwgLTksOSIgY2xhc3M9ImFycm93aGVhZE1hcmtlciIgc3R5bGU9InN0cm9rZS13aWR0aDogMjsgc3Ryb2tlLWRhc2hhcnJheTogMSwgMDsiLz48L21hcmtlcj48bWFya2VyIGlkPSJmbG93Y2hhcnQtY3Jvc3NTdGFydCIgY2xhc3M9Im1hcmtlciBjcm9zcyBmbG93Y2hhcnQiIHZpZXdCb3g9IjAgMCAxMSAxMSIgcmVmWD0iLTEiIHJlZlk9IjUuMiIgbWFya2VyVW5pdHM9InN0cm9rZVdpZHRoIiBtYXJrZXJXaWR0aD0iMTEiIG1hcmtlckhlaWdodD0iMTEiIG9yaWVudD0iYXV0byI+PHBhdGggZD0iTSAxLDEgbCA5LDkgTSAxMCwxIGwgLTksOSIgY2xhc3M9ImFycm93aGVhZE1hcmtlciIgc3R5bGU9InN0cm9rZS13aWR0aDogMjsgc3Ryb2tlLWRhc2hhcnJheTogMSwgMDsiLz48L21hcmtlcj48Zz48Zz48Zz48cG9seWdvbiBwb2ludHM9IjQyLjAwMzkwNjI1LDMwMTggNDIuMDAzOTA2MjUsMzAzOCAyMjIuMzQ3NjU2MjUsMzA1NSAyNDIuMzQ3NjU2MjUsMzA1NCAyNDIuMzQ3NjU2MjUsMzAzNCAyMjIuMzQ3NjU2MjUsMzAzNCIgaWQ9ImZsb3djaGFydC1Db21wbGV0ZS0xNSIgY2xhc3M9Im5vZGUgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiIHN0eWxlPSJmaWxsOiAjMjhhNzQ1OyBzdHJva2U6ICMxZTdlMzQ7IHN0cm9rZS13aWR0aDogM3B4OyBjb2xvcjogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQyLjE3NTc4MTI1LDMwNDQpIj48L3BvbHlnb24+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQyLjE3NTc4MTI1LCAzMDQ0KSI+PGcgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCB3aWR0aD0iMjAwLjM0Mzc1IiBoZWlnaHQ9IjQwIj48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiB0YWJsZTsgaGVpZ2h0OiAxMDAlOyB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlOyB3aGl0ZS1zcGFjZTogbm93cmFwOyBsaW5lLWhlaWdodDogMS41OyBtYXgtd2lkdGg6IDIwMHB4OyB0ZXh0LWFsaWduOiBjZW50ZXI7Ij48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIiBzdHlsZT0iZGlzcGxheTogdGFibGUtY2VsbDsgd2hpdGUtc3BhY2U6IG5vcm1hbDsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsiPuKckyBDaGVjayBDb21wbGV0ZTxiciAvPkRvY3VtZW50IGluIENJUzwvZGl2PjwvZGl2PjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjwvZz48Zz48cmVjdCBpZD0iZmxvd2NoYXJ0LU1vbml0b3JQbGFuLTEzIiBjbGFzcz0ibm9kZSBkZWZhdWx0IGZsb3djaGFydC1sYWJlbCIgcng9IjVweCIgcnk9IjVweCIgeD0iMCIgeT0iMCIgd2lkdGg9IjE1NC41NjI1IiBoZWlnaHQ9IjY0IiBzdHlsZT0iZmlsbDogI0VDRUNGRjsgc3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMXB4OyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTE3Ljg3ODkwNjI1LCAyODk0KSI+PC9yZWN0PjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xNy44Nzg5MDYyNSwgMjg5NCkiPjxnIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3Qgd2lkdGg9IjE1NC41NjI1IiBoZWlnaHQ9IjY0Ij48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiB0YWJsZTsgaGVpZ2h0OiAxMDAlOyB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlOyB3aGl0ZS1zcGFjZTogbm93cmFwOyBsaW5lLWhlaWdodDogMS41OyBtYXgtd2lkdGg6IDIwMHB4OyB0ZXh0LWFsaWduOiBjZW50ZXI7Ij48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIiBzdHlsZT0iZGlzcGxheTogdGFibGUtY2VsbDsgd2hpdGUtc3BhY2U6IG5vcm1hbDsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsiPkNvbnRpbnVlIHRlbXBvcmFyeSBwYWNpbmc8YnIgLz5SZXZpZXcgZGFpbHk8L2Rpdj48L2Rpdj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48L2c+PGc+PHJlY3QgaWQ9ImZsb3djaGFydC1XZWFuUGxhbi0xNCIgY2xhc3M9Im5vZGUgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiIHJ4PSI1cHgiIHJ5PSI1cHgiIHg9IjAiIHk9IjAiIHdpZHRoPSIxNTQuOTgwNDY4NzUiIGhlaWdodD0iNjQiIHN0eWxlPSJmaWxsOiAjRUNFQ0ZGOyBzdHJva2U6IHJnYigyNTUsIDI1NSwgMjU1KTsgc3Ryb2tlLXdpZHRoOiAxcHg7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzcuNzgwMjczNDM3NSwgMjg5NCkiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzcuNzgwMjczNDM3NSwgMjg5NCkiPjxnIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3Qgd2lkdGg9IjE1NC45ODA0Njg3NSIgaGVpZ2h0PSI2NCI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PGRpdiBzdHlsZT0iZGlzcGxheTogdGFibGU7IGhlaWdodDogMTAwJTsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsgd2hpdGUtc3BhY2U6IG5vd3JhcDsgbGluZS1oZWlnaHQ6IDEuNTsgbWF4LXdpZHRoOiAyMDBweDsgdGV4dC1hbGlnbjogY2VudGVyOyI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCIgc3R5bGU9ImRpc3BsYXk6IHRhYmxlLWNlbGw7IHdoaXRlLXNwYWNlOiBub3JtYWw7IHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7Ij5QbGFuIGZvciB3aXJlIHJlbW92YWw8YnIgLz5vciBQUE0gaWYgaW5kaWNhdGVkPC9kaXY+PC9kaXY+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PC9nPjxnPjxyZWN0IGlkPSJmbG93Y2hhcnQtQ29uc3VsdGFudC0xMiIgY2xhc3M9Im5vZGUgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiIHJ4PSI1cHgiIHJ5PSI1cHgiIHg9IjAiIHk9IjAiIHdpZHRoPSI5Ni45NjQzNTU0Njg3NSIgaGVpZ2h0PSI2NCIgc3R5bGU9ImZpbGw6ICNFQ0VDRkY7IHN0cm9rZTogcmdiKDI1NSwgMjU1LCAyNTUpOyBzdHJva2Utd2lkdGg6IDFweDsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5Mi43Mjc1MzkwNjI1LCAyODk0KSI+PC9yZWN0PjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM5Mi43Mjc1MzkwNjI1LCAyODk0KSI+PGcgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCB3aWR0aD0iOTYuOTY0MzU1NDY4NzUiIGhlaWdodD0iNjQiPjxkaXYgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiPjxkaXYgc3R5bGU9ImRpc3BsYXk6IHRhYmxlOyBoZWlnaHQ6IDEwMCU7IHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7IHdoaXRlLXNwYWNlOiBub3dyYXA7IGxpbmUtaGVpZ2h0OiAxLjU7IG1heC13aWR0aDogMjAwcHg7IHRleHQtYWxpZ246IGNlbnRlcjsiPjxkaXYgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiIHN0eWxlPSJkaXNwbGF5OiB0YWJsZS1jZWxsOyB3aGl0ZS1zcGFjZTogbm9ybWFsOyB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlOyI+RGlzY3VzcyB3aXRoPGJyIC8+Q29uc3VsdGFudDwvZGl2PjwvZGl2PjwvZGl2PjwvZm9yZWlnbk9iamVjdD48L2c+PC9nPjwvZz48Zz48cmVjdCBpZD0iZmxvd2NoYXJ0LUVzY2FsYXRlQ2FyZGlvbG9neS03IiBjbGFzcz0ibm9kZSBkZWZhdWx0IGZsb3djaGFydC1sYWJlbCIgcng9IjVweCIgcnk9IjVweCIgeD0iMCIgeT0iMCIgd2lkdGg9IjE3My42Njg5NDUzMTI1IiBoZWlnaHQ9IjEwMCIgc3R5bGU9ImZpbGw6IHJnYigyMjAsIDUzLCA2OSk7IHN0cm9rZTogcmdiKDE4OSwgMzMsIDQ4KTsgc3Ryb2tlLXdpZHRoOiAzcHg7IGNvbG9yOiByZ2IoMjU1LCAyNTUsIDI1NSk7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjYuNjcwODk4NDM3NSwgMjcwNikiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNjYuNjcwODk4NDM3NSwgMjcwNikiPjxnIGNsYXNzPSJsYWJlbCI+PGZvcmVpZ25PYmplY3Qgd2lkdGg9IjE3My42Njg5NDUzMTI1IiBoZWlnaHQ9IjEwMCI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PGRpdiBzdHlsZT0iZGlzcGxheTogdGFibGU7IGhlaWdodDogMTAwJTsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsgd2hpdGUtc3BhY2U6IG5vd3JhcDsgbGluZS1oZWlnaHQ6IDEuNTsgbWF4LXdpZHRoOiAyMDBweDsgdGV4dC1hbGlnbjogY2VudGVyOyI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCIgc3R5bGU9ImRpc3BsYXk6IHRhYmxlLWNlbGw7IHdoaXRlLXNwYWNlOiBub3JtYWw7IHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7Ij7wn5qoIEVTQ0FMQVRFPGJ1IiAvPkNvbnRhY3QgQ2FyZGlvbG9neTxiciAvPkNvbnNpZGVyIGFsdGVybmF0aXZlPGJyIC8+cGFjaW5nIG1ldGhvZHM8L2Rpdj48L2Rpdj48L2Rpdj48L2ZvcmVpZ25PYmplY3Q+PC9nPjwvZz48L2c+PGc+PHBvbHlnb24gcG9pbnRzPSI1NS45ODI0MjE4NzUsMjc1NiAwLDI4MDYgNTUuOTgyNDIxODc1LDI4NTYgMTExLjk2NDg0Mzc1LDI4MDYiIGlkPSJmbG93Y2hhcnQtRGVjaXNpb25QYWNpbmctMTEiIGNsYXNzPSJub2RlIGRlZmF1bHQgZmxvd2NoYXJ0LWxhYmVsIiBzdHlsZT0iZmlsbDogI0VDRUNGRjsgc3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMXB4OyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTg0LjE4MTY0MDYyNSwgMjgwNikiPjwvcG9seWdvbj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODQuMTgxNjQwNjI1LCAyODA2KSI+PGcgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCB3aWR0aD0iMTA0IiBoZWlnaHQ9IjQwIj48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj48ZGl2IHN0eWxlPSJkaXNwbGF5OiB0YWJsZTsgaGVpZ2h0OiAxMDAlOyB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlOyB3aGl0ZS1zcGFjZTogbm93cmFwOyBsaW5lLWhlaWdodDogMS41OyBtYXgtd2lkdGg6IDIwMHB4OyB0ZXh0LWFsaWduOiBjZW50ZXI7Ij48ZGl2IHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIiBzdHlsZT0iZGlzcGxheTogdGFibGUtY2VsbDsgd2hpdGUtc3BhY2U6IG5vcm1hbDsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsiPk9uZ29pbmcgTmVlZDxiciAvPmZvciBQYWNpbmc/PC9kaXY+PC9kaXY+PC9kaXY+PC9mb3JlaWduT2JqZWN0PjwvZz48L2c+PC9nPjxnPjxyZWN0IGlkPSJmbG93Y2hhcnQtRmluYWxDaGVjay0xMCIgY2xhc3M9Im5vZGUgZGVmYXVsdCBmbG93Y2hhcnQtbGFiZWwiIHJ4PSI1cHgiIHJ5PSI1cHgiIHg9IjAiIHk9IjAiIHdpZHRoPSIxNjYuNTg5ODQzNzUiIGhlaWdodD0iMTAwIiBzdHlsZT0iZmlsbDogI0VDRUNGRjsgc3Ryb2tlOiByZ2IoMjU1LCAyNTUsIDI1NSk7IHN0cm9rZS13aWR0aDogMXB4OyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAwLjU0ODgyODEyNSwgMjU2NikiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAuNTQ4ODI4MTI1LCAyNTY2KSI+PGcgY2xhc3M9ImxhYmVsIj48Zm9yZWlnbk9iamVjdCB3aWR0aD0iMTY2LjU4OTg0Mzc1IiBoZWlnaHQ9IjEwMCI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCI+PGRpdiBzdHlsZT0iZGlzcGxheTogdGFibGU7IGhlaWdodDogMTAwJTsgdmVydGljYWwtYWxpZ246IG1pZGRsZTsgd2hpdGUtc3BhY2U6IG5vd3JhcDsgbGluZS1oZWlnaHQ6IDEuNTsgbWF4LXdpZHRoOiAyMDBweDsgdGV4dC1hbGlnbjogY2VudGVyOyI+PGRpdiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94aHRtbCIgc3R5bGU9ImRpc3BsYXk6IHRhYmxlLWNlbGw7IHdoaXRlLXNwYWNlOiBub3JtYWw7IHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7Ij5GaW5hbCBEb2N1bWVudGF0aW9uOjxiciAvPuKAoiBVbmRlcmx5aW5nIHJoeXRobTxiciAvPuKAoiBUaHJlc2hvbGQgdmFsdWU8YnIgLz7igKIgQ3VycmVudCBzZXR0aW5nczxiciAvPuKAoiBQbGFuIGZvciB3ZWFuaW5nL1BQTQ==</img>
+            <p style="margin-top: 15px; font-style: italic; color: #666;">
+                Clinical decision flowchart for daily temporary pacing checks
+            </p>
+        </div>
+
+        <h2>Step-by-Step Process</h2>
+
+        <div class="steps-section">
+            <div class="step-card">
+                <h3>Initial Safety Assessment</h3>
+                <ul>
+                    <li><strong>Determine pacing dependency:</strong> Is the patient fully pacing-dependent?</li>
+                    <li><strong>If YES:</strong> Confirm consultant presence on unit before proceeding</li>
+                    <li><strong>If NO:</strong> Proceed with routine checks</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 1: Assess Underlying Rhythm</h3>
+                <ul>
+                    <li>Slowly decrease the pacing rate below the patient's intrinsic rate</li>
+                    <li>Observe for stable underlying rhythm</li>
+                    <li>If stable rhythm present: Consider obtaining 12-lead ECG and document</li>
+                    <li>If unstable or no rhythm: Document as pacing-dependent and skip to Step 2</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 2: Review Pacing Settings</h3>
+                <ul>
+                    <li>Confirm current mode is appropriate (VVI vs DDD)</li>
+                    <li>Verify rate setting is optimal for patient</li>
+                    <li>Reassess ongoing indication for pacing</li>
+                    <li>Make adjustments if needed and document changes</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 3: Check Output Threshold</h3>
+                <ul>
+                    <li>Set pacing rate above patient's intrinsic rate</li>
+                    <li>Gradually decrease output until loss of capture</li>
+                    <li>Record the threshold value (minimum output for capture)</li>
+                    <li>Set final output at 2× threshold (typically 25-50% above threshold)</li>
+                    <li><strong>If no capture at maximum:</strong> Seek senior help immediately</li>
+                    <li><strong>If threshold >10V:</strong> Escalate to Cardiology</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 4: Check Sensitivity</h3>
+                <ul>
+                    <li>Press PAUSE button on pulse generator</li>
+                    <li>Observe P wave and R wave amplitudes</li>
+                    <li><strong>If R wave visible:</strong> Set V-sense to 1/3 of R wave amplitude (or as low as possible, whichever is higher)</li>
+                    <li><strong>If no rhythm visible:</strong> Set V-sense to default 1mV</li>
+                    <li>Document sensitivity setting in clinical notes</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Parameters to Record</h2>
+
+        <table class="parameters-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>What to Document</th>
+                    <th>Typical Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mode</strong></td>
+                    <td>VVI or DDD (or other if applicable)</td>
+                    <td>VVI most common</td>
+                </tr>
+                <tr>
+                    <td><strong>Rate</strong></td>
+                    <td>Current pacing rate in bpm</td>
+                    <td>80-90 bpm typical</td>
+                </tr>
+                <tr>
+                    <td><strong>Output</strong></td>
+                    <td>Current output in mA or V</td>
+                    <td>2× threshold value</td>
+                </tr>
+                <tr>
+                    <td><strong>Threshold</strong></td>
+                    <td>Minimum capture threshold found</td>
+                    <td>Should be <10V</td>
+                </tr>
+                <tr>
+                    <td><strong>Sensitivity</strong></td>
+                    <td>V-sense setting in mV</td>
+                    <td>1mV typical or 1/3 R wave</td>
+                </tr>
+                <tr>
+                    <td><strong>Underlying Rhythm</strong></td>
+                    <td>Type and rate of intrinsic rhythm</td>
+                    <td>Document if present</td>
+                </tr>
+                <tr>
+                    <td><strong>R Wave Amplitude</strong></td>
+                    <td>Height of R wave if visible</td>
+                    <td>Used to calculate sensitivity</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Critical Stop Points</h2>
+
+        <div class="safety-box">
+            <h3>⚠️ Mandatory Stop: Pacing-Dependent Patient</h3>
+            <p><strong>If patient is pacing-dependent and Consultant is NOT on unit:</strong></p>
+            <ul>
+                <li>STOP the ward round check immediately</li>
+                <li>Wait for Consultant to arrive before proceeding</li>
+                <li>Do not attempt threshold checks without consultant supervision</li>
+                <li>Reason: Loss of pacing during checks could be life-threatening</li>
+            </ul>
+        </div>
+
+        <div class="escalation-box">
+            <h3>🚨 Escalation Required: High Threshold</h3>
+            <p><strong>If threshold >10V:</strong></p>
+            <ul>
+                <li>Escalate to Cardiology immediately</li>
+                <li>Consider alternative pacing methods</li>
+                <li>Increase output to maximum if needed for patient safety</li>
+                <li>High threshold suggests wire dislodgement or exit block</li>
+            </ul>
+        </div>
+
+        <div class="escalation-box">
+            <h3>🚨 Emergency: Loss of Capture</h3>
+            <p><strong>If unable to achieve capture even at maximum output:</strong></p>
+            <ul>
+                <li>Seek senior help immediately</li>
+                <li>Prepare for alternative pacing (transcutaneous if needed)</li>
+                <li>Check all connections and battery status</li>
+                <li>Consider wire dislodgement or failure</li>
+            </ul>
+        </div>
+
+        <h2>Final Documentation</h2>
+
+        <div class="alert alert-info">
+            <strong>Document in Clinical Information System (CIS):</strong>
+            <ul style="margin: 10px 0 0 20px;">
+                <li>Presence and characteristics of underlying rhythm</li>
+                <li>Threshold value recorded during check</li>
+                <li>All current pacemaker settings (mode, rate, output, sensitivity)</li>
+                <li>Plan for ongoing pacing vs weaning vs permanent pacemaker</li>
+                <li>Any complications or concerns identified</li>
+                <li>Consultant notification if escalation required</li>
+            </ul>
+        </div>
+
+        <h2>Decision Outcomes</h2>
+
+        <div class="step-card">
+            <h3>Continue Temporary Pacing</h3>
+            <p>If ongoing need for pacing identified:</p>
+            <ul>
+                <li>Continue current pacing strategy</li>
+                <li>Review daily during ward rounds</li>
+                <li>Reassess underlying rhythm regularly</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3>Plan for Weaning</h3>
+            <p>If stable underlying rhythm with good rate:</p>
+            <ul>
+                <li>Consider reducing backup pacing rate</li>
+                <li>Plan for wire removal once criteria met</li>
+                <li>Ensure patient afebrile >24 hours before removal</li>
+            </ul>
+        </div>
+
+        <div class="step-card">
+            <h3>Consider Permanent Pacemaker</h3>
+            <p>If persistent pacing requirement:</p>
+            <ul>
+                <li>Discuss with Cardiology/Consultant</li>
+                <li>Ensure patient afebrile >24 hours before PPM insertion</li>
+                <li>Document indication for permanent pacing</li>
+            </ul>
+        </div>
+
+        <div class="alert alert-warning" style="margin-top: 30px;">
+            <strong>Remember:</strong> Patient safety is paramount. When in doubt, consult with a senior colleague before proceeding with threshold checks or making significant changes to pacing settings.
+        </div>
+
+        <div class="back-to-top" onclick="scrollToTop()">↑</div>
+    </div>
+
+    <script>
+        function toggleMetadata() {
+            const content = document.getElementById('metadataContent');
+            const arrow = document.querySelector('.metadata-arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                arrow.classList.add('expanded');
+            }
+        }
+
+        // Back to top button functionality
+        window.onscroll = function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>

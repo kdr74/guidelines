@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporary Pacing Guidelines - UHBW ICU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #005EB8 0%, #003087 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .breadcrumb {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .breadcrumb a {
+            color: #005EB8;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: #4C6272;
+            margin: 0 8px;
+        }
+
+        h2 {
+            color: #005EB8;
+            font-size: 1.5rem;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #E8EDEE;
+        }
+
+        .guideline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .guideline-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            border-left: 4px solid #005EB8;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .guideline-card:hover {
+            box-shadow: 0 4px 12px rgba(0,94,184,0.15);
+            transform: translateY(-2px);
+        }
+
+        .guideline-card h3 {
+            color: #005EB8;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .guideline-card p {
+            color: #4C6272;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .guideline-card .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #F0F4F5;
+            font-size: 0.85rem;
+            color: #4C6272;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .badge-guideline {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-interactive {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .badge-reference {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-flowchart {
+            background-color: #e7e7ff;
+            color: #3d3d8e;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #005EB8;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #003087;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #E8EDEE;
+            text-align: center;
+            color: #4C6272;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .guideline-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="../../index.html">UHBW ICU Guidelines</a>
+            <span>›</span>
+            <a href="../index.html">Cardiovascular</a>
+            <span>›</span>
+            <strong>Temporary Pacing</strong>
+        </div>
+
+        <div class="header">
+            <h1>Temporary Pacing Guidelines</h1>
+            <p>Clinical protocols for temporary cardiac pacing management in ICU</p>
+        </div>
+
+        <div class="alert alert-info">
+            <strong>📱 Mobile Optimised:</strong> All guidelines are fully responsive and optimised for use on mobile devices at the bedside.
+        </div>
+
+        <h2>Clinical Guidelines & Tools</h2>
+        
+        <div class="guideline-grid">
+            <!-- Main Clinical Guideline -->
+            <div class="guideline-card">
+                <span class="badge badge-guideline">Clinical Guideline</span>
+                <h3>Temporary Pacing Guideline</h3>
+                <p>Comprehensive guideline covering epicardial and transvenous temporary pacing including indications, contraindications, equipment, insertion procedures, daily care, troubleshooting, and complications management.</p>
+                <div class="meta">
+                    <span>📄 Full Guideline</span>
+                    <a href="temporary_pacing_guide.html" class="btn">View Guideline</a>
+                </div>
+            </div>
+
+            <!-- Interactive Tool -->
+            <div class="guideline-card">
+                <span class="badge badge-interactive">Interactive Tool</span>
+                <h3>Medical Ward Round Check (Interactive)</h3>
+                <p>Interactive stepwise tool for daily pacing checks. Records parameters, guides threshold testing, and generates documentation-ready summary. Includes safety stops for pacing-dependent patients and automatic calculations.</p>
+                <div class="meta">
+                    <span>🔧 Interactive</span>
+                    <a href="pacing-check-interactive.html" class="btn">Launch Tool</a>
+                </div>
+            </div>
+
+            <!-- Quick Reference Guide -->
+            <div class="guideline-card">
+                <span class="badge badge-reference">Quick Guide</span>
+                <h3>Medical Ward Round Check (Quickguide)</h3>
+                <p>Quick reference guide for routine pacing checks during ward rounds. Includes step-by-step procedures, parameter tables, safety checkpoints, and escalation criteria.</p>
+                <div class="meta">
+                    <span>📋 Reference</span>
+                    <a href="pacing-ward-round-check.html" class="btn">View Guide</a>
+                </div>
+            </div>
+
+            <!-- Flowchart -->
+            <div class="guideline-card">
+                <span class="badge badge-flowchart">Flowchart</span>
+                <h3>Medical Ward Round Check (Flowchart)</h3>
+                <p>Visual flowchart showing the decision pathway for daily temporary pacing checks. Includes safety checkpoints, threshold testing sequence, and clinical decision points.</p>
+                <div class="meta">
+                    <span>📊 Flowchart</span>
+                    <a href="images/pacing_ward_round_check_flowchart.png" class="btn" target="_blank">View Flowchart</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>Additional Resources</h2>
+        
+        <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #005EB8; margin-bottom: 15px;">PDF Guidelines</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                    <a href="Epicardial%20Transvenous%20Pacing%20Guideline.pdf" style="color: #005EB8; text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px;">📥</span>
+                        <strong>Epicardial & Transvenous Pacing Guideline</strong>
+                    </a>
+                </li>
+                <li style="padding: 10px 0;">
+                    <a href="Management%20of%20Epicardial%20and%20Transvenous%20Pacing.pdf" style="color: #005EB8; text-decoration: none; display: flex; align-items: center;">
+                        <span style="margin-right: 10px;">📥</span>
+                        <strong>Management of Epicardial and Transvenous Pacing</strong>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <h2>Key Features</h2>
+        
+        <div style="margin: 20px 0;">
+            <h3 style="color: #005EB8; margin: 20px 0 10px 0; font-size: 1.1rem;">Comprehensive Coverage</h3>
+            <ul style="margin-left: 20px; line-height: 1.8; color: #4C6272;">
+                <li>Epicardial and transvenous pacing protocols</li>
+                <li>Equipment specifications and setup</li>
+                <li>Daily monitoring and threshold checks</li>
+                <li>Troubleshooting algorithms for common issues</li>
+                <li>Complications management and escalation</li>
+            </ul>
+
+            <h3 style="color: #005EB8; margin: 20px 0 10px 0; font-size: 1.1rem;">Interactive Decision Support</h3>
+            <ul style="margin-left: 20px; line-height: 1.8; color: #4C6272;">
+                <li>Context-dependent pathways based on patient status</li>
+                <li>Automatic safety stops for high-risk scenarios</li>
+                <li>Real-time threshold calculations</li>
+                <li>Copy-to-clipboard functionality for clinical notes</li>
+            </ul>
+
+            <h3 style="color: #005EB8; margin: 20px 0 10px 0; font-size: 1.1rem;">Clinical Safety</h3>
+            <ul style="margin-left: 20px; line-height: 1.8; color: #4C6272;">
+                <li>Mandatory consultant presence for pacing-dependent patients</li>
+                <li>High threshold (>10V) escalation protocols</li>
+                <li>Loss of capture emergency procedures</li>
+                <li>Colour-coded warnings and alerts</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p><strong>University Hospitals Bristol and Weston NHS Foundation Trust</strong></p>
+            <p>Adult Intensive Care Units</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">
+                For clinical queries contact ICU medical staff<br>
+                Emergency advice available 24/7 via ICU Consultant on call
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

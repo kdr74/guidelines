@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Temporary Pacing Ward Round Check - UHBW ICU</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #005EB8 0%, #003087 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #005EB8, #28a745);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .step-container {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .step-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-header {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-left: 4px solid #005EB8;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+
+        .step-header h2 {
+            color: #005EB8;
+            margin-bottom: 10px;
+        }
+
+        .step-header p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin: 20px 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #005EB8;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #005EB8;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            border-color: #005EB8;
+            background-color: #f8f9fa;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            flex: 1;
+            cursor: pointer;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn-primary {
+            background-color: #005EB8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #003087;
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .summary-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .summary-section h3 {
+            color: #005EB8;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #005EB8;
+            min-width: 200px;
+        }
+
+        .summary-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            .btn, .button-group {
+                display: none;
+            }
+
+            .step-container:not(.active) {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.4em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .summary-item {
+                flex-direction: column;
+            }
+
+            .summary-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interactive Temporary Pacing Ward Round Check</h1>
+            <p>UHBW ICU Clinical Decision Support Tool</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Step 0: Introduction -->
+        <div class="step-container active" id="step0">
+            <div class="step-header">
+                <h2>Welcome</h2>
+                <p>This interactive tool will guide you through the temporary pacing ward round check process</p>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Before you begin:</strong>
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>Ensure patient monitoring is in place</li>
+                    <li>Have access to the pulse generator</li>
+                    <li>Prepare documentation system</li>
+                </ul>
+            </div>
+
+            <div class="button-group">
+                <div></div>
+                <button class="btn btn-primary" onclick="nextStep()">Begin Check</button>
+            </div>
+        </div>
+
+        <!-- Step 1: Safety Check -->
+        <div class="step-container" id="step1">
+            <div class="step-header">
+                <h2>Step 1: Safety Assessment</h2>
+                <p>Determine if consultant supervision is required</p>
+            </div>
+
+            <div class="form-group">
+                <label>Is the patient pacing-dependent?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="pacingDep_yes" name="pacingDependent" value="yes">
+                        <label for="pacingDep_yes">Yes - Patient has no stable underlying rhythm</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="pacingDep_no" name="pacingDependent" value="no">
+                        <label for="pacingDep_no">No - Patient has stable underlying rhythm</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step1Next" onclick="handlePacingDependency()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 1a: Consultant Check (conditional) -->
+        <div class="step-container" id="step1a">
+            <div class="step-header">
+                <h2>Step 1a: Consultant Presence Required</h2>
+                <p>Patient is pacing-dependent - consultant must be present for threshold checks</p>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>⚠️ STOP - Mandatory Safety Check</strong><br>
+                Because the patient is pacing-dependent, a Consultant must be present on the unit before proceeding with threshold checks. Loss of pacing during checks could be life-threatening.
+            </div>
+
+            <div class="form-group">
+                <label>Is a Consultant currently present on the unit?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="consultant_yes" name="consultantPresent" value="yes">
+                        <label for="consultant_yes">Yes - Consultant is available now</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="consultant_no" name="consultantPresent" value="no">
+                        <label for="consultant_no">No - Consultant is not currently on unit</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step1aNext" onclick="handleConsultantPresence()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 1b: Stop - Wait for Consultant -->
+        <div class="step-container" id="step1b">
+            <div class="step-header">
+                <h2>Cannot Proceed</h2>
+                <p>Consultant presence required</p>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>🚨 STOP - Do Not Proceed</strong><br><br>
+                The patient is pacing-dependent and the Consultant is not currently on the unit. You must wait for the Consultant to arrive before proceeding with threshold checks.
+                <br><br>
+                <strong>What to do now:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Contact the ICU Consultant immediately</li>
+                    <li>Inform them that pacing checks are due</li>
+                    <li>Resume this check when Consultant arrives</li>
+                    <li>Continue with other ward round tasks in the meantime</li>
+                </ul>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="restartCheck()">Restart Check</button>
+                <div></div>
+            </div>
+        </div>
+
+        <!-- Step 2: Record Current Settings -->
+        <div class="step-container" id="step2">
+            <div class="step-header">
+                <h2>Step 2: Record Current Settings</h2>
+                <p>Document the existing pacemaker parameters</p>
+            </div>
+
+            <div class="form-group">
+                <label>Current Pacing Mode</label>
+                <select id="currentMode" name="currentMode">
+                    <option value="">Select mode...</option>
+                    <option value="VVI">VVI (Ventricular demand)</option>
+                    <option value="DDD">DDD (Dual chamber demand)</option>
+                    <option value="VOO">VOO (Ventricular asynchronous) ⚠️</option>
+                    <option value="AOO">AOO (Atrial asynchronous) ⚠️</option>
+                    <option value="DOO">DOO (Dual asynchronous) ⚠️</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Current Rate (bpm)</label>
+                <input type="number" id="currentRate" name="currentRate" min="40" max="120" placeholder="e.g., 80">
+            </div>
+
+            <div class="form-group">
+                <label>Current Output (mA or V)</label>
+                <input type="number" id="currentOutput" name="currentOutput" step="0.1" min="0" max="20" placeholder="e.g., 5.0">
+            </div>
+
+            <div class="form-group">
+                <label>Current Sensitivity (mV)</label>
+                <input type="number" id="currentSensitivity" name="currentSensitivity" step="0.1" min="0" max="10" placeholder="e.g., 1.0">
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step2Next" onclick="validateStep2()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Assess Underlying Rhythm -->
+        <div class="step-container" id="step3">
+            <div class="step-header">
+                <h2>Step 3: Assess Underlying Rhythm</h2>
+                <p>Slowly decrease pacing rate to observe intrinsic rhythm</p>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Procedure:</strong> Gradually decrease the pacing rate below the patient's expected intrinsic rate and observe the ECG monitor.
+            </div>
+
+            <div class="form-group">
+                <label>Underlying Rhythm Present?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="rhythm_stable" name="underlyingRhythm" value="stable">
+                        <label for="rhythm_stable">Yes - Stable underlying rhythm observed</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rhythm_unstable" name="underlyingRhythm" value="unstable">
+                        <label for="rhythm_unstable">Rhythm present but unstable</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rhythm_none" name="underlyingRhythm" value="none">
+                        <label for="rhythm_none">No underlying rhythm - patient is pacing-dependent</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Rhythm Type (if present)</label>
+                <select id="rhythmType" name="rhythmType">
+                    <option value="">Select rhythm type...</option>
+                    <option value="Sinus rhythm">Sinus rhythm</option>
+                    <option value="Sinus bradycardia">Sinus bradycardia</option>
+                    <option value="Atrial fibrillation">Atrial fibrillation</option>
+                    <option value="Junctional rhythm">Junctional rhythm</option>
+                    <option value="Complete heart block">Complete heart block</option>
+                    <option value="Other">Other</option>
+                    <option value="N/A">N/A - No rhythm</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Intrinsic Rate (bpm) if applicable</label>
+                <input type="number" id="intrinsicRate" name="intrinsicRate" min="0" max="150" placeholder="e.g., 45">
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step3Next" onclick="validateStep3()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Check Output Threshold -->
+        <div class="step-container" id="step4">
+            <div class="step-header">
+                <h2>Step 4: Check Output Threshold</h2>
+                <p>Find the minimum output required for capture</p>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Procedure:</strong>
+                <ol style="margin: 10px 0 0 20px;">
+                    <li>Set pacing rate above intrinsic rate (if present)</li>
+                    <li>Gradually decrease output until loss of capture</li>
+                    <li>Note the threshold value</li>
+                    <li>Set output at 2× threshold for safety margin</li>
+                </ol>
+            </div>
+
+            <div class="form-group">
+                <label>Threshold Value (minimum output for capture)</label>
+                <input type="number" id="thresholdValue" name="thresholdValue" step="0.1" min="0" max="20" placeholder="e.g., 2.5">
+            </div>
+
+            <div class="form-group">
+                <label>Did you achieve capture at reasonable output?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="capture_yes" name="captureAchieved" value="yes">
+                        <label for="capture_yes">Yes - Capture achieved, threshold recorded</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="capture_no" name="captureAchieved" value="no">
+                        <label for="capture_no">No - Unable to achieve capture even at maximum output</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step4Next" onclick="handleThreshold()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 4a: High Threshold Warning -->
+        <div class="step-container" id="step4a">
+            <div class="step-header">
+                <h2>⚠️ High Threshold Detected</h2>
+                <p>Immediate action required</p>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>🚨 ESCALATE TO CARDIOLOGY</strong><br><br>
+                Threshold >10V indicates potential wire dislodgement or exit block. This requires immediate specialist review.
+                <br><br>
+                <strong>Actions required:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Contact Cardiology team immediately</li>
+                    <li>Increase output to maximum safe level</li>
+                    <li>Prepare for alternative pacing methods if needed</li>
+                    <li>Consider CXR to check wire position</li>
+                    <li>Frequent monitoring until reviewed</li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label>Cardiology contacted?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="cardio_yes" name="cardiologyContacted" value="yes">
+                        <label for="cardio_yes">Yes - Cardiology team contacted</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="cardio_pending" name="cardiologyContacted" value="pending">
+                        <label for="cardio_pending">Pending - Will contact now</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step4aNext" onclick="validateStep4a()" disabled>Continue to Summary</button>
+            </div>
+        </div>
+
+        <!-- Step 4b: Loss of Capture Emergency -->
+        <div class="step-container" id="step4b">
+            <div class="step-header">
+                <h2>🚨 Emergency: Loss of Capture</h2>
+                <p>Immediate intervention required</p>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>EMERGENCY PROTOCOL</strong><br><br>
+                Unable to achieve capture even at maximum output. This is a pacing emergency.
+                <br><br>
+                <strong>Immediate actions:</strong>
+                <ol style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Press EMERGENCY button</strong> on pulse generator</li>
+                    <li>Check all connections - generator to wires</li>
+                    <li>Check battery status and replace if needed</li>
+                    <li>Try swapping wire polarity</li>
+                    <li>Contact senior immediately</li>
+                    <li>Prepare for transcutaneous pacing</li>
+                    <li>Have emergency equipment ready</li>
+                </ol>
+            </div>
+
+            <div class="form-group">
+                <label>Current patient status</label>
+                <textarea id="emergencyNotes" name="emergencyNotes" placeholder="Document patient haemodynamics, actions taken, and senior input..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-danger" onclick="completeEmergencyCheck()">Complete Emergency Documentation</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Set New Output -->
+        <div class="step-container" id="step5">
+            <div class="step-header">
+                <h2>Step 5: Set New Output</h2>
+                <p>Calculate and set safe output level</p>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Calculation:</strong> Set output at 2× the threshold value to ensure adequate safety margin (typically 25-50% above threshold).
+            </div>
+
+            <div class="form-group">
+                <label>New Output Setting (2× threshold)</label>
+                <input type="number" id="newOutput" name="newOutput" step="0.1" min="0" max="20" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm output has been set on pulse generator</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="output_set" name="outputSet" value="yes">
+                        <label for="output_set">Yes - New output confirmed on device</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step5Next" onclick="validateStep5()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Check Sensitivity -->
+        <div class="step-container" id="step6">
+            <div class="step-header">
+                <h2>Step 6: Check Sensitivity</h2>
+                <p>Optimize sensing to prevent inappropriate pacing</p>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Procedure:</strong>
+                <ol style="margin: 10px 0 0 20px;">
+                    <li>Press PAUSE button on pulse generator</li>
+                    <li>Observe P wave and R wave amplitudes on display</li>
+                    <li>Set V-sense to 1/3 of R wave amplitude (or 1mV minimum)</li>
+                </ol>
+            </div>
+
+            <div class="form-group">
+                <label>R Wave Amplitude Visible?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="rwave_yes" name="rwaveVisible" value="yes">
+                        <label for="rwave_yes">Yes - R wave visible on display</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rwave_no" name="rwaveVisible" value="no">
+                        <label for="rwave_no">No - No R wave visible (no intrinsic rhythm)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="rwaveAmplitudeGroup" style="display:none;">
+                <label>R Wave Amplitude (mV)</label>
+                <input type="number" id="rwaveAmplitude" name="rwaveAmplitude" step="0.1" min="0" max="50" placeholder="e.g., 12.5">
+            </div>
+
+            <div class="form-group">
+                <label>New Sensitivity Setting (mV)</label>
+                <input type="number" id="newSensitivity" name="newSensitivity" step="0.1" min="0.1" max="10" placeholder="e.g., 1.0 or 1/3 of R wave">
+            </div>
+
+            <div class="form-group">
+                <label>Confirm sensitivity has been set on pulse generator</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="sens_set" name="sensitivitySet" value="yes">
+                        <label for="sens_set">Yes - New sensitivity confirmed on device</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step6Next" onclick="validateStep6()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Step 7: Clinical Decision -->
+        <div class="step-container" id="step7">
+            <div class="step-header">
+                <h2>Step 7: Clinical Decision</h2>
+                <p>Determine ongoing pacing requirements</p>
+            </div>
+
+            <div class="form-group">
+                <label>Ongoing need for pacing?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="need_continue" name="pacingNeed" value="continue">
+                        <label for="need_continue">Continue temporary pacing - still needed</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="need_wean" name="pacingNeed" value="wean">
+                        <label for="need_wean">Plan for weaning - stable underlying rhythm</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="need_ppm" name="pacingNeed" value="ppm">
+                        <label for="need_ppm">Permanent pacemaker indicated</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="need_discuss" name="pacingNeed" value="discuss">
+                        <label for="need_discuss">Uncertain - discuss with Consultant</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Plan and Notes</label>
+                <textarea id="clinicalPlan" name="clinicalPlan" placeholder="Document your clinical plan, any changes to pacing strategy, and review frequency..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="previousStep()">Back</button>
+                <button class="btn btn-primary" id="step7Next" onclick="validateStep7()" disabled>Complete Check</button>
+            </div>
+        </div>
+
+        <!-- Step 8: Summary -->
+        <div class="step-container" id="step8">
+            <div class="step-header">
+                <h2>✓ Ward Round Check Complete</h2>
+                <p>Review and document your findings</p>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Check completed successfully.</strong> Review the summary below and copy to your clinical documentation system.
+            </div>
+
+            <div class="summary-section">
+                <h3>Temporary Pacing Ward Round Check Summary</h3>
+                <div id="summaryContent"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="restartCheck()">Start New Check</button>
+                <button class="btn btn-success" onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button class="btn btn-primary" onclick="window.print()">Print Summary</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Store all form data
+        const checkData = {};
+        let currentStep = 0;
+        const totalSteps = 8;
+
+        // Enable next button when required fields are filled
+        function setupFieldListeners() {
+            // Step 1
+            document.querySelectorAll('input[name="pacingDependent"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step1Next').disabled = false;
+                });
+            });
+
+            // Step 1a
+            document.querySelectorAll('input[name="consultantPresent"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step1aNext').disabled = false;
+                });
+            });
+
+            // Step 2
+            ['currentMode', 'currentRate', 'currentOutput', 'currentSensitivity'].forEach(id => {
+                document.getElementById(id).addEventListener('input', checkStep2Complete);
+            });
+
+            // Step 3
+            document.querySelectorAll('input[name="underlyingRhythm"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step3Next').disabled = false;
+                });
+            });
+            document.getElementById('rhythmType').addEventListener('change', checkStep3Complete);
+
+            // Step 4
+            document.getElementById('thresholdValue').addEventListener('input', checkStep4Complete);
+            document.querySelectorAll('input[name="captureAchieved"]').forEach(radio => {
+                radio.addEventListener('change', checkStep4Complete);
+            });
+
+            // Step 4a
+            document.querySelectorAll('input[name="cardiologyContacted"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step4aNext').disabled = false;
+                });
+            });
+
+            // Step 5
+            document.querySelectorAll('input[name="outputSet"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step5Next').disabled = false;
+                });
+            });
+
+            // Step 6
+            document.querySelectorAll('input[name="rwaveVisible"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    if (radio.value === 'yes') {
+                        document.getElementById('rwaveAmplitudeGroup').style.display = 'block';
+                    } else {
+                        document.getElementById('rwaveAmplitudeGroup').style.display = 'none';
+                        document.getElementById('newSensitivity').value = '1.0';
+                    }
+                    checkStep6Complete();
+                });
+            });
+            document.getElementById('newSensitivity').addEventListener('input', checkStep6Complete);
+            document.querySelectorAll('input[name="sensitivitySet"]').forEach(radio => {
+                radio.addEventListener('change', checkStep6Complete);
+            });
+
+            // Step 7
+            document.querySelectorAll('input[name="pacingNeed"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('step7Next').disabled = false;
+                });
+            });
+        }
+
+        function checkStep2Complete() {
+            const mode = document.getElementById('currentMode').value;
+            const rate = document.getElementById('currentRate').value;
+            const output = document.getElementById('currentOutput').value;
+            const sens = document.getElementById('currentSensitivity').value;
+            
+            document.getElementById('step2Next').disabled = !(mode && rate && output && sens);
+        }
+
+        function checkStep3Complete() {
+            const rhythm = document.querySelector('input[name="underlyingRhythm"]:checked');
+            const rhythmType = document.getElementById('rhythmType').value;
+            
+            document.getElementById('step3Next').disabled = !(rhythm && rhythmType);
+        }
+
+        function checkStep4Complete() {
+            const capture = document.querySelector('input[name="captureAchieved"]:checked');
+            const threshold = document.getElementById('thresholdValue').value;
+            
+            if (capture && capture.value === 'yes') {
+                document.getElementById('step4Next').disabled = !threshold;
+            } else if (capture) {
+                document.getElementById('step4Next').disabled = false;
+            }
+        }
+
+        function checkStep6Complete() {
+            const rwave = document.querySelector('input[name="rwaveVisible"]:checked');
+            const sens = document.getElementById('newSensitivity').value;
+            const sensSet = document.querySelector('input[name="sensitivitySet"]:checked');
+            
+            document.getElementById('step6Next').disabled = !(rwave && sens && sensSet);
+        }
+
+        function nextStep() {
+            hideAllSteps();
+            currentStep++;
+            showStep(currentStep);
+            updateProgress();
+        }
+
+        function previousStep() {
+            hideAllSteps();
+            currentStep--;
+            showStep(currentStep);
+            updateProgress();
+        }
+
+        function showStep(stepNum) {
+            const stepElement = document.getElementById(`step${stepNum}`);
+            if (stepElement) {
+                stepElement.classList.add('active');
+            }
+        }
+
+        function hideAllSteps() {
+            document.querySelectorAll('.step-container').forEach(step => {
+                step.classList.remove('active');
+            });
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function handlePacingDependency() {
+            const dependent = document.querySelector('input[name="pacingDependent"]:checked').value;
+            checkData.pacingDependent = dependent;
+            
+            hideAllSteps();
+            if (dependent === 'yes') {
+                currentStep = 1.1; // Go to step 1a
+                document.getElementById('step1a').classList.add('active');
+            } else {
+                currentStep = 2;
+                showStep(2);
+            }
+            updateProgress();
+        }
+
+        function handleConsultantPresence() {
+            const present = document.querySelector('input[name="consultantPresent"]:checked').value;
+            checkData.consultantPresent = present;
+            
+            hideAllSteps();
+            if (present === 'no') {
+                currentStep = 1.2; // Go to stop screen
+                document.getElementById('step1b').classList.add('active');
+            } else {
+                currentStep = 2;
+                showStep(2);
+            }
+            updateProgress();
+        }
+
+        function validateStep2() {
+            checkData.currentMode = document.getElementById('currentMode').value;
+            checkData.currentRate = document.getElementById('currentRate').value;
+            checkData.currentOutput = document.getElementById('currentOutput').value;
+            checkData.currentSensitivity = document.getElementById('currentSensitivity').value;
+            
+            if (checkData.currentMode.includes('OO')) {
+                alert('⚠️ WARNING: Asynchronous mode (VOO/AOO/DOO) detected. This should be escalated to senior medical staff immediately as it is typically only used in theatre or emergencies.');
+            }
+            
+            nextStep();
+        }
+
+        function validateStep3() {
+            checkData.underlyingRhythm = document.querySelector('input[name="underlyingRhythm"]:checked').value;
+            checkData.rhythmType = document.getElementById('rhythmType').value;
+            checkData.intrinsicRate = document.getElementById('intrinsicRate').value || 'N/A';
+            
+            nextStep();
+        }
+
+        function handleThreshold() {
+            const captureAchieved = document.querySelector('input[name="captureAchieved"]:checked').value;
+            const thresholdValue = parseFloat(document.getElementById('thresholdValue').value) || 0;
+            
+            checkData.captureAchieved = captureAchieved;
+            checkData.thresholdValue = thresholdValue;
+            
+            hideAllSteps();
+            
+            if (captureAchieved === 'no') {
+                // Emergency - no capture
+                currentStep = 4.2;
+                document.getElementById('step4b').classList.add('active');
+            } else if (thresholdValue > 10) {
+                // High threshold warning
+                currentStep = 4.1;
+                document.getElementById('step4a').classList.add('active');
+            } else {
+                // Normal - proceed to set output
+                currentStep = 5;
+                document.getElementById('newOutput').value = (thresholdValue * 2).toFixed(1);
+                showStep(5);
+            }
+            updateProgress();
+        }
+
+        function validateStep4a() {
+            checkData.cardiologyContacted = document.querySelector('input[name="cardiologyContacted"]:checked').value;
+            
+            // Go straight to summary for high threshold cases
+            generateSummary();
+            currentStep = 8;
+            hideAllSteps();
+            showStep(8);
+            updateProgress();
+        }
+
+        function completeEmergencyCheck() {
+            checkData.emergencyNotes = document.getElementById('emergencyNotes').value;
+            checkData.isEmergency = true;
+            
+            generateSummary();
+            currentStep = 8;
+            hideAllSteps();
+            showStep(8);
+            updateProgress();
+        }
+
+        function validateStep5() {
+            checkData.newOutput = document.getElementById('newOutput').value;
+            checkData.outputSet = document.querySelector('input[name="outputSet"]:checked').value;
+            
+            nextStep();
+        }
+
+        function validateStep6() {
+            checkData.rwaveVisible = document.querySelector('input[name="rwaveVisible"]:checked').value;
+            checkData.rwaveAmplitude = document.getElementById('rwaveAmplitude').value || 'N/A';
+            checkData.newSensitivity = document.getElementById('newSensitivity').value;
+            checkData.sensitivitySet = document.querySelector('input[name="sensitivitySet"]:checked').value;
+            
+            nextStep();
+        }
+
+        function validateStep7() {
+            checkData.pacingNeed = document.querySelector('input[name="pacingNeed"]:checked').value;
+            checkData.clinicalPlan = document.getElementById('clinicalPlan').value;
+            
+            generateSummary();
+            nextStep();
+        }
+
+        function generateSummary() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB');
+            const timeStr = now.toLocaleTimeString('en-GB');
+            
+            let summary = `TEMPORARY PACING WARD ROUND CHECK
+Date: ${dateStr}
+Time: ${timeStr}
+
+SAFETY ASSESSMENT:
+`;
+            
+            if (checkData.pacingDependent === 'yes') {
+                summary += `Patient Status: Pacing-dependent\n`;
+                summary += `Consultant Present: ${checkData.consultantPresent === 'yes' ? 'Yes' : 'No'}\n`;
+            } else {
+                summary += `Patient Status: Not pacing-dependent (has underlying rhythm)\n`;
+            }
+            
+            summary += `\nCURRENT SETTINGS (Pre-Check):
+Mode: ${checkData.currentMode}
+Rate: ${checkData.currentRate} bpm
+Output: ${checkData.currentOutput} mA/V
+Sensitivity: ${checkData.currentSensitivity} mV
+
+UNDERLYING RHYTHM ASSESSMENT:
+Status: ${checkData.underlyingRhythm}
+Rhythm Type: ${checkData.rhythmType}
+Intrinsic Rate: ${checkData.intrinsicRate} bpm
+`;
+
+            if (checkData.isEmergency) {
+                summary += `\n🚨 EMERGENCY - LOSS OF CAPTURE
+Unable to achieve capture even at maximum output.
+Emergency actions taken:
+${checkData.emergencyNotes}
+SENIOR REVIEW REQUIRED URGENTLY
+`;
+            } else if (checkData.thresholdValue > 10) {
+                summary += `\n⚠️ HIGH THRESHOLD DETECTED
+Threshold: ${checkData.thresholdValue} V (>10V)
+Cardiology contacted: ${checkData.cardiologyContacted}
+SPECIALIST REVIEW REQUIRED
+`;
+            } else if (checkData.captureAchieved === 'yes') {
+                summary += `\nOUTPUT THRESHOLD CHECK:
+Threshold: ${checkData.thresholdValue} mA/V
+New Output Setting: ${checkData.newOutput} mA/V (2× threshold)
+
+SENSITIVITY CHECK:
+R Wave Visible: ${checkData.rwaveVisible}
+R Wave Amplitude: ${checkData.rwaveAmplitude} mV
+New Sensitivity Setting: ${checkData.newSensitivity} mV
+
+CLINICAL DECISION:
+Ongoing Pacing Need: ${formatPacingNeed(checkData.pacingNeed)}
+Plan: ${checkData.clinicalPlan}
+`;
+            }
+            
+            summary += `\nNEW SETTINGS (Post-Check):
+Mode: ${checkData.currentMode}
+Rate: ${checkData.currentRate} bpm
+Output: ${checkData.newOutput || checkData.currentOutput} mA/V
+Sensitivity: ${checkData.newSensitivity || checkData.currentSensitivity} mV
+
+Review frequency: Daily ward rounds
+Next check: Tomorrow
+
+Checked by: [Your name]
+Consultant informed: [Name if applicable]
+`;
+            
+            document.getElementById('summaryContent').innerHTML = '<pre style="white-space: pre-wrap; font-family: monospace; font-size: 0.9em;">' + summary + '</pre>';
+            checkData.summary = summary;
+        }
+
+        function formatPacingNeed(value) {
+            const needs = {
+                'continue': 'Continue temporary pacing',
+                'wean': 'Plan for weaning',
+                'ppm': 'Permanent pacemaker indicated',
+                'discuss': 'Uncertain - consultant discussion required'
+            };
+            return needs[value] || value;
+        }
+
+        function copyToClipboard() {
+            const summary = checkData.summary;
+            navigator.clipboard.writeText(summary).then(() => {
+                alert('Summary copied to clipboard! You can now paste it into your clinical documentation system.');
+            }).catch(err => {
+                alert('Failed to copy to clipboard. Please select and copy the text manually.');
+            });
+        }
+
+        function restartCheck() {
+            if (confirm('Are you sure you want to start a new check? All current data will be lost.')) {
+                location.reload();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setupFieldListeners();
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
