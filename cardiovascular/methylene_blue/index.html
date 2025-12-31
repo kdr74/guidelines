@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Methylene Blue for Vasoplegia - UHBW ICU Guidelines</title>
+    <style>
+        :root {
+            --nhs-blue: #005EB8;
+            --nhs-dark-blue: #003087;
+            --nhs-light-blue: #41B6E6;
+            --nhs-red: #DA291C;
+            --nhs-orange: #ED8B00;
+            --nhs-yellow: #FFE000;
+            --nhs-green: #007F3B;
+            --nhs-grey: #768692;
+            --nhs-dark-grey: #425563;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Frutiger', Arial, sans-serif;
+            line-height: 1.5;
+            color: #212b32;
+            background: #f0f4f5;
+            font-size: 15px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--nhs-dark-blue) 0%, var(--nhs-blue) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+        
+        .header-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .alert-box {
+            background: linear-gradient(135deg, #fff4e5 0%, #fff8f0 100%);
+            border-left: 4px solid var(--nhs-orange);
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .alert-box.critical {
+            background: linear-gradient(135deg, #ffe5e5 0%, #fff0f0 100%);
+            border-left-color: var(--nhs-red);
+        }
+        
+        .alert-box strong {
+            color: var(--nhs-orange);
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .alert-box.critical strong {
+            color: var(--nhs-red);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.5rem 0 0 0;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--nhs-blue);
+        }
+        
+        .tab {
+            background: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--nhs-dark-grey);
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            border-bottom: none;
+            position: relative;
+            bottom: -2px;
+        }
+        
+        .tab:hover {
+            background: var(--nhs-light-blue);
+            color: white;
+        }
+        
+        .tab.active {
+            background: var(--nhs-blue);
+            color: white;
+            border-color: var(--nhs-blue);
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 0 4px 4px 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: var(--nhs-dark-blue);
+            border-bottom: 2px solid var(--nhs-blue);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.8rem 0;
+            color: var(--nhs-dark-blue);
+        }
+        
+        h4 {
+            font-size: 1.05rem;
+            margin: 1rem 0 0.5rem 0;
+            color: var(--nhs-dark-grey);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-left: 4px solid var(--nhs-blue);
+            padding: 1.2rem;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .info-card h4 {
+            color: var(--nhs-blue);
+            margin: 0 0 0.8rem 0;
+        }
+        
+        .indications-box {
+            background: #e8f4f8;
+            border: 2px solid var(--nhs-blue);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .indications-box h3 {
+            color: var(--nhs-blue);
+            margin-top: 0;
+        }
+        
+        .criteria-list {
+            background: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        
+        .criteria-list li {
+            margin: 0.8rem 0;
+            padding-left: 0.5rem;
+        }
+        
+        .dosing-section {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e8f4f8 100%);
+            border: 2px solid var(--nhs-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .dosing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .dosing-table th {
+            background: var(--nhs-blue);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .dosing-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .dosing-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .calculator-section {
+            background: white;
+            border: 2px solid var(--nhs-green);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .calculator-section h3 {
+            color: var(--nhs-green);
+            margin-top: 0;
+        }
+        
+        .input-group {
+            margin: 1rem 0;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--nhs-dark-grey);
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--nhs-blue);
+        }
+        
+        .calc-button {
+            background: var(--nhs-green);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .calc-button:hover {
+            background: #006030;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .results-box {
+            display: none;
+            background: #f0f8ff;
+            border: 2px solid var(--nhs-blue);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .results-box.show {
+            display: block;
+        }
+        
+        .result-item {
+            background: white;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border-radius: 4px;
+            border-left: 4px solid var(--nhs-blue);
+        }
+        
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--nhs-blue);
+            margin: 0.3rem 0;
+        }
+        
+        .adverse-effects-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .adverse-effects-table th {
+            background: var(--nhs-orange);
+            color: white;
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .adverse-effects-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+        
+        .adverse-effects-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .monitoring-item {
+            background: #fff4e5;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border-left: 3px solid var(--nhs-orange);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .references {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin: 2rem 0;
+        }
+        
+        .references h3 {
+            color: var(--nhs-dark-blue);
+            margin-top: 0;
+        }
+        
+        .references ol {
+            padding-left: 1.5rem;
+        }
+        
+        .references li {
+            margin: 0.8rem 0;
+            line-height: 1.6;
+        }
+        
+        .key-point {
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 100%);
+            border-left: 4px solid var(--nhs-blue);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .key-point strong {
+            color: var(--nhs-blue);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .tab-content {
+                padding: 1.2rem;
+            }
+            
+            .tabs {
+                gap: 0.3rem;
+            }
+            
+            .tab {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            
+            .dosing-table,
+            .adverse-effects-table {
+                font-size: 0.9rem;
+            }
+            
+            .dosing-table th,
+            .dosing-table td,
+            .adverse-effects-table th,
+            .adverse-effects-table td {
+                padding: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Methylene Blue (Methylthioninium Chloride) for Vasoplegia</h1>
+        <div class="header-subtitle">Critical Care Clinical Guideline - UNLICENSED & NON-FORMULARY</div>
+        <div class="header-meta">
+            <div class="meta-item">Version 1.00</div>
+            <div class="meta-item">Author: Matt Govier (ICU Consultant)</div>
+            <div class="meta-item">Valid: May 2023 - May 2027</div>
+            <div class="meta-item">Setting: A600, C604, Weston ICU</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert-box critical">
+            <strong>⚠️ CONSULTANT-INITIATED THERAPY ONLY</strong>
+            Methylene blue is unlicensed for vasoplegia and non-formulary. This therapy should only be initiated following consultant approval. Non-formulary paperwork is required but should not delay treatment. Contact ICU Pharmacist for assistance.
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>Setting</h4>
+                <p>Adult ICU units at UHBW: General ICU (A600), Cardiac ICU (C604), and Weston ICU</p>
+            </div>
+            <div class="info-card">
+                <h4>For Staff</h4>
+                <p>ICU nurses, advanced critical care practitioners, and medical staff</p>
+            </div>
+            <div class="info-card">
+                <h4>Patient Group</h4>
+                <p>Patients with severe vasoplegic shock (post-CPB, sepsis, toxicology) refractory to standard vasopressor therapy</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('indication')">Indication & Mechanism</button>
+            <button class="tab" onclick="showTab('dosing')">Dosing & Administration</button>
+            <button class="tab" onclick="showTab('calculator')">Dose Calculator</button>
+            <button class="tab" onclick="showTab('monitoring')">Monitoring & Adverse Effects</button>
+            <button class="tab" onclick="showTab('safety')">Safety & Interactions</button>
+            <button class="tab" onclick="showTab('references')">References</button>
+        </div>
+
+        <div id="indication" class="tab-content active">
+            <h2>Indication & Mechanism of Action</h2>
+            
+            <div class="key-point">
+                <strong>Mechanism:</strong> Methylene blue competitively inhibits nitric oxide by binding to the iron haem-moiety of soluble guanylate cyclase enzyme. This blocks cGMP-mediated calcium extrusion from vascular smooth muscle, counteracting vasodilation and reversing vasoplegia.
+            </div>
+
+            <h3>Clinical Context</h3>
+            <p>Patients with severe vasoplegic shock present significant treatment challenges. Excessive catecholamine doses cause serious adverse effects including arrhythmias, myocardial ischaemia, and increased mortality. Methylene blue acts on non-catecholamine pathways, potentially reducing vasopressor requirements and limiting catecholamine-related complications.</p>
+
+            <div class="indications-box">
+                <h3>When to Consider Methylene Blue</h3>
+                <p><strong>All of the following criteria must be met:</strong></p>
+                
+                <div class="criteria-list">
+                    <ul>
+                        <li><strong>Adequate fluid resuscitation</strong> - Patient must be appropriately volume loaded</li>
+                        <li><strong>High-dose noradrenaline</strong> - Dose >0.5 mcg/kg/min</li>
+                        <li><strong>Vasopressin therapy</strong> - Dose >0.02 units/min</li>
+                        <li><strong>Vasopressor-dose corticosteroids</strong> - Hydrocortisone 50mg QDS IV</li>
+                        <li><strong>Optimised cardiac output</strong> - Inodilator agents reduced whilst maintaining adequate cardiac output</li>
+                        <li><strong>Confirmed vasoplegic state</strong> - Documented by cardiac output monitoring or echocardiography</li>
+                        <li><strong>Progressive deterioration</strong> - Despite maximal conventional therapy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <strong>Essential Prerequisite</strong>
+                Cardiac output monitoring or echocardiographic assessment must confirm a vasoplegic state (low SVR with preserved or elevated cardiac output) prior to administration.
+            </div>
+
+            <h3>Common Aetiologies of Vasoplegia</h3>
+            <ul style="padding-left: 2rem; margin: 1rem 0;">
+                <li>Post-cardiopulmonary bypass (CPB) - particularly prolonged bypass times</li>
+                <li>Septic shock - especially gram-negative sepsis</li>
+                <li>Toxicology - calcium channel blocker overdose, beta-blocker toxicity</li>
+                <li>Anaphylaxis</li>
+                <li>Post-cardiac arrest</li>
+            </ul>
+        </div>
+
+        <div id="dosing" class="tab-content">
+            <h2>Prescribing & Administration</h2>
+
+            <div class="alert-box critical">
+                <strong>⚠️ CRITICAL COMPATIBILITY INFORMATION</strong>
+                Methylene blue is INCOMPATIBLE with sodium chloride 0.9%. All dilutions and line flushing MUST use glucose 5% only. Failure to follow this can result in precipitation and line occlusion.
+            </div>
+
+            <div class="alert-box">
+                <strong>Important Dosing Considerations</strong>
+                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                    <li>All doses calculated using <strong>LEAN body weight</strong></li>
+                    <li><strong>Central venous administration</strong> recommended</li>
+                    <li>Peripheral administration only in emergencies - maximum concentration 1mg/ml</li>
+                    <li>Available as 5mg/ml and 10mg/ml preparations - exercise caution</li>
+                </ul>
+            </div>
+
+            <div class="dosing-section">
+                <h3>Initial Bolus Dose</h3>
+                <div class="key-point">
+                    <strong>Dose:</strong> 1-2 mg/kg (lean body weight)<br>
+                    <strong>Preparation:</strong> Dilute to 50ml total volume with glucose 5%<br>
+                    <strong>Administration:</strong> Infuse over 15-60 minutes via central line
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">Renal Impairment Adjustment</h4>
+                <p>Consider reducing initial bolus to <strong>&lt;1mg/kg</strong> in patients with renal impairment</p>
+            </div>
+
+            <div class="dosing-section">
+                <h3>Ongoing Therapy (if positive response to initial bolus)</h3>
+                <p style="margin-bottom: 1rem;">Choose either repeated boluses OR continuous infusion:</p>
+
+                <table class="dosing-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Preparation</th>
+                            <th>Dosing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Repeated Boluses</strong></td>
+                            <td>
+                                1-2 mg/kg in glucose 5%<br>
+                                Total volume: 50ml
+                            </td>
+                            <td>
+                                Infuse over 15-60 minutes<br>
+                                Repeat every <strong>2-3 hours</strong> as required
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Continuous Infusion</strong></td>
+                            <td>
+                                500mg methylene blue in glucose 5%<br>
+                                Total volume: 250ml<br>
+                                Final concentration: <strong>2mg/ml</strong>
+                            </td>
+                            <td>
+                                Rate: <strong>0.25 - 2 mg/kg/hr</strong><br>
+                                (0.125 - 1 ml/kg/hr)<br>
+                                Start 2 hours after initial bolus
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert-box" style="margin-top: 1rem;">
+                    <strong>Renal Impairment:</strong> Use lower end of infusion range (0.25 mg/kg/hr) in patients with renal dysfunction
+                </div>
+            </div>
+
+            <h3>Special Populations</h3>
+            <div class="info-card">
+                <h4>Hepatic Impairment</h4>
+                <p>No experience in patients with severe hepatic impairment. Use with extreme caution and consider dose reduction.</p>
+            </div>
+        </div>
+
+        <div id="calculator" class="tab-content">
+            <h2>Methylene Blue Dose Calculator</h2>
+
+            <div class="calculator-section">
+                <h3>Patient Parameters</h3>
+                
+                <div class="input-group">
+                    <label for="leanWeight">Lean Body Weight (kg)</label>
+                    <input type="number" id="leanWeight" placeholder="Enter lean body weight" min="30" max="150" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label for="renalFunction">Renal Function</label>
+                    <select id="renalFunction">
+                        <option value="normal">Normal renal function</option>
+                        <option value="impaired">Renal impairment</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="bolusDose">Bolus Dose (mg/kg)</label>
+                    <select id="bolusDose">
+                        <option value="1">1 mg/kg (conservative)</option>
+                        <option value="1.5">1.5 mg/kg</option>
+                        <option value="2">2 mg/kg (standard)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="preparation">Available Preparation</label>
+                    <select id="preparation">
+                        <option value="5">5 mg/ml</option>
+                        <option value="10">10 mg/ml</option>
+                    </select>
+                </div>
+
+                <button class="calc-button" onclick="calculateDose()">Calculate Doses</button>
+
+                <div id="results" class="results-box">
+                    <h3 style="color: var(--nhs-blue); margin-bottom: 1rem;">Calculated Doses</h3>
+                    
+                    <div class="result-item">
+                        <strong>Initial Bolus Dose</strong>
+                        <div class="result-value" id="bolusTotal"></div>
+                        <div id="bolusPrep"></div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--nhs-grey);">
+                            Dilute to 50ml total volume with glucose 5%. Infuse over 15-60 minutes.
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <strong>Repeated Bolus Regimen</strong>
+                        <div class="result-value" id="repeatBolus"></div>
+                        <div id="repeatPrep"></div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--nhs-grey);">
+                            Repeat every 2-3 hours as required. Monitor response and adverse effects.
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <strong>Continuous Infusion Alternative</strong>
+                        <div class="result-value" id="infusionRate"></div>
+                        <div id="infusionDetails"></div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--nhs-grey);">
+                            Prepare: 500mg in 250ml glucose 5% (2mg/ml). Start 2 hours after initial bolus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="monitoring" class="tab-content">
+            <h2>Monitoring & Adverse Effects</h2>
+
+            <div class="alert-box">
+                <strong>Essential Monitoring Requirements</strong>
+                <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                    <li>Continuous SpO2 monitoring during and for 4 hours post-administration</li>
+                    <li>CNS assessment for 4 hours after each dose</li>
+                    <li>Methaemoglobin levels every 4 hours if using infusion or repeated boluses</li>
+                    <li>Continuous cardiac monitoring</li>
+                    <li>Blood pressure monitoring</li>
+                    <li>Arterial blood gas analysis as required</li>
+                </ul>
+            </div>
+
+            <h3>Adverse Effects and Management</h3>
+
+            <table class="adverse-effects-table">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Adverse Effect</th>
+                        <th>Monitoring & Management</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CNS Toxicity</strong><br>
+                        Dizziness, headache, tremors, mental confusion</td>
+                        <td>
+                            <strong>Monitoring:</strong> Neurological observations during and for 4 hours post-dose<br>
+                            <strong>Management:</strong> Minimise dose, provide supportive care. If features of CNS toxicity develop, monitor closely and give supportive treatment.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pulse Oximetry Interference</strong><br>
+                        Falsely low SpO2 readings</td>
+                        <td>
+                            <strong>Monitoring:</strong> Continuous SpO2 during and for 4 hours post-administration<br>
+                            <strong>Management:</strong> If SpO2 appears falsely low, check arterial PaO2 on blood gas. Provide supplemental oxygen as clinically indicated.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cardiac Arrhythmias</strong></td>
+                        <td>
+                            <strong>Monitoring:</strong> Continuous ECG monitoring<br>
+                            <strong>Management:</strong> Consider reducing methylene blue or other vasoactive agents. Treat arrhythmias with standard antiarrhythmic protocols.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hypertension</strong></td>
+                        <td>
+                            <strong>Monitoring:</strong> Continuous arterial pressure monitoring<br>
+                            <strong>Management:</strong> Assess fluid status. Consider reducing methylene blue or other vasopressor doses.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hypotension</strong></td>
+                        <td>
+                            <strong>Monitoring:</strong> Continuous arterial pressure monitoring<br>
+                            <strong>Management:</strong> Assess fluid status. Consider increasing other vasopressor agents.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Methaemoglobinaemia</strong></td>
+                        <td>
+                            <strong>Monitoring:</strong> Check MetHb levels on arterial blood gas every 4 hours during infusion/repeated boluses<br>
+                            <strong>Management:</strong> If MetHb >5%, reduce or stop infusion and do not give further boluses.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gastrointestinal</strong><br>
+                        Nausea</td>
+                        <td>
+                            <strong>Management:</strong> Consider antiemetic therapy
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Blue Discolouration</strong><br>
+                        Urine, stools, saliva</td>
+                        <td>
+                            <strong>Management:</strong> Reassure patient and healthcare staff. This is expected and harmless.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="monitoring-item">
+                <strong>Positive Response Indicators:</strong> Reduction in vasopressor requirements, improved blood pressure, increased systemic vascular resistance
+            </div>
+
+            <div class="monitoring-item">
+                <strong>Duration of Effect:</strong> If effective, expect response within 1-2 hours of initial bolus. Duration of action typically 2-4 hours, hence timing of repeat dosing.
+            </div>
+        </div>
+
+        <div id="safety" class="tab-content">
+            <h2>Safety Considerations & Drug Interactions</h2>
+
+            <div class="alert-box critical">
+                <strong>⚠️ MHRA SAFETY WARNING - Serotonergic Drug Interactions</strong>
+                The MHRA has issued specific guidance on methylene blue use with serotonergic antidepressants due to risk of central nervous system toxicity.
+            </div>
+
+            <h3>Serotonergic Drug Interactions</h3>
+            <div class="indications-box" style="background: #ffe5e5; border-color: var(--nhs-red);">
+                <h4 style="color: var(--nhs-red); margin-top: 0;">High-Risk Interactions</h4>
+                <p><strong>Intravenous methylthioninium chloride should be AVOIDED in patients recently treated with:</strong></p>
+                <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Selective serotonin reuptake inhibitors (SSRIs)</li>
+                    <li>Clomipramine</li>
+                    <li>Venlafaxine</li>
+                    <li>Other serotonergic antidepressants</li>
+                </ul>
+
+                <h4 style="color: var(--nhs-red); margin-top: 1rem;">If Use Cannot Be Avoided:</h4>
+                <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Use the <strong>lowest possible dose</strong></li>
+                    <li>Observe patient <strong>closely for CNS effects</strong> for up to 4 hours after administration</li>
+                    <li>Watch for signs of serotonin syndrome: agitation, confusion, neuromuscular hyperactivity, autonomic instability</li>
+                    <li>If CNS toxicity develops, monitor closely and provide supportive care</li>
+                </ul>
+            </div>
+
+            <h3>Contraindications</h3>
+            <div class="info-card" style="border-left-color: var(--nhs-red);">
+                <h4 style="color: var(--nhs-red);">Absolute Contraindications</h4>
+                <ul style="padding-left: 1.5rem;">
+                    <li>Known hypersensitivity to methylene blue</li>
+                    <li>Glucose-6-phosphate dehydrogenase (G6PD) deficiency - risk of severe haemolysis</li>
+                    <li>Recent use of serotonergic antidepressants (relative - see above)</li>
+                </ul>
+            </div>
+
+            <h3>Special Populations</h3>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Renal Impairment</h4>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Reduce initial bolus to &lt;1mg/kg</li>
+                        <li>Use lower end of infusion range (0.25 mg/kg/hr)</li>
+                        <li>Monitor closely for adverse effects</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>Hepatic Impairment</h4>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>No experience in severe hepatic impairment</li>
+                        <li>Use with extreme caution</li>
+                        <li>Consider dose reduction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Compatibility</h3>
+            <div class="key-point">
+                <strong>Compatible with:</strong> Glucose 5% only<br>
+                <strong>Incompatible with:</strong> Sodium chloride 0.9% and all saline-containing solutions
+            </div>
+
+            <h3>Contact & Escalation</h3>
+            <div class="info-grid">
+                <div class="info-card" style="border-left-color: var(--nhs-red);">
+                    <h4>Emergency Contact</h4>
+                    <p>Critical Care Pharmacy team or Senior ICU medical team</p>
+                    <p><strong>Phone: 27139</strong></p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Non-Emergency Advice</h4>
+                    <p>Critical Care Pharmacy team</p>
+                    <p>Matt Govier (ICU Consultant)<br>matthew.govier@uhbw.nhs.uk</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="references" class="tab-content">
+            <h2>Evidence Base & References</h2>
+
+            <div class="references">
+                <h3>Key Clinical Trials</h3>
+                <ol>
+                    <li>
+                        <strong>Kirov MY, Evgenov OV, Evgenov NV, et al.</strong> Infusion of methylene blue in human septic shock: a pilot, randomized, controlled study. <em>Crit Care Med.</em> 2001;29(10):1860-1867.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Landmark pilot RCT demonstrating methylene blue's efficacy in reducing vasopressor requirements in septic shock.
+                        </div>
+                    </li>
+                    <li>
+                        <strong>Ibarra-Estrada M, Kattan E, Aguilera-González P, et al.</strong> Early adjunctive methylene blue in patients with septic shock: a randomized controlled trial. <em>Crit Care.</em> 2023;27:110.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Recent multicentre RCT showing potential benefits of early methylene blue administration in septic shock.
+                        </div>
+                    </li>
+                </ol>
+
+                <h3 style="margin-top: 1.5rem;">Reviews & Guidelines</h3>
+                <ol start="3">
+                    <li>
+                        <strong>Shanmugam G.</strong> Vasoplegic syndrome – the role of methylene blue. <em>Eur J Cardiothorac Surg.</em> 2005;28:705-710.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Comprehensive review of methylene blue's role in post-CPB vasoplegia.
+                        </div>
+                    </li>
+                    <li>
+                        <strong>Fischer GW, Levin MA.</strong> Vasoplegia during cardiac surgery: Current concepts and management. <em>Semin Thorac Cardiovasc Surg.</em> 2010;22(2):140-144.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Overview of vasoplegic syndrome pathophysiology and treatment strategies.
+                        </div>
+                    </li>
+                </ol>
+
+                <h3 style="margin-top: 1.5rem;">Safety & Regulatory</h3>
+                <ol start="5">
+                    <li>
+                        <strong>MHRA Drug Safety Update, April 2009.</strong> Methylthioninium chloride (methylene blue): Update on CNS toxicity with serotonergic drugs.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Official regulatory guidance on serotonergic drug interactions.
+                        </div>
+                    </li>
+                    <li>
+                        <strong>Vutskits L, Briner A, Klauser P, et al.</strong> Adverse effects of methylene blue on the central nervous system. <em>Anesthesiology.</em> 2008;108:684-692.
+                        <div style="margin-top: 0.3rem; color: var(--nhs-grey); font-size: 0.9rem;">
+                            Detailed analysis of CNS adverse effects and mechanisms.
+                        </div>
+                    </li>
+                </ol>
+
+                <h3 style="margin-top: 1.5rem;">Supporting Guidelines</h3>
+                <ol start="7">
+                    <li>Royal Brompton and Harefield Hospitals Clinical Guidelines - Methylene Blue (Methylthioninium Chloride)</li>
+                    <li>
+                        <strong>Medusa Injectable Medicines Guide.</strong> Methylthioninium chloride. Available via <a href="http://medusa.wales.nhs.uk" target="_blank" style="color: var(--nhs-blue);">http://medusa.wales.nhs.uk</a> (via Trust intranet). Accessed 10/05/23.
+                    </li>
+                    <li>
+                        <strong>TOXBASE.</strong> Methylene Blue (antidote). Available via <a href="https://www.toxbase.org" target="_blank" style="color: var(--nhs-blue);">https://www.toxbase.org</a>. Accessed 10/05/23.
+                    </li>
+                </ol>
+            </div>
+
+            <h3>Related UHBW Guidelines</h3>
+            <div class="info-card">
+                <ul style="padding-left: 1.5rem;">
+                    <li>Noradrenaline in Critical Care (pending)</li>
+                    <li>Vasopressin - ICU SharePoint and DMS</li>
+                    <li>Management of Cardiogenic and Mixed Shock in Critical Care - ICU SharePoint</li>
+                </ul>
+            </div>
+
+            <div class="alert-box" style="margin-top: 1.5rem;">
+                <strong>Audit Requirements</strong><br>
+                Datix review of all methylene blue administrations. Critical Care Executive approval pending.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            
+            event.target.classList.add('active');
+        }
+
+        function calculateDose() {
+            const leanWeight = parseFloat(document.getElementById('leanWeight').value);
+            const renalFunction = document.getElementById('renalFunction').value;
+            const bolusDose = parseFloat(document.getElementById('bolusDose').value);
+            const preparation = parseFloat(document.getElementById('preparation').value);
+
+            if (!leanWeight || leanWeight < 30 || leanWeight > 150) {
+                alert('Please enter a valid lean body weight (30-150 kg)');
+                return;
+            }
+
+            let adjustedBolusDose = bolusDose;
+            if (renalFunction === 'impaired' && bolusDose > 1) {
+                adjustedBolusDose = 0.75;
+            }
+
+            const bolusTotal = leanWeight * adjustedBolusDose;
+            const bolusVolume = bolusTotal / preparation;
+
+            const repeatBolusTotal = bolusTotal;
+            const repeatBolusVolume = bolusVolume;
+
+            const infusionRateMin = leanWeight * 0.25;
+            const infusionRateMax = leanWeight * 2.0;
+            const infusionRateMinMl = infusionRateMin / 2;
+            const infusionRateMaxMl = infusionRateMax / 2;
+
+            let recommendedRate = renalFunction === 'impaired' ? 
+                `${infusionRateMin.toFixed(1)} mg/hr (${infusionRateMinMl.toFixed(1)} ml/hr)` :
+                `${infusionRateMin.toFixed(1)} - ${infusionRateMax.toFixed(1)} mg/hr (${infusionRateMinMl.toFixed(1)} - ${infusionRateMaxMl.toFixed(1)} ml/hr)`;
+
+            document.getElementById('bolusTotal').textContent = `${bolusTotal.toFixed(1)} mg`;
+            document.getElementById('bolusPrep').innerHTML = `Draw up <strong>${bolusVolume.toFixed(1)} ml</strong> of ${preparation}mg/ml preparation`;
+
+            document.getElementById('repeatBolus').textContent = `${repeatBolusTotal.toFixed(1)} mg every 2-3 hours`;
+            document.getElementById('repeatPrep').innerHTML = `Draw up <strong>${repeatBolusVolume.toFixed(1)} ml</strong> of ${preparation}mg/ml preparation each time`;
+
+            document.getElementById('infusionRate').textContent = recommendedRate;
+            
+            let infusionNote = renalFunction === 'impaired' ? 
+                `<div style="color: var(--nhs-orange); margin-top: 0.5rem; font-weight: 600;">⚠️ Reduced rate recommended due to renal impairment</div>` : '';
+            
+            document.getElementById('infusionDetails').innerHTML = 
+                `Standard preparation: 500mg in 250ml glucose 5% (2mg/ml concentration)` + infusionNote;
+
+            document.getElementById('results').classList.add('show');
+
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
