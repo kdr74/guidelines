@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLH - UHBW Guidelines</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --nhs-blue: #005EB8; --nhs-dark-blue: #003087;
+            --nhs-pale-blue: #E8EDEE; --nhs-green: #007F3B;
+            --nhs-red: #DA291C; --nhs-orange: #ED8B00;
+        }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #231f20; background: #E8EDEE; }
+        .header { background: linear-gradient(135deg, var(--nhs-blue), var(--nhs-dark-blue)); color: white; padding: 20px; }
+        .header h1 { font-size: 28px; margin-bottom: 5px; }
+        .menu-btn { position: fixed; top: 20px; left: 20px; z-index: 1001; background: var(--nhs-blue); color: white; border: none; padding: 12px 16px; cursor: pointer; border-radius: 4px; }
+        .side-menu { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: white; transition: left 0.3s; z-index: 1000; overflow-y: auto; padding-top: 70px; }
+        .side-menu.active { left: 0; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+        .overlay.active { display: block; }
+        .menu-item { padding: 12px 20px; cursor: pointer; color: #425563; display: block; text-decoration: none; border-left: 4px solid transparent; }
+        .menu-item:hover { background: var(--nhs-pale-blue); border-left-color: var(--nhs-blue); color: var(--nhs-blue); }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .content-section { background: white; padding: 30px; margin-bottom: 20px; border-radius: 8px; }
+        h2 { color: var(--nhs-blue); font-size: 24px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid var(--nhs-blue); }
+        h3 { color: var(--nhs-dark-blue); font-size: 20px; margin: 20px 0 15px; }
+        h4 { color: #425563; font-size: 18px; margin: 15px 0 10px; }
+        .alert-box { padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 5px solid; }
+        .alert-box.critical { background: #FFE5E5; border-left-color: var(--nhs-red); color: #8B0000; }
+        .alert-box.warning { background: #FFF9E6; border-left-color: var(--nhs-orange); color: #8B4500; }
+        .alert-box.info { background: #E6F4FF; border-left-color: var(--nhs-blue); color: var(--nhs-dark-blue); }
+        .tabs { display: flex; border-bottom: 2px solid #E8EDEE; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { padding: 12px 24px; cursor: pointer; background: transparent; border: none; border-bottom: 3px solid transparent; color: #425563; font-size: 16px; }
+        .tab.active { color: var(--nhs-blue); border-bottom-color: var(--nhs-blue); font-weight: 600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .criteria-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .criteria-table th { background: var(--nhs-dark-blue); color: white; padding: 12px; text-align: left; }
+        .criteria-table td { padding: 12px; border-bottom: 1px solid #E8EDEE; }
+        .criteria-table tr:nth-child(even) { background: #F8F9FA; }
+        .calculator { background: var(--nhs-pale-blue); padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .calc-row { display: flex; justify-content: space-between; margin: 10px 0; flex-wrap: wrap; }
+        .calc-label { flex: 1; min-width: 200px; }
+        .calc-input select { padding: 8px; border: 1px solid #768692; border-radius: 4px; }
+        .calc-button { background: var(--nhs-blue); color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 15px; }
+        .calc-result { background: white; padding: 20px; border-radius: 4px; margin-top: 15px; border-left: 5px solid var(--nhs-blue); display: none; }
+        ul, ol { margin: 15px 0 15px 30px; }
+        .reference { background: #F0F4F7; padding: 15px; margin: 20px 0; border-radius: 4px; font-size: 14px; }
+        .treatment-box { background: #F0F8F0; border: 2px solid var(--nhs-green); padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .dose-table { width: 100%; margin: 10px 0; border-collapse: collapse; }
+        .dose-table td { padding: 8px; border: 1px solid #E8EDEE; }
+        .dose-table td:first-child { font-weight: 600; background: #F8F9FA; width: 40%; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 22px; }
+            .content-section { padding: 20px; }
+            .calc-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    
+    <nav class="side-menu" id="sideMenu">
+        <a href="#overview" class="menu-item" onclick="scrollToSection('overview')">Overview</a>
+        <a href="#pathophysiology" class="menu-item" onclick="scrollToSection('pathophysiology')">Pathophysiology</a>
+        <a href="#presentation" class="menu-item" onclick="scrollToSection('presentation')">Presentation</a>
+        <a href="#diagnosis" class="menu-item" onclick="scrollToSection('diagnosis')">Diagnosis</a>
+        <a href="#calculators" class="menu-item" onclick="scrollToSection('calculators')">Calculators</a>
+        <a href="#ward-management" class="menu-item" onclick="scrollToSection('ward-management')">Ward Management</a>
+        <a href="#icu-management" class="menu-item" onclick="scrollToSection('icu-management')">ICU Management</a>
+        <a href="#references" class="menu-item" onclick="scrollToSection('references')">References</a>
+    </nav>
+
+    <div class="header">
+        <h1>Hemophagocytic Lymphohistiocytosis (HLH)</h1>
+        <div>University Hospitals Bristol and Weston NHS Foundation Trust</div>
+    </div>
+
+    <div class="container">
+        <section id="overview" class="content-section">
+            <h2>Overview</h2>
+            
+            <div class="alert-box critical">
+                <strong>⚠ Critical:</strong> HLH is a life-threatening hyperinflammatory syndrome with mortality rates approaching 50% in critically ill adults. Early recognition and prompt treatment are essential.
+            </div>
+
+            <p>Hemophagocytic lymphohistiocytosis (HLH) is a rare, life-threatening syndrome characterised by excessive immune activation leading to uncontrolled inflammation and multi-organ dysfunction. It results from aberrant activation of macrophages and cytotoxic T cells, causing a cytokine storm.</p>
+
+            <h3>Key Facts</h3>
+            <ul>
+                <li><strong>Incidence:</strong> 1-2 cases per million adults annually (likely underdiagnosed)</li>
+                <li><strong>Mortality:</strong> 40-50% in critically ill adults</li>
+                <li><strong>Classification:</strong>
+                    <ul>
+                        <li><strong>Primary (Familial) HLH:</strong> Genetic defects in cytotoxic function (rare in adults)</li>
+                        <li><strong>Secondary HLH:</strong> Triggered by infections, malignancy, or autoimmune disease (majority of adult cases)</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="alert-box info">
+                <strong>ICU Data:</strong> In a systematic review of 148 critically ill adults with HLH, infections were the most common trigger (88.1%), followed by autoimmune disorders (19.7%) and haematological malignancies (13.6%). Mechanical ventilation was required in 83.3% of cases. (<a href="https://doi.org/10.3389/fmed.2025.1622770" target="_blank">Montrucchio et al., 2025</a>)
+            </div>
+        </section>
+
+        <section id="pathophysiology" class="content-section">
+            <h2>Pathophysiology</h2>
+
+            <h3>Mechanism of Disease</h3>
+            <p>HLH results from failure to downregulate the immune response following an initial trigger. Defective cytotoxic T-cell and NK cell function leads to:</p>
+            <ol>
+                <li>Impaired target cell killing and failure to eliminate activated immune cells</li>
+                <li>Persistent immune activation with continued stimulation of T cells and macrophages</li>
+                <li>Cytokine storm with massive release of IFN-γ, TNF-α, IL-1, IL-6, IL-18</li>
+                <li>Uncontrolled macrophage proliferation and activation with hemophagocytosis</li>
+                <li>Multi-organ dysfunction from direct tissue damage and consumptive coagulopathy</li>
+            </ol>
+
+            <h3>Aetiological Triggers</h3>
+            
+            <h4>Infection-Associated (88%)</h4>
+            <ul>
+                <li><strong>Viral:</strong> EBV (most common), CMV, HIV, SARS-CoV-2, HSV, Influenza</li>
+                <li><strong>Bacterial:</strong> Tuberculosis, typhoid fever, Gram-negative sepsis</li>
+                <li><strong>Parasitic:</strong> Leishmaniasis, malaria</li>
+            </ul>
+
+            <h4>Malignancy-Associated (14%)</h4>
+            <ul>
+                <li>T-cell and NK-cell lymphomas</li>
+                <li>B-cell lymphomas (including diffuse large B-cell lymphoma)</li>
+                <li>Acute leukaemias</li>
+                <li>Myelodysplastic syndromes</li>
+            </ul>
+
+            <h4>Autoimmune/Rheumatological (20%)</h4>
+            <ul>
+                <li>Systemic lupus erythematosus (SLE)</li>
+                <li>Adult-onset Still's disease (AOSD)</li>
+                <li>Systemic juvenile idiopathic arthritis</li>
+            </ul>
+            <p><em>Note: Often termed Macrophage Activation Syndrome (MAS) in rheumatological context</em></p>
+
+            <h4>Iatrogenic</h4>
+            <ul>
+                <li>Post-transplant (solid organ or HSCT)</li>
+                <li>Immunosuppressive therapy</li>
+                <li>Immune checkpoint inhibitors</li>
+                <li>CAR T-cell therapy</li>
+            </ul>
+
+            <div class="alert-box warning">
+                <strong>Clinical Pearl:</strong> In approximately 40% of cases, no clear trigger is identified despite thorough investigation. This should not delay treatment initiation when HLH is strongly suspected.
+            </div>
+        </section>
+
+        <section id="presentation" class="content-section">
+            <h2>Clinical Presentation</h2>
+
+            <div class="alert-box warning">
+                <strong>Diagnostic Challenge:</strong> HLH presents with non-specific features that overlap significantly with sepsis. Maintain high index of suspicion in patients with unexplained multi-organ dysfunction, particularly with persistent fever and cytopenias.
+            </div>
+
+            <h3>Classic Presenting Features</h3>
+
+            <h4>Constitutional Symptoms (>95%)</h4>
+            <ul>
+                <li><strong>Fever:</strong> Persistent or recurrent, typically >38.5°C</li>
+                <li>Night sweats</li>
+                <li>Weight loss</li>
+                <li>Profound fatigue</li>
+            </ul>
+
+            <h4>Haematological Manifestations (>90%)</h4>
+            <table class="criteria-table">
+                <thead>
+                    <tr>
+                        <th>Finding</th>
+                        <th>Typical Values</th>
+                        <th>Clinical Significance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Anaemia</strong></td>
+                        <td>Hb <9 g/dL</td>
+                        <td>Progressive, often transfusion-dependent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Thrombocytopenia</strong></td>
+                        <td>Platelets <100 × 10⁹/L</td>
+                        <td>Associated with bleeding risk; rapidly progressive</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neutropenia</strong></td>
+                        <td>ANC <1.0 × 10⁹/L</td>
+                        <td>Increases infection susceptibility</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coagulopathy</strong></td>
+                        <td>↓ Fibrinogen, ↑ D-dimer</td>
+                        <td>Features of consumptive coagulopathy/DIC</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Hepatic Dysfunction (>70%)</h4>
+            <ul>
+                <li><strong>Hepatomegaly:</strong> Often with splenomegaly (hepatosplenomegaly)</li>
+                <li><strong>Elevated transaminases:</strong> ALT/AST typically 2-5× upper limit normal</li>
+                <li><strong>Hypertriglyceridaemia:</strong> Triglycerides often >3 mmol/L (>265 mg/dL)</li>
+                <li><strong>Hepatic synthetic dysfunction:</strong> Low albumin, prolonged PT/INR</li>
+            </ul>
+
+            <h4>Neurological Manifestations (30-50%)</h4>
+            <p>CNS involvement can be the presenting feature and is associated with poor prognosis:</p>
+            <ul>
+                <li><strong>Seizures</strong> (most common neurological feature - 48%)</li>
+                <li><strong>Altered consciousness/confusion</strong> (36%)</li>
+                <li><strong>Headache</strong> (21%)</li>
+                <li>Ataxia, focal deficits, encephalopathy</li>
+            </ul>
+
+            <div class="alert-box critical">
+                <strong>High-Risk Feature:</strong> CNS involvement significantly increases mortality. EBV may be limited to brain tissue in some cases, emphasising importance of CSF analysis. (<a href="https://doi.org/10.1186/s13023-025-04057-9" target="_blank">Rajabi et al., 2025</a>)
+            </div>
+
+            <h3>Red Flags for HLH</h3>
+            <ul>
+                <li>Persistent fever + bicytopenia/pancytopenia</li>
+                <li>Unexplained hepatosplenomegaly with transaminitis</li>
+                <li>Dramatically elevated ferritin (>1000 μg/L)</li>
+                <li>Marked hypertriglyceridaemia with fever</li>
+                <li>Multi-organ dysfunction without clear alternative diagnosis</li>
+                <li>Fever unresponsive to antibiotics in immunosuppressed patient</li>
+            </ul>
+        </section>
+
+        <section id="diagnosis" class="content-section">
+            <h2>Diagnosis</h2>
+
+            <p>Diagnosis requires high clinical suspicion combined with laboratory and histopathological findings. Two main diagnostic approaches are used:</p>
+
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'hlh2004')">HLH-2004 Criteria</button>
+                <button class="tab" onclick="openTab(event, 'hscore')">HScore</button>
+            </div>
+
+            <div id="hlh2004" class="tab-content active">
+                <h3>HLH-2004 Diagnostic Criteria</h3>
+                
+                <div class="alert-box info">
+                    <strong>Diagnostic Requirement:</strong> HLH diagnosis established by meeting 5 out of 8 clinical/laboratory features.
+                </div>
+
+                <p><strong>5 out of 8 of the following criteria must be met:</strong></p>
+
+                <table class="criteria-table">
+                    <thead>
+                        <tr>
+                            <th>Criterion</th>
+                            <th>Threshold</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Fever</strong></td>
+                            <td>≥38.5°C</td>
+                            <td>Present in >95%; often persistent or recurrent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Splenomegaly</strong></td>
+                            <td>Clinical or radiological</td>
+                            <td>Occurs in >70%; often with hepatomegaly</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Cytopenias</strong> (≥2 lineages)</td>
+                            <td>Hb <9 g/dL<br>Platelets <100 × 10⁹/L<br>Neutrophils <1.0 × 10⁹/L</td>
+                            <td>Present in >95%; not secondary to marrow hypoplasia</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Hypertriglyceridaemia and/or Hypofibrinogenaemia</strong></td>
+                            <td>TG ≥3.0 mmol/L (≥265 mg/dL) OR<br>Fibrinogen ≤1.5 g/L</td>
+                            <td>TG in 60-75%; fibrinogen more specific</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Hemophagocytosis</strong></td>
+                            <td>In bone marrow, spleen, lymph nodes, or liver</td>
+                            <td>Neither sensitive NOR fully specific; absence does NOT rule out HLH</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. Low or absent NK cell activity</strong></td>
+                            <td>Per local laboratory reference</td>
+                            <td>Highly specific (100%); may not be readily available</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7. Ferritin</strong></td>
+                            <td>≥500 μg/L</td>
+                            <td>Often MUCH higher (>10,000 μg/L)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8. Soluble CD25 (sIL-2R)</strong></td>
+                            <td>≥2,400 U/mL</td>
+                            <td>Elevated in >95%; >10,000 U/mL highly suggestive (Sp 93%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert-box warning">
+                    <strong>Important Limitations:</strong>
+                    <ul>
+                        <li><strong>Hemophagocytosis is NOT required for diagnosis</strong> - it may be absent early or in extramedullary sites only</li>
+                        <li>Some criteria (NK cell activity, sCD25) may not be routinely available</li>
+                        <li>Do NOT delay treatment while awaiting all criteria</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="hscore" class="tab-content">
+                <h3>HScore</h3>
+                
+                <p>The HScore is a validated diagnostic calculator for adult patients with suspected secondary HLH.</p>
+
+                <div class="alert-box info">
+                    <strong>HScore Advantages:</strong>
+                    <ul>
+                        <li>Specifically validated for adult populations</li>
+                        <li>Provides probability rather than binary diagnosis</li>
+                        <li>Does NOT require bone marrow biopsy or NK cell function tests</li>
+                        <li>Sensitivity 93%, Specificity 86% at score ≥169</li>
+                    </ul>
+                </div>
+
+                <table class="criteria-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Finding</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Known immunosuppression</strong></td>
+                            <td>HIV+ or on immunosuppressive therapy</td>
+                            <td>18</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Temperature</strong></td>
+                            <td><38.4°C (0), 38.4-39.4°C (33), >39.4°C (49)</td>
+                            <td>0-49</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Organomegaly</strong></td>
+                            <td>Hepatomegaly OR splenomegaly</td>
+                            <td>23</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cytopenias</strong></td>
+                            <td>2 lineages (24), 3 lineages (34)</td>
+                            <td>0-34</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ferritin (μg/L)</strong></td>
+                            <td>2000-6000 (35), >6000 (50)</td>
+                            <td>0-50</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Triglycerides (mmol/L)</strong></td>
+                            <td>1.5-4.0 (44), >4.0 (64)</td>
+                            <td>0-64</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fibrinogen (g/L)</strong></td>
+                            <td>≤2.5</td>
+                            <td>30</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AST (U/L)</strong></td>
+                            <td>≥30</td>
+                            <td>19</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hemophagocytosis</strong></td>
+                            <td>On bone marrow aspirate</td>
+                            <td>35</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>HScore Interpretation</h4>
+                <ul>
+                    <li><strong><100:</strong> HLH very unlikely (<1%)</li>
+                    <li><strong>100-150:</strong> Low suspicion (1-15%)</li>
+                    <li><strong>150-169:</strong> Intermediate probability (15-40%) - consider empiric treatment</li>
+                    <li><strong>169-250:</strong> High probability (40-90%) - strongly consider treatment</li>
+                    <li><strong>>250:</strong> Very high probability (>90%) - initiate HLH-directed therapy</li>
+                </ul>
+
+                <div class="alert-box critical">
+                    <strong>Clinical Application:</strong> HScore ≥169 has 93% sensitivity and 86% specificity for HLH diagnosis. Given the high mortality of untreated HLH, empiric treatment should be strongly considered at this threshold.
+                </div>
+            </div>
+
+            <h3>Recommended Investigations</h3>
+
+            <h4>Essential Initial Tests</h4>
+            <ul>
+                <li>FBC with differential</li>
+                <li>Ferritin (markedly elevated, often >10,000 μg/L)</li>
+                <li>Triglycerides and fibrinogen</li>
+                <li>LFTs and coagulation screen</li>
+                <li>LDH</li>
+                <li>Blood film</li>
+            </ul>
+
+            <h4>Specialized Tests</h4>
+            <ul>
+                <li>Soluble IL-2 receptor (sCD25) - send even if not readily available</li>
+                <li>NK cell function (if available)</li>
+                <li>Bone marrow biopsy with flow cytometry</li>
+            </ul>
+
+            <h4>Infectious Workup</h4>
+            <ul>
+                <li>Blood cultures (bacterial and fungal)</li>
+                <li>Viral PCR: EBV, CMV, HSV, VZV, HHV-6, HIV, SARS-CoV-2</li>
+                <li>EBV serology and quantitative viral load</li>
+                <li>TB screening</li>
+            </ul>
+
+            <h4>Imaging</h4>
+            <ul>
+                <li>CT chest/abdomen/pelvis: assess organomegaly, lymphadenopathy</li>
+                <li>MRI brain if neurological symptoms</li>
+                <li>PET-CT: suspected malignancy</li>
+            </ul>
+
+            <h4>Lumbar Puncture</h4>
+            <p>Consider if neurological signs/symptoms:</p>
+            <ul>
+                <li>Cell count, protein, glucose</li>
+                <li>Microbiology culture and PCR (especially EBV)</li>
+                <li>Cytology</li>
+            </ul>
+        </section>
+
+        <section id="calculators" class="content-section">
+            <h2>Diagnostic Calculators</h2>
+
+            <h3>HScore Calculator</h3>
+            <p>Calculate the probability of HLH in adult patients. HScore ≥169 suggests high probability of HLH.</p>
+
+            <div class="calculator">
+                <div class="calc-row">
+                    <div class="calc-label">Known immunosuppression?</div>
+                    <div class="calc-input">
+                        <select id="immunosupp">
+                            <option value="0">No</option>
+                            <option value="18">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Temperature (°C):</div>
+                    <div class="calc-input">
+                        <select id="temp">
+                            <option value="0"><38.4</option>
+                            <option value="33">38.4-39.4</option>
+                            <option value="49">>39.4</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Organomegaly:</div>
+                    <div class="calc-input">
+                        <select id="organomeg">
+                            <option value="0">No</option>
+                            <option value="23">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Number of cytopenias:</div>
+                    <div class="calc-input">
+                        <select id="cytopenias">
+                            <option value="0">1 lineage</option>
+                            <option value="24">2 lineages</option>
+                            <option value="34">3 lineages</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Ferritin (μg/L):</div>
+                    <div class="calc-input">
+                        <select id="ferritin">
+                            <option value="0"><2,000</option>
+                            <option value="35">2,000-6,000</option>
+                            <option value="50">>6,000</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Triglycerides (mmol/L):</div>
+                    <div class="calc-input">
+                        <select id="triglycerides">
+                            <option value="0"><1.5</option>
+                            <option value="44">1.5-4.0</option>
+                            <option value="64">>4.0</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Fibrinogen (g/L):</div>
+                    <div class="calc-input">
+                        <select id="fibrinogen">
+                            <option value="0">>2.5</option>
+                            <option value="30">≤2.5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">AST (U/L):</div>
+                    <div class="calc-input">
+                        <select id="ast">
+                            <option value="0"><30</option>
+                            <option value="19">≥30</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-row">
+                    <div class="calc-label">Hemophagocytosis on BM:</div>
+                    <div class="calc-input">
+                        <select id="hemophag">
+                            <option value="0">No/Not done</option>
+                            <option value="35">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="calc-button" onclick="calculateHScore()">Calculate HScore</button>
+
+                <div id="hscoreResult" class="calc-result">
+                    <!-- Result will be displayed here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="ward-management" class="content-section">
+            <h2>Initial Ward Management</h2>
+
+            <div class="alert-box critical">
+                <strong>⚠ Key Principle:</strong> HLH is a medical emergency. Early treatment initiation is associated with improved survival. Do NOT delay therapy while awaiting confirmatory tests if HLH is strongly suspected.
+            </div>
+
+            <h3>Immediate Actions</h3>
+
+            <h4>1. Multidisciplinary Team Involvement</h4>
+            <p>Urgent involvement required:</p>
+            <ul>
+                <li><strong>Haematology:</strong> Mandatory - coordinate diagnostic workup and treatment</li>
+                <li><strong>Infectious diseases:</strong> Identify and treat underlying infections</li>
+                <li><strong>Rheumatology:</strong> If autoimmune trigger suspected</li>
+                <li><strong>Intensive care:</strong> Early involvement if organ support likely</li>
+                <li><strong>Neurology:</strong> If CNS involvement</li>
+            </ul>
+
+            <h4>2. Complete Diagnostic Workup</h4>
+            <p>Initiate comprehensive investigations whilst starting treatment.</p>
+
+            <h4>3. Identify and Treat Underlying Trigger</h4>
+            <ul>
+                <li><strong>Infection:</strong> Start appropriate antimicrobials immediately</li>
+                <li><strong>Malignancy:</strong> Urgent haematology/oncology involvement for chemotherapy</li>
+                <li><strong>Autoimmune:</strong> Treat underlying condition</li>
+            </ul>
+
+            <h3>HLH-Directed Pharmacotherapy</h3>
+
+            <div class="treatment-box">
+                <h4>Standard HLH-94/2004 Protocol</h4>
+                
+                <p><strong>1. Dexamethasone</strong></p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Week 1-2</td>
+                        <td>10 mg/m² daily (divided doses)</td>
+                    </tr>
+                    <tr>
+                        <td>Week 3-4</td>
+                        <td>5 mg/m² daily</td>
+                    </tr>
+                    <tr>
+                        <td>Week 5-6</td>
+                        <td>2.5 mg/m² daily</td>
+                    </tr>
+                    <tr>
+                        <td>Week 7-8</td>
+                        <td>1.25 mg/m² daily</td>
+                    </tr>
+                </table>
+
+                <p><strong>2. Etoposide</strong></p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Weeks 1-2</td>
+                        <td>150 mg/m² IV twice weekly</td>
+                    </tr>
+                    <tr>
+                        <td>Weeks 3-8</td>
+                        <td>150 mg/m² IV once weekly</td>
+                    </tr>
+                </table>
+
+                <p><strong>3. Cyclosporine A (if CNS involvement or refractory)</strong></p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Dose</td>
+                        <td>3-5 mg/kg/day PO divided BID</td>
+                    </tr>
+                    <tr>
+                        <td>Target trough</td>
+                        <td>200-400 ng/mL</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h4>Modified Approaches for Adult Secondary HLH</h4>
+            
+            <div class="treatment-box">
+                <h4>High-Dose Corticosteroids Alone</h4>
+                <p>May be appropriate for mild to moderate HLH:</p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Dexamethasone</td>
+                        <td>10-20 mg daily IV/PO</td>
+                    </tr>
+                    <tr>
+                        <td>OR Methylprednisolone</td>
+                        <td>1-2 mg/kg/day IV (or pulse 500-1000 mg × 3-5 days)</td>
+                    </tr>
+                </table>
+                <p><strong>Reassess at 3-5 days:</strong> If no improvement, escalate to etoposide</p>
+            </div>
+
+            <div class="treatment-box">
+                <h4>Alternative Agents</h4>
+                
+                <p><strong>Anakinra (IL-1 antagonist)</strong></p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Dose</td>
+                        <td>100 mg SC daily (up to 4-8 mg/kg/day)</td>
+                    </tr>
+                    <tr>
+                        <td>Use</td>
+                        <td>Particularly for MAS/autoimmune-triggered HLH</td>
+                    </tr>
+                </table>
+
+                <p><strong>Ruxolitinib (JAK1/2 inhibitor)</strong></p>
+                <table class="dose-table">
+                    <tr>
+                        <td>Dose</td>
+                        <td>10-20 mg PO BID</td>
+                    </tr>
+                    <tr>
+                        <td>Use</td>
+                        <td>Steroid-refractory HLH; emerging data</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>Supportive Care</h3>
+
+            <h4>Infection Prophylaxis</h4>
+            <table class="dose-table">
+                <tr>
+                    <td>PCP prophylaxis</td>
+                    <td>Co-trimoxazole 960 mg PO TDS weekly</td>
+                </tr>
+                <tr>
+                    <td>Fungal prophylaxis</td>
+                    <td>Fluconazole 400 mg daily</td>
+                </tr>
+                <tr>
+                    <td>Viral prophylaxis</td>
+                    <td>Aciclovir 400 mg PO BD</td>
+                </tr>
+            </table>
+
+            <h4>Blood Product Support</h4>
+            <ul>
+                <li>Red cells: Transfuse for Hb <70 g/L (or higher if symptomatic)</li>
+                <li>Platelets: Transfuse for Plt <10×10⁹/L or <50×10⁹/L if bleeding</li>
+                <li>Use irradiated products if potential HSCT candidate</li>
+            </ul>
+
+            <h3>Treatment Response Assessment</h3>
+            <p><strong>Positive response indicators:</strong></p>
+            <ul>
+                <li>Defervescence (fever resolves)</li>
+                <li>Declining ferritin (>20-30% reduction)</li>
+                <li>Improving cytopenias</li>
+                <li>Normalisation of triglycerides and fibrinogen</li>
+            </ul>
+
+            <h3>Criteria for ICU Transfer</h3>
+            <p><strong>Consider ICU transfer if:</strong></p>
+            <ul>
+                <li>Respiratory failure or increasing oxygen requirements</li>
+                <li>Haemodynamic instability or shock</li>
+                <li>Altered consciousness or deteriorating neurology</li>
+                <li>Acute kidney injury requiring RRT</li>
+                <li>Multi-organ dysfunction</li>
+                <li>Severe lactic acidosis (lactate ≥10 mmol/L)</li>
+            </ul>
+        </section>
+
+        <section id="icu-management" class="content-section">
+            <h2>ICU Management</h2>
+
+            <div class="alert-box critical">
+                <strong>Prognosis:</strong> Mortality rates approach 50% in critically ill adults with HLH. Factors associated with poor prognosis include viral infections (especially SARS-CoV-2), underlying haematological malignancy, and need for mechanical ventilation. Despite this, aggressive supportive care combined with HLH-directed therapy can lead to recovery.
+            </div>
+
+            <h3>Organ Support</h3>
+
+            <h4>Respiratory Support</h4>
+            <p>Over 80% of ICU patients with HLH require mechanical ventilation.</p>
+            
+            <p><strong>Lung-Protective Ventilation (ARDS is common):</strong></p>
+            <ul>
+                <li>Tidal volume: 6 mL/kg ideal body weight</li>
+                <li>Plateau pressure: Target <30 cmH₂O</li>
+                <li>PEEP: Optimised using PEEP/FiO₂ table</li>
+                <li>Permissive hypercapnia: Accept pH >7.20</li>
+            </ul>
+
+            <p><strong>Prone Positioning:</strong> For severe ARDS (PaO₂/FiO₂ <150 mmHg), prone for ≥16 hours daily</p>
+
+            <p><strong>ECMO:</strong> Consider for refractory hypoxaemia if reversible cause and HLH treatment initiated</p>
+
+            <h4>Haemodynamic Support</h4>
+            <p>Distributive shock is common in HLH:</p>
+            <ul>
+                <li><strong>Fluid resuscitation:</strong> Balanced crystalloids, avoid fluid overload</li>
+                <li><strong>Vasopressors:</strong> Noradrenaline first-line</li>
+                <li><strong>Vasopressin:</strong> Consider as second agent if refractory</li>
+                <li><strong>Inotropes:</strong> Dobutamine if evidence of cardiac dysfunction</li>
+            </ul>
+
+            <div class="alert-box info">
+                <strong>Haemodynamic Monitoring:</strong> Arterial line essential. Consider advanced monitoring if refractory shock.
+            </div>
+
+            <h4>Renal Support</h4>
+            <p>AKI is common and frequently requires RRT:</p>
+            <ul>
+                <li><strong>CRRT preferred</strong> over intermittent HD in haemodynamically unstable patients</li>
+                <li><strong>Indications:</strong> Standard criteria (refractory hyperkalaemia, acidosis, uraemia, fluid overload)</li>
+                <li><strong>Anticoagulation:</strong> Regional citrate if Plt >30×10⁹/L and no severe liver dysfunction</li>
+            </ul>
+
+            <h4>Haematological Management</h4>
+            <p><strong>Severe Coagulopathy:</strong></p>
+            <ul>
+                <li>Monitor coagulation closely (PT, APTT, fibrinogen, D-dimer)</li>
+                <li>FFP/cryoprecipitate for active bleeding with consumptive coagulopathy</li>
+                <li>Platelet transfusions liberally if <50×10⁹/L and bleeding</li>
+                <li>Consider tranexamic acid for refractory bleeding (caution with DIC)</li>
+            </ul>
+
+            <p><strong>Severe Lactic Acidosis (≥10 mmol/L):</strong></p>
+            <p>Extreme lactic acidosis is a rare but critical manifestation of HLH:</p>
+            <ul>
+                <li>Etoposide can rapidly normalise lactate (within 24 hours in malignancy-associated HLH)</li>
+                <li>Aggressive HLH treatment is key</li>
+                <li>Standard supportive measures for acidosis</li>
+            </ul>
+
+            <div class="alert-box warning">
+                <strong>Clinical Pearl:</strong> Extreme lactic acidosis (lactate ≥10 mmol/L) in ICU patients should prompt urgent HLH evaluation. (<a href="https://doi.org/10.1186/s13256-025-05335-7" target="_blank">Xu et al., 2025</a>)
+            </div>
+
+            <h3>Infection Management in ICU</h3>
+            <ul>
+                <li><strong>High index of suspicion:</strong> Patients are profoundly immunosuppressed</li>
+                <li><strong>Early broad-spectrum antibiotics:</strong> For any clinical deterioration</li>
+                <li><strong>Fungal coverage:</strong> Low threshold for antifungal therapy (invasive aspergillosis risk)</li>
+                <li><strong>CMV reactivation:</strong> Monitor and treat pre-emptively</li>
+                <li><strong>Daily clinical surveillance:</strong> New infiltrates, worsening organ function</li>
+            </ul>
+
+            <h3>Specific ICU Considerations</h3>
+
+            <h4>Sedation</h4>
+            <ul>
+                <li>Use standard ICU sedation protocols</li>
+                <li>Monitor for hepatic dysfunction affecting drug metabolism</li>
+                <li>Daily sedation holds when appropriate</li>
+            </ul>
+
+            <h4>Nutrition</h4>
+            <ul>
+                <li>Early enteral nutrition when tolerated</li>
+                <li>Avoid lipid-containing TPN if marked hypertriglyceridaemia</li>
+                <li>Patients are catabolic - adequate protein provision</li>
+            </ul>
+
+            <h4>VTE Prophylaxis</h4>
+            <ul>
+                <li>Risk vs benefit given coagulopathy and thrombocytopenia</li>
+                <li>Mechanical prophylaxis (TED stockings, intermittent pneumatic compression)</li>
+                <li>Pharmacological if Plt >50×10⁹/L and no active bleeding</li>
+            </ul>
+
+            <h3>Monitoring in ICU</h3>
+            <table class="criteria-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Frequency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>FBC</td>
+                        <td>Daily</td>
+                    </tr>
+                    <tr>
+                        <td>Ferritin</td>
+                        <td>Twice weekly (key marker of response)</td>
+                    </tr>
+                    <tr>
+                        <td>LFTs, coagulation</td>
+                        <td>Daily initially, then twice weekly</td>
+                    </tr>
+                    <tr>
+                        <td>Triglycerides, fibrinogen</td>
+                        <td>Weekly</td>
+                    </tr>
+                    <tr>
+                        <td>Lactate, ABG</td>
+                        <td>As clinically indicated</td>
+                    </tr>
+                    <tr>
+                        <td>Cyclosporine level</td>
+                        <td>Twice weekly until stable</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Prognostic Factors</h3>
+            <p><strong>Associated with increased mortality:</strong></p>
+            <ul>
+                <li>Viral infections (especially SARS-CoV-2)</li>
+                <li>Underlying haematological malignancy</li>
+                <li>Need for mechanical ventilation</li>
+                <li>Multi-organ failure</li>
+                <li>Delayed treatment initiation</li>
+            </ul>
+
+            <p><strong>Associated with improved outcomes:</strong></p>
+            <ul>
+                <li>Early diagnosis and treatment</li>
+                <li>Identification and control of underlying trigger</li>
+                <li>Corticosteroid use (in some studies)</li>
+                <li>Infection-associated HLH (better prognosis than malignancy-associated)</li>
+            </ul>
+        </section>
+
+        <section id="references" class="content-section">
+            <h2>References</h2>
+
+            <div class="reference">
+                <div class="reference-title">Key Publications (PubMed)</div>
+                <ol>
+                    <li>Montrucchio G, Traversi R, Arrigo G, et al. Hemophagocytic Lymphohistiocytosis in the adult critically ill: a narrative review of case reports and case series. <em>Front Med (Lausanne)</em>. 2025;12:1622770. <a href="https://doi.org/10.3389/fmed.2025.1622770" target="_blank">DOI: 10.3389/fmed.2025.1622770</a></li>
+                    
+                    <li>Xu T, Tang M, Wu M, Xue X. Lactic acidosis in hemophagocytic syndrome: diagnostic and therapeutic challenges in the intensive care unit-a case series. <em>J Med Case Rep</em>. 2025;19(1):417. <a href="https://doi.org/10.1186/s13256-025-05335-7" target="_blank">DOI: 10.1186/s13256-025-05335-7</a></li>
+                    
+                    <li>Rajabi E, Gharagozlou S, Farhadi K, et al. The neurologic face of X-linked lymphoproliferative syndrome type 1: a systematic review. <em>Orphanet J Rare Dis</em>. 2025;20(1):528. <a href="https://doi.org/10.1186/s13023-025-04057-9" target="_blank">DOI: 10.1186/s13023-025-04057-9</a></li>
+                    
+                    <li>Abdelhay A, Eltaher B, Reghis M, et al. Hemophagocytic Lymphohistiocytosis in Pregnancy: A Systematic Review of Case Reports and Case Series. <em>Am J Hematol</em>. 2025;100(10):1828-1838. <a href="https://doi.org/10.1002/ajh.70013" target="_blank">DOI: 10.1002/ajh.70013</a></li>
+                    
+                    <li>Yagnik KJ, Espiritu A, Rathod M, et al. Fever: Harmless Heat or a Deadly Inferno? Unmasking Hemophagocytic Lymphohistiocytosis and Beyond: A Rare Case of Mast Cell Sarcoma and Overview of HLH. <em>J Hematol</em>. 2025;14(5):273-280. <a href="https://doi.org/10.14740/jh2087" target="_blank">DOI: 10.14740/jh2087</a></li>
+                </ol>
+            </div>
+
+            <div class="reference">
+                <div class="reference-title">Clinical Guidelines</div>
+                <ul class="reference-list">
+                    <li>Henter JI, Horne A, Aricó M, et al. HLH-2004: Diagnostic and therapeutic guidelines for hemophagocytic lymphohistiocytosis. <em>Pediatr Blood Cancer</em>. 2007;48(2):124-131.</li>
+                    <li>Fardet L, Galicier L, Lambotte O, et al. Development and validation of the HScore, a score for the diagnosis of reactive hemophagocytic syndrome. <em>Arthritis Rheumatol</em>. 2014;66(9):2613-2620.</li>
+                    <li>La Rosée P, Horne A, Hines M, et al. Recommendations for the management of hemophagocytic lymphohistiocytosis in adults. <em>Blood</em>. 2019;133(23):2465-2477.</li>
+                </ul>
+            </div>
+
+            <div class="alert-box info">
+                <strong>Guideline Information:</strong>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Prepared by:</strong> Dr Kieron Rooney, Consultant in Intensive Care Medicine</li>
+                    <li><strong>Version:</strong> 1.0</li>
+                    <li><strong>Date:</strong> January 2026</li>
+                    <li><strong>Review date:</strong> January 2027</li>
+                    <li><strong>Based on:</strong> Systematic literature review of publications 2022-2025</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Menu functions
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+                toggleMenu();
+            }
+        }
+
+        // Tab functions
+        function openTab(evt, tabName) {
+            const tabcontents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove('active');
+            }
+            
+            const tablinks = evt.currentTarget.parentElement.getElementsByClassName("tab");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // HScore Calculator
+        function calculateHScore() {
+            const immunosupp = parseInt(document.getElementById('immunosupp').value);
+            const temp = parseInt(document.getElementById('temp').value);
+            const organomeg = parseInt(document.getElementById('organomeg').value);
+            const cytopenias = parseInt(document.getElementById('cytopenias').value);
+            const ferritin = parseInt(document.getElementById('ferritin').value);
+            const triglycerides = parseInt(document.getElementById('triglycerides').value);
+            const fibrinogen = parseInt(document.getElementById('fibrinogen').value);
+            const ast = parseInt(document.getElementById('ast').value);
+            const hemophag = parseInt(document.getElementById('hemophag').value);
+
+            const totalScore = immunosupp + temp + organomeg + cytopenias + ferritin + triglycerides + fibrinogen + ast + hemophag;
+
+            let probability, interpretation, scoreClass;
+            
+            if (totalScore < 100) {
+                probability = "<1%";
+                interpretation = "HLH very unlikely";
+                scoreClass = "score-low";
+            } else if (totalScore < 150) {
+                probability = "1-15%";
+                interpretation = "Low suspicion - monitor closely";
+                scoreClass = "score-low";
+            } else if (totalScore < 169) {
+                probability = "15-40%";
+                interpretation = "Intermediate probability - consider empiric treatment";
+                scoreClass = "score-medium";
+            } else if (totalScore <= 250) {
+                probability = "40-90%";
+                interpretation = "High probability - strongly consider HLH-directed therapy";
+                scoreClass = "score-high";
+            } else {
+                probability = ">90%";
+                interpretation = "Very high probability - initiate HLH-directed therapy";
+                scoreClass = "score-high";
+            }
+
+            const resultDiv = document.getElementById('hscoreResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h4 class="${scoreClass}">HScore: ${totalScore}</h4>
+                <p><strong>Probability of HLH:</strong> ${probability}</p>
+                <p><strong>Interpretation:</strong> ${interpretation}</p>
+                ${totalScore >= 169 ? '<p style="margin-top: 10px;"><em>HScore ≥169 has 93% sensitivity and 86% specificity for HLH diagnosis.</em></p>' : ''}
+            `;
+        }
+
+        // Scroll spy for menu highlighting
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.content-section');
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
